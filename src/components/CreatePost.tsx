@@ -5,7 +5,7 @@ import { Button } from "./ui/button";
 
 const CreatePost = () => {
 	return (
-		<div className='mt-24 w-full h-auto shadow rounded-lg p-4'>
+		<div className='mt-2 w-full h-auto shadow rounded-lg p-4'>
 			<div className='w-full p-4'>
 				<Textarea placeholder='What is happening?!.' />
 				<div className='flex items-center justify-between pt-4'>

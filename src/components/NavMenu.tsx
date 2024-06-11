@@ -4,15 +4,24 @@ import { FaHome } from "react-icons/fa";
 import { FaFacebookMessenger } from "react-icons/fa";
 import { IoNotifications } from "react-icons/io5";
 import { IoSearchSharp } from "react-icons/io5";
+import { FaUserFriends } from "react-icons/fa";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
+import Link from "next/link";
 
 const NavMenu = () => {
 	return (
-		<div className='flex justify-center items-center w-full fixed bottom-0 bg-white shadow border-t-[1px] border-gray-400'>
-			<Menubar className='flex justify-between items-center w-[900px] h-[80px] p-4 px-12'>
+		<div className='flex justify-center items-center w-full fixed bottom-4 bg-white  '>
+			<Menubar className='flex justify-between items-center w-[900px] h-[80px] p-4 px-12 shadow-2xl'>
 				<MenubarMenu>
 					<MenubarTrigger>
-						<FaHome size={30} />
+						<Link href={"/"}>
+							<FaHome size={30} />
+						</Link>
+					</MenubarTrigger>
+				</MenubarMenu>
+				<MenubarMenu>
+					<MenubarTrigger>
+						<FaUserFriends size={30} />
 					</MenubarTrigger>
 				</MenubarMenu>
 				<MenubarMenu>
@@ -32,10 +41,12 @@ const NavMenu = () => {
 				</MenubarMenu>
 				<MenubarMenu>
 					<MenubarTrigger>
-						<Avatar>
-							<AvatarImage src='https://github.com/shadcn.png' />
-							<AvatarFallback>CN</AvatarFallback>
-						</Avatar>
+						<Link href={"/profile"}>
+							<Avatar>
+								<AvatarImage src='https://github.com/shadcn.png' />
+								<AvatarFallback>CN</AvatarFallback>
+							</Avatar>
+						</Link>
 					</MenubarTrigger>
 				</MenubarMenu>
 			</Menubar>

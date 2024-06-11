@@ -1,8 +1,15 @@
-import React from "react";
+"use client";
+import React, { useState } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import Link from "next/link";
+import { HiOutlineDotsVertical } from "react-icons/hi";
 
 const Header = () => {
+	const [isOpen, setIsOpen] = useState(false);
+
+	const toggleMenu = () => {
+		setIsOpen(!isOpen);
+	};
 	return (
 		<div className='flex fixed top-0 bg-white items-center justify-center z-10 w-full h-[80px] border-y-[1px] border-gray-400 '>
 			<div className='flex justify-between items-center w-[900px] p-4'>
@@ -16,11 +23,60 @@ const Header = () => {
 				</div>
 				<div>
 					<Link href={"/"}>
-						<h3 className='text-lg font-bold'>Friendify</h3>
+						<h2 className='text-xl font-bold'>Friendify</h2>
 					</Link>
 				</div>
-				<div>
-					<Link href={"#"}>Logout</Link>
+				<div className='relative'>
+					<button
+						className='hover:bg-gray-50 rounded-full p-1'
+						type='button'
+						id='menu-button'
+						aria-expanded={isOpen}
+						aria-haspopup='true'
+						onClick={toggleMenu}>
+						<HiOutlineDotsVertical size={24} />
+					</button>
+					{/* <!-- Dropdown menu --> */}
+					{isOpen && (
+						<div
+							className='absolute right-0 z-10 mt-4 w-40 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none'
+							role='menu'
+							aria-orientation='vertical'
+							aria-labelledby='menu-button'>
+							<div className='py-1' role='none'>
+								<Link
+									href='/profile'
+									className='block px-4 py-2 text-sm text-gray-700'
+									role='menuitem'
+									id='menu-item-0'>
+									View Profile
+								</Link>
+								<Link
+									href='#'
+									className='block px-4 py-2 text-sm text-gray-700'
+									role='menuitem'
+									id='menu-item-1'>
+									Support
+								</Link>
+								<Link
+									href='#'
+									className='block px-4 py-2 text-sm text-gray-700'
+									role='menuitem'
+									id='menu-item-1'>
+									About Us
+								</Link>
+								<form role='none'>
+									<button
+										type='submit'
+										className='block w-full px-4 py-2 text-left text-sm text-gray-700'
+										role='menuitem'
+										id='menu-item-3'>
+										Sign out
+									</button>
+								</form>
+							</div>
+						</div>
+					)}
 				</div>
 			</div>
 		</div>

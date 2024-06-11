@@ -1,4 +1,5 @@
-import React from "react";
+"use client";
+import React, { useState } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import { Button } from "./ui/button";
 import Image from "next/image";
@@ -6,8 +7,14 @@ import PostImage from "./../../public/post.jpg";
 import { HiOutlineDotsVertical } from "react-icons/hi";
 import { CiHeart } from "react-icons/ci";
 import { FaCommentDots } from "react-icons/fa6";
+import Link from "next/link";
 
 const Post = () => {
+	const [isOpen, setIsOpen] = useState(false);
+
+	const toggleMenu = () => {
+		setIsOpen(!isOpen);
+	};
 	return (
 		<div className='w-full'>
 			{/* <!-- component --> */}
@@ -31,9 +38,38 @@ const Post = () => {
 						</div>
 						<div className='text-gray-500 cursor-pointer'>
 							{/* <!-- Three-dot menu icon --> */}
-							<button className='hover:bg-gray-50 rounded-full p-1'>
+							<button
+								className='hover:bg-gray-50 rounded-full p-1'
+								id='menu-button'
+								aria-expanded={isOpen}
+								aria-haspopup='true'
+								onClick={toggleMenu}>
 								<HiOutlineDotsVertical size={24} />
 							</button>
+							{isOpen && (
+								<div
+									className='absolute right-0 z-10 mt-4 w-36 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none'
+									role='menu'
+									aria-orientation='vertical'
+									aria-labelledby='menu-button'>
+									<div className='py-1' role='none'>
+										<Link
+											href='#'
+											className='block px-4 py-2 text-sm text-gray-700'
+											role='menuitem'
+											id='menu-item-0'>
+											Delete Post
+										</Link>
+										<Link
+											href='#'
+											className='block px-4 py-2 text-sm text-gray-700'
+											role='menuitem'
+											id='menu-item-1'>
+											Support
+										</Link>
+									</div>
+								</div>
+							)}
 						</div>
 					</div>
 					{/* <!-- Message --> */}

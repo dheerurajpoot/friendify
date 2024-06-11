@@ -1,50 +1,64 @@
+"use client";
 import Image from "next/image";
-import React from "react";
+import React, { useState } from "react";
 import ProfilePic from "./../../../public/post.jpg";
 import { HiOutlineDotsVertical } from "react-icons/hi";
 import Post from "@/components/Post";
+import Link from "next/link";
 
 const Profile = () => {
+	const [isOpen, setIsOpen] = useState(false);
+
+	const toggleMenu = () => {
+		setIsOpen(!isOpen);
+	};
 	return (
 		<div className='flex min-h-screen flex-col relative items-center m-auto lg:w-[900px] md:w-[900px]'>
 			<div className='w-full bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700'>
 				<div className='flex justify-end px-4 pt-4'>
 					<button
-						id='dropdownButton'
-						data-dropdown-toggle='dropdown'
 						className='hover:bg-gray-50 rounded-full p-1'
-						type='button'>
-						<span className='sr-only'>Open dropdown</span>
+						type='button'
+						id='menu-button'
+						aria-expanded={isOpen}
+						aria-haspopup='true'
+						onClick={toggleMenu}>
 						<HiOutlineDotsVertical size={24} />
 					</button>
 					{/* <!-- Dropdown menu --> */}
-					<div
-						id='dropdown'
-						className='z-10 hidden text-base list-none bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700'>
-						<ul className='py-2' aria-labelledby='dropdownButton'>
-							<li>
-								<a
+					{isOpen && (
+						<div
+							className='absolute right-0 z-10 mt-8 w-40 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none'
+							role='menu'
+							aria-orientation='vertical'
+							aria-labelledby='menu-button'>
+							<div className='py-1' role='none'>
+								<Link
 									href='#'
-									className='block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white'>
-									Edit
-								</a>
-							</li>
-							<li>
-								<a
+									className='block px-4 py-2 text-sm text-gray-700'
+									role='menuitem'
+									id='menu-item-0'>
+									Edit Profile
+								</Link>
+								<Link
 									href='#'
-									className='block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white'>
-									Export Data
-								</a>
-							</li>
-							<li>
-								<a
-									href='#'
-									className='block px-4 py-2 text-sm text-red-600 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white'>
-									Delete
-								</a>
-							</li>
-						</ul>
-					</div>
+									className='block px-4 py-2 text-sm text-gray-700'
+									role='menuitem'
+									id='menu-item-1'>
+									Support
+								</Link>
+								<form role='none'>
+									<button
+										type='submit'
+										className='block w-full px-4 py-2 text-left text-sm text-gray-700'
+										role='menuitem'
+										id='menu-item-3'>
+										Sign out
+									</button>
+								</form>
+							</div>
+						</div>
+					)}
 				</div>
 				<div className='flex flex-col items-center pb-10'>
 					<Image

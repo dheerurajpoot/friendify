@@ -34,7 +34,7 @@ const Profile = () => {
 							aria-labelledby='menu-button'>
 							<div className='py-1' role='none'>
 								<Link
-									href='#'
+									href='/updateprofile'
 									className='block px-4 py-2 text-sm text-gray-700'
 									role='menuitem'
 									id='menu-item-0'>

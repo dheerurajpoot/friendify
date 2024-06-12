@@ -8,7 +8,7 @@ const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
 	title: "Friendify: Connect with your friends",
-	description: "Connect with your friends everywere in this World",
+	description: "Connect with your friends everywere in the World",
 };
 
 export default function RootLayout({

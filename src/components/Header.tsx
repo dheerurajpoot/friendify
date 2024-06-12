@@ -11,6 +11,9 @@ import {
 } from "./ui/dropdown-menu";
 import { Button } from "./ui/button";
 import { FaRegTrashAlt } from "react-icons/fa";
+import { BiSupport } from "react-icons/bi";
+import { FaRegUserCircle } from "react-icons/fa";
+import { FcAbout } from "react-icons/fc";
 
 const Header = () => {
 	return (
@@ -42,10 +45,24 @@ const Header = () => {
 							</Button>
 						</DropdownMenuTrigger>
 						<DropdownMenuContent align='end'>
-							<DropdownMenuItem>
-								<FaRegTrashAlt className='h-4 w-4 mr-2' />
-								Delete Post
-							</DropdownMenuItem>
+							<Link href={"/profile"}>
+								<DropdownMenuItem>
+									<FaRegUserCircle className='h-4 w-4 mr-2' />
+									Profile
+								</DropdownMenuItem>
+							</Link>
+							<Link href={"/"}>
+								<DropdownMenuItem>
+									<BiSupport className='h-4 w-4 mr-2' />
+									Support
+								</DropdownMenuItem>
+							</Link>
+							<Link href={"/"}>
+								<DropdownMenuItem>
+									<FcAbout className='h-4 w-4 mr-2' />
+									About
+								</DropdownMenuItem>
+							</Link>
 						</DropdownMenuContent>
 					</DropdownMenu>
 				</div>

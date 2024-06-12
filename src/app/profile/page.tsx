@@ -1,64 +1,57 @@
 "use client";
 import Image from "next/image";
-import React, { useState } from "react";
+import React from "react";
 import ProfilePic from "./../../../public/post.jpg";
 import { HiOutlineDotsVertical } from "react-icons/hi";
 import Post from "@/components/Post";
 import Link from "next/link";
+import {
+	DropdownMenu,
+	DropdownMenuContent,
+	DropdownMenuItem,
+	DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { Button } from "@/components/ui/button";
+import { MdLogout } from "react-icons/md";
+import { BiSupport } from "react-icons/bi";
+import { FaEdit } from "react-icons/fa";
 
 const Profile = () => {
-	const [isOpen, setIsOpen] = useState(false);
-
-	const toggleMenu = () => {
-		setIsOpen(!isOpen);
-	};
 	return (
-		<div className='flex min-h-screen flex-col relative items-center m-auto lg:w-[900px] md:w-[900px]'>
+		<div className='flex min-h-screen pt-4 flex-col relative items-center m-auto lg:w-[900px] md:w-[900px]'>
 			<div className='w-full bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700'>
-				<div className='flex justify-end px-4 pt-4'>
-					<button
-						className='hover:bg-gray-50 rounded-full p-1'
-						type='button'
-						id='menu-button'
-						aria-expanded={isOpen}
-						aria-haspopup='true'
-						onClick={toggleMenu}>
-						<HiOutlineDotsVertical size={24} />
-					</button>
-					{/* <!-- Dropdown menu --> */}
-					{isOpen && (
-						<div
-							className='absolute right-0 z-10 mt-8 w-40 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none'
-							role='menu'
-							aria-orientation='vertical'
-							aria-labelledby='menu-button'>
-							<div className='py-1' role='none'>
-								<Link
-									href='/updateprofile'
-									className='block px-4 py-2 text-sm text-gray-700'
-									role='menuitem'
-									id='menu-item-0'>
-									Edit Profile
-								</Link>
-								<Link
-									href='#'
-									className='block px-4 py-2 text-sm text-gray-700'
-									role='menuitem'
-									id='menu-item-1'>
+				<div className='flex justify-end pt-2 pr-2'>
+					<DropdownMenu>
+						<DropdownMenuTrigger asChild>
+							<Button
+								variant='ghost'
+								size='icon'
+								className='rounded-full relative'>
+								<HiOutlineDotsVertical className='h-8 w-8' />
+								<span className='sr-only'>More options</span>
+							</Button>
+						</DropdownMenuTrigger>
+						<DropdownMenuContent align='end'>
+							<Link href={"/updateprofile"}>
+								<DropdownMenuItem>
+									<FaEdit className='h-4 w-4 mr-2' />
+									Profile
+								</DropdownMenuItem>
+							</Link>
+							<Link href={"/"}>
+								<DropdownMenuItem>
+									<BiSupport className='h-4 w-4 mr-2' />
 									Support
-								</Link>
-								<form role='none'>
-									<button
-										type='submit'
-										className='block w-full px-4 py-2 text-left text-sm text-gray-700'
-										role='menuitem'
-										id='menu-item-3'>
-										Sign out
-									</button>
-								</form>
-							</div>
-						</div>
-					)}
+								</DropdownMenuItem>
+							</Link>
+							<Link href={"/"}>
+								<DropdownMenuItem>
+									<MdLogout className='h-4 w-4 mr-2' />
+									Logout
+								</DropdownMenuItem>
+							</Link>
+						</DropdownMenuContent>
+					</DropdownMenu>
 				</div>
 				<div className='flex flex-col items-center pb-10'>
 					<Image

@@ -21,22 +21,30 @@ const NavMenu = () => {
 				</MenubarMenu>
 				<MenubarMenu>
 					<MenubarTrigger>
-						<FaUserFriends size={30} />
+						<Link href={"/friends"}>
+							<FaUserFriends size={30} />
+						</Link>
 					</MenubarTrigger>
 				</MenubarMenu>
 				<MenubarMenu>
 					<MenubarTrigger>
-						<FaFacebookMessenger size={30} />
+						<Link href={"/chat"}>
+							<FaFacebookMessenger size={30} />
+						</Link>
 					</MenubarTrigger>
 				</MenubarMenu>
 				<MenubarMenu>
 					<MenubarTrigger>
-						<IoSearchSharp size={30} />
+						<Link href={"/search"}>
+							<IoSearchSharp size={30} />
+						</Link>
 					</MenubarTrigger>
 				</MenubarMenu>
 				<MenubarMenu>
 					<MenubarTrigger>
-						<IoNotifications size={30} />
+						<Link href={"/notification"}>
+							<IoNotifications size={30} />
+						</Link>
 					</MenubarTrigger>
 				</MenubarMenu>
 				<MenubarMenu>

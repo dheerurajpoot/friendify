@@ -5,7 +5,7 @@ import Link from "next/link";
 
 export default function Component() {
 	return (
-		<div className='bg-white dark:bg-gray-950 rounded-lg shadow-md p-4 m-auto lg:w-[900px] md:w-[900px]'>
+		<div className='bg-white dark:bg-gray-950 rounded-lg shadow-md p-4 mx-auto lg:w-[900px] md:w-[900px]'>
 			<Card className='w-full'>
 				<CardHeader className='flex items-center justify-between pb-4'>
 					<CardTitle>Notifications</CardTitle>

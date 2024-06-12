@@ -48,7 +48,7 @@ export default function Search() {
 		);
 	};
 	return (
-		<div className='bg-white dark:bg-gray-950 rounded-lg shadow-md p-4 m-auto lg:w-[900px] md:w-[900px]'>
+		<div className='bg-white dark:bg-gray-950 rounded-lg shadow-md p-4 mx-auto lg:w-[900px] md:w-[900px]'>
 			<div className='flex items-center mb-4'>
 				<Input
 					type='text'

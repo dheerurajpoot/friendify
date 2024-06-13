@@ -21,7 +21,7 @@ const Signup = () => {
 								<Label htmlFor='firstName'>First Name</Label>
 								<Input
 									id='firstName'
-									placeholder='John'
+									placeholder='First name'
 									required
 								/>
 							</div>
@@ -29,7 +29,7 @@ const Signup = () => {
 								<Label htmlFor='lastName'>Last Name</Label>
 								<Input
 									id='lastName'
-									placeholder='Doe'
+									placeholder='Last name'
 									required
 								/>
 							</div>
@@ -48,7 +48,7 @@ const Signup = () => {
 							<Input
 								id='email'
 								type='email'
-								placeholder='john@example.com'
+								placeholder='example@gmail.com'
 								required
 							/>
 						</div>
@@ -57,7 +57,7 @@ const Signup = () => {
 							<Input
 								id='phone'
 								type='tel'
-								placeholder='+1 (555) 555-5555'
+								placeholder='+91 999555-5555'
 								required
 							/>
 						</div>
@@ -79,7 +79,7 @@ const Signup = () => {
 					<div>
 						<span>Already have an account:</span>{" "}
 						<Link
-							href={"/signin"}
+							href={"/sign-in"}
 							className='text-blue-500 font-semibold'>
 							Sign In
 						</Link>

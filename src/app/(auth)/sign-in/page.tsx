@@ -44,7 +44,7 @@ const Signin = () => {
 					<div>
 						<span>Don't' have an account: </span>{" "}
 						<Link
-							href={"/signup"}
+							href={"/sign-up"}
 							className='text-blue-500 font-semibold'>
 							Create Account
 						</Link>

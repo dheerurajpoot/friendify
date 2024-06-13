@@ -6,6 +6,7 @@ import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { IoSearch } from "react-icons/io5";
 import { FiMessageCircle } from "react-icons/fi";
+import Link from "next/link";
 
 export default function Chat() {
 	const friends = [
@@ -96,7 +97,8 @@ export default function Chat() {
 			</div>
 			<div className='grid gap-4'>
 				{filteredFriends.map((friend) => (
-					<div
+					<Link
+						href={"/chat/message"}
 						key={friend.id}
 						className='flex items-center justify-between bg-gray-100 dark:bg-gray-800 rounded-lg p-4'>
 						<div className='flex items-center gap-4'>
@@ -127,7 +129,7 @@ export default function Chat() {
 								</span>
 							</Button> */}
 						</div>
-					</div>
+					</Link>
 				))}
 			</div>
 		</div>

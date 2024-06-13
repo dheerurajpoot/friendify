@@ -1,86 +1,136 @@
 "use client";
-import Image from "next/image";
 import React from "react";
 import ProfilePic from "./../../../public/post.jpg";
 import { HiOutlineDotsVertical } from "react-icons/hi";
 import Post from "@/components/Post";
 import Link from "next/link";
+import { FaRegTrashAlt } from "react-icons/fa";
+import { FaUserCheck } from "react-icons/fa";
 import {
 	DropdownMenu,
 	DropdownMenuContent,
 	DropdownMenuItem,
+	DropdownMenuSeparator,
 	DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
 import { MdLogout } from "react-icons/md";
-import { BiSupport } from "react-icons/bi";
 import { FaEdit } from "react-icons/fa";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { IoMailOpenOutline } from "react-icons/io5";
+import { SlCalender } from "react-icons/sl";
+import { Separator } from "@/components/ui/separator";
+import { IoSettingsOutline } from "react-icons/io5";
+import Image from "next/image";
+import { FiMessageCircle } from "react-icons/fi";
+import { FiUserPlus } from "react-icons/fi";
 
 const Profile = () => {
 	return (
 		<div className='flex min-h-screen pt-4 flex-col relative items-center m-auto lg:w-[900px] md:w-[900px]'>
-			<div className='w-full bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700'>
-				<div className='flex justify-end pt-2 pr-2'>
-					<DropdownMenu>
-						<DropdownMenuTrigger asChild>
-							<Button
-								variant='ghost'
-								size='icon'
-								className='rounded-full relative'>
-								<HiOutlineDotsVertical className='h-8 w-8' />
-								<span className='sr-only'>More options</span>
-							</Button>
-						</DropdownMenuTrigger>
-						<DropdownMenuContent align='end'>
-							<Link href={"/updateprofile"}>
+			<Card className='w-full mx-auto'>
+				<div className='relative'>
+					<CardHeader className='bg-gray-100 dark:bg-gray-800 h-72 relative overflow-hidden'>
+						<Image
+							src={ProfilePic}
+							alt='Banner'
+							width={800}
+							height={400}
+							className='object-cover w-full h-full'
+						/>
+						<div className='absolute top-2/3 left-1/2 transform -translate-x-1/2 -translate-y-1/2'>
+							<Avatar className='w-44 h-44 border-4 border-white dark:border-gray-950'>
+								<AvatarImage src='https://github.com/shadcn.png' />
+								<AvatarFallback>JD</AvatarFallback>
+							</Avatar>
+						</div>
+					</CardHeader>
+					<div className='absolute top-6 right-6'>
+						<DropdownMenu>
+							<DropdownMenuTrigger asChild>
+								<Button
+									variant='ghost'
+									size='icon'
+									className='rounded-full'>
+									<HiOutlineDotsVertical className='w-6 h-6' />
+									<span className='sr-only'>
+										Open user menu
+									</span>
+								</Button>
+							</DropdownMenuTrigger>
+							<DropdownMenuContent align='end'>
 								<DropdownMenuItem>
-									<FaEdit className='h-4 w-4 mr-2' />
-									Profile
+									<FaEdit className='w-4 h-4 mr-2' />
+									Edit Profile
 								</DropdownMenuItem>
-							</Link>
-							<Link href={"/"}>
 								<DropdownMenuItem>
-									<BiSupport className='h-4 w-4 mr-2' />
-									Support
+									<FaRegTrashAlt className='w-4 h-4 mr-2' />
+									Delete Profile
 								</DropdownMenuItem>
-							</Link>
-							<Link href={"/"}>
+								<DropdownMenuSeparator />
 								<DropdownMenuItem>
-									<MdLogout className='h-4 w-4 mr-2' />
+									<MdLogout className='w-4 h-4 mr-2' />
 									Logout
 								</DropdownMenuItem>
-							</Link>
-						</DropdownMenuContent>
-					</DropdownMenu>
-				</div>
-				<div className='flex flex-col items-center pb-10'>
-					<Image
-						className='w-40 h-40 mb-3 rounded-full shadow-lg'
-						width={120}
-						height={120}
-						src={ProfilePic}
-						alt='Profile Picture'
-					/>
-					<h5 className='mb-1 text-xl font-medium text-gray-900 dark:text-white'>
-						Dheeru Rajpoot
-					</h5>
-					<span className='text-sm text-gray-500 dark:text-gray-400'>
-						Web Developer
-					</span>
-					<div className='flex mt-4 md:mt-6'>
-						<a
-							href='#'
-							className='inline-flex items-center px-4 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800'>
-							Add friend
-						</a>
-						<a
-							href='#'
-							className='py-2 px-4 ms-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700'>
-							Message
-						</a>
+							</DropdownMenuContent>
+						</DropdownMenu>
 					</div>
 				</div>
-			</div>
+				<CardContent className='p-6 px-20'>
+					<div className='grid gap-2'>
+						<div className='flex items-center justify-between'>
+							<h2 className='text-2xl font-bold'>
+								Dheeru Rajpoot
+							</h2>
+							<Button
+								variant='outline'
+								className='flex items-center justify-center'>
+								<IoSettingsOutline className='mr-2 h-4 w-4' />
+								Edit Profile
+							</Button>
+						</div>
+						<p className='text-gray-500 dark:text-gray-400'>
+							Software Engineer at Lesshopy.
+						</p>
+						<Separator className='my-4' />
+						<div className='grid gap-4'>
+							<div className='flex items-center gap-2'>
+								<IoMailOpenOutline className='w-5 h-5 text-gray-500 dark:text-gray-400' />
+								<span className='text-gray-500 dark:text-gray-400'>
+									john.doe@example.com
+								</span>
+							</div>
+							<div className='flex items-center gap-2'>
+								<SlCalender className='w-5 h-5 text-gray-500 dark:text-gray-400' />
+								<span className='text-gray-500 dark:text-gray-400'>
+									Joined in June 2021
+								</span>
+							</div>
+							<div className='flex items-start gap-2'>
+								<FaUserCheck className='w-5 h-5 text-gray-500 dark:text-gray-400 mt-1' />
+								<div>
+									<p className='text-gray-500 dark:text-gray-400'>
+										I'm a software engineer with a passion
+										for building innovative products. In my
+										free time, I enjoy hiking and reading.
+									</p>
+								</div>
+							</div>
+						</div>
+						<div className='flex items-center justify-center gap-8 mt-4'>
+							<Button variant='outline' size='sm'>
+								<FiMessageCircle className='w-4 h-4 mr-2' />
+								Message
+							</Button>
+							<Button size='sm'>
+								<FiUserPlus className='w-4 h-4 mr-2' />
+								Follow
+							</Button>
+						</div>
+					</div>
+				</CardContent>
+			</Card>
 			<Post />
 		</div>
 	);

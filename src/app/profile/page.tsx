@@ -60,10 +60,12 @@ const Profile = () => {
 								</Button>
 							</DropdownMenuTrigger>
 							<DropdownMenuContent align='end'>
-								<DropdownMenuItem>
-									<FaEdit className='w-4 h-4 mr-2' />
-									Edit Profile
-								</DropdownMenuItem>
+								<Link href={"/updateprofile"}>
+									<DropdownMenuItem>
+										<FaEdit className='w-4 h-4 mr-2' />
+										Edit Profile
+									</DropdownMenuItem>
+								</Link>
 								<DropdownMenuItem>
 									<FaRegTrashAlt className='w-4 h-4 mr-2' />
 									Delete Profile
@@ -83,12 +85,14 @@ const Profile = () => {
 							<h2 className='text-2xl font-bold'>
 								Dheeru Rajpoot
 							</h2>
-							<Button
-								variant='outline'
-								className='flex items-center justify-center'>
-								<IoSettingsOutline className='mr-2 h-4 w-4' />
-								Edit Profile
-							</Button>
+							<Link href={"/updateprofile"}>
+								<Button
+									variant='outline'
+									className='flex items-center justify-center'>
+									<IoSettingsOutline className='mr-2 h-4 w-4' />
+									Edit Profile
+								</Button>
+							</Link>
 						</div>
 						<p className='text-gray-500 dark:text-gray-400'>
 							Software Engineer at Lesshopy.
@@ -119,10 +123,12 @@ const Profile = () => {
 							</div>
 						</div>
 						<div className='flex items-center justify-center gap-8 mt-4'>
-							<Button variant='outline' size='sm'>
-								<FiMessageCircle className='w-4 h-4 mr-2' />
-								Message
-							</Button>
+							<Link href={"/chat"}>
+								<Button variant='outline' size='sm'>
+									<FiMessageCircle className='w-4 h-4 mr-2' />
+									Message
+								</Button>
+							</Link>
 							<Button size='sm'>
 								<FiUserPlus className='w-4 h-4 mr-2' />
 								Follow

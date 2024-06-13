@@ -16,6 +16,8 @@ import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import ProfilePic from "./../../../public/post.jpg";
 import Image from "next/image";
+import { IoMdArrowRoundBack } from "react-icons/io";
+import Link from "next/link";
 
 export default function Component() {
 	const [name, setName] = useState("Jared Palmer");
@@ -39,12 +41,22 @@ export default function Component() {
 		<div className='flex flex-col min-h-sm relative items-center justify-center pt-5 m-auto lg:w-[900px] md:w-[900px]'>
 			<form className='w-full'>
 				<Card className='w-full mx-auto'>
-					<CardHeader>
-						<CardTitle>Update Profile</CardTitle>
-						<CardDescription>
-							Make changes to your profile information below.
-						</CardDescription>
-					</CardHeader>
+					<div className='flex items-center ml-4'>
+						<Link href={"/profile"}>
+							<Button
+								variant='ghost'
+								size='icon'
+								className='rounded-full'>
+								<IoMdArrowRoundBack className='w-5 h-5 text-gray-500 dark:text-gray-400' />
+							</Button>
+						</Link>
+						<CardHeader>
+							<CardTitle>Update Profile</CardTitle>
+							<CardDescription>
+								Make changes to your profile information below.
+							</CardDescription>
+						</CardHeader>
+					</div>
 					<CardContent className='space-y-4'>
 						<div className='flex flex-col items-center'>
 							<Image

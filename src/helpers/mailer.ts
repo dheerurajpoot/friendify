@@ -1,14 +1,29 @@
 import nodemailer from "nodemailer";
+import jwt from "jsonwebtoken";
+import { User } from "@/model/user.model";
+import { verifyMailTemplate } from "./verifyMailTemplate";
 
-export const sendMail = async ({ email, emailType, userid }: any) => {
+export const sendMail = async ({ email, emailType, userId }: any) => {
 	try {
+		const token = jwt.sign(userId.toString(), "dheerurajpoot");
+
+		if ((emailType = "VERIFY")) {
+			await User.findByIdAndUpdate({
+				verifyToken: token,
+				verifyTokenExpiry: Date.now() + 3600000,
+			});
+		} else if ((emailType = "RESET")) {
+			await User.findByIdAndUpdate({
+				forgotPasswordToken: token,
+				forgotPasswordTokenExpiry: Date.now() + 3600000,
+			});
+		}
 		const transporter = nodemailer.createTransport({
-			host: "contact@dheeru.org",
-			port: 587,
-			secure: false,
+			host: process.env.MAIL_SERVER,
+			port: 2525,
 			auth: {
-				user: "maddison53@ethereal.email",
-				pass: "jn7jnAPss4f63QBp6D",
+				user: process.env.MAIL_USER,
+				pass: process.env.MAIL_PASS,
 			},
 		});
 
@@ -20,7 +35,10 @@ export const sendMail = async ({ email, emailType, userid }: any) => {
 					? "Verify Your Email"
 					: "Reset Password Link",
 			text: "",
-			html: "<b>Hello world?</b>",
+			html:
+				emailType === "VERIFY"
+					? verifyMailTemplate(token)
+					: "<p>forgot password</p>",
 		};
 
 		const mailResponse = await transporter.sendMail(mailOptions);

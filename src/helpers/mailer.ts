@@ -5,15 +5,15 @@ import { verifyMailTemplate } from "./verifyMailTemplate";
 
 export const sendMail = async ({ email, emailType, userId }: any) => {
 	try {
-		const token = jwt.sign(userId.toString(), "dheerurajpoot");
+		const token = jwt.sign({ userId: userId }, process.env.TOKEN_SECRET!);
 
 		if ((emailType = "VERIFY")) {
-			await User.findByIdAndUpdate({
+			await User.findByIdAndUpdate(userId, {
 				verifyToken: token,
 				verifyTokenExpiry: Date.now() + 3600000,
 			});
 		} else if ((emailType = "RESET")) {
-			await User.findByIdAndUpdate({
+			await User.findByIdAndUpdate(userId, {
 				forgotPasswordToken: token,
 				forgotPasswordTokenExpiry: Date.now() + 3600000,
 			});

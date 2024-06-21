@@ -9,13 +9,17 @@ export const sendMail = async ({ email, emailType, userId }: any) => {
 
 		if ((emailType = "VERIFY")) {
 			await User.findByIdAndUpdate(userId, {
-				verifyToken: token,
-				verifyTokenExpiry: Date.now() + 3600000,
+				$set: {
+					verifyToken: token,
+					verifyTokenExpiry: Date.now() + 3600000,
+				},
 			});
 		} else if ((emailType = "RESET")) {
 			await User.findByIdAndUpdate(userId, {
-				forgotPasswordToken: token,
-				forgotPasswordTokenExpiry: Date.now() + 3600000,
+				$set: {
+					forgotPasswordToken: token,
+					forgotPasswordTokenExpiry: Date.now() + 3600000,
+				},
 			});
 		}
 		const transporter = nodemailer.createTransport({

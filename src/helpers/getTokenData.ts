@@ -1,6 +1,5 @@
 import { connectDb } from "@/dbConfig/connectDb";
-import { User } from "@/model/user.model";
-import { NextRequest, NextResponse } from "next/server";
+import { NextRequest } from "next/server";
 import jwt from "jsonwebtoken";
 connectDb();
 

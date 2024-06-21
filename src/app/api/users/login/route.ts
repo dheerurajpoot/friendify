@@ -9,6 +9,7 @@ export async function POST(request: NextRequest) {
 	try {
 		const reqBody = await request.json();
 		const { email, password } = reqBody;
+
 		const user = await User.findOne({ email });
 		if (!user) {
 			return NextResponse.json(
@@ -16,7 +17,7 @@ export async function POST(request: NextRequest) {
 				{ status: 400 }
 			);
 		}
-		console.log(user);
+		// console.log(user);
 		const isValid = await bcryptjs.compare(password, user.password);
 		if (!isValid) {
 			return NextResponse.json(
@@ -35,6 +36,7 @@ export async function POST(request: NextRequest) {
 		const response = NextResponse.json({
 			message: "Login Successfully",
 			success: true,
+			user,
 		});
 		response.cookies.set("token", token, {
 			httpOnly: true,

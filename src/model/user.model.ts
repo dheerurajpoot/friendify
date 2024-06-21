@@ -11,6 +11,8 @@ export interface userInterface {
 	forgotPasswordTokenExpiry: string;
 	verifyToken: string;
 	verifyTokenExpiry: string;
+	profession: string;
+	about: string;
 }
 export interface userDocument extends userInterface, Document {
 	createdAt: Date;
@@ -37,6 +39,12 @@ const userModel = new mongoose.Schema<userDocument>(
 		password: {
 			type: String,
 			required: true,
+		},
+		profession: {
+			type: String,
+		},
+		about: {
+			type: String,
 		},
 		isVerified: {
 			type: Boolean,

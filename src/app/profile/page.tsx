@@ -124,7 +124,7 @@ const Profile = () => {
 					</div>
 				</CardContent>
 			</Card>
-			<Post />
+			{/* <Post /> */}
 		</div>
 	);
 };

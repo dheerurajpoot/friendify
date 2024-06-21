@@ -1,16 +1,17 @@
-import mongoose, { Types, PopulatedDoc, Document, Model } from "mongoose";
-import { userDocument } from "./user.model";
+import mongoose, { Types, Schema, Document, Model } from "mongoose";
+
+export interface Comment {
+	author: Types.ObjectId | string;
+	commentText: string;
+	createdAt: Date;
+}
 
 export interface postInterface {
-	description: string;
-	postImage: string;
+	postContent: string;
+	image: string;
 	likes: Types.ObjectId[];
-	comments: Types.Array<{
-		userId: Types.ObjectId | PopulatedDoc<userDocument>;
-		comment: string;
-		createdAt: Date;
-	}>;
-	userId: Types.ObjectId | PopulatedDoc<userDocument>;
+	comments: Comment[];
+	createdBy: mongoose.Schema.Types.ObjectId;
 }
 export interface postDocument extends postInterface, Document {
 	createdAt: Date;
@@ -19,10 +20,10 @@ export interface postDocument extends postInterface, Document {
 
 const postModel = new mongoose.Schema<postDocument>(
 	{
-		description: {
+		postContent: {
 			type: String,
 		},
-		postImage: {
+		image: {
 			type: String,
 		},
 		likes: [
@@ -33,8 +34,8 @@ const postModel = new mongoose.Schema<postDocument>(
 		],
 		comments: [
 			{
-				userId: {
-					type: mongoose.Schema.Types.ObjectId,
+				author: {
+					type: Schema.Types.ObjectId,
 					ref: "User",
 					required: true,
 				},
@@ -48,8 +49,8 @@ const postModel = new mongoose.Schema<postDocument>(
 				},
 			},
 		],
-		userId: {
-			type: mongoose.Schema.Types.ObjectId,
+		createdBy: {
+			type: Schema.Types.ObjectId,
 			ref: "User",
 		},
 	},
@@ -57,4 +58,4 @@ const postModel = new mongoose.Schema<postDocument>(
 );
 
 export const Post: Model<postDocument> =
-	mongoose?.models?.Posts || mongoose.model("Post", postModel);
+	mongoose?.models?.Post || mongoose.model("Post", postModel);

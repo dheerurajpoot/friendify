@@ -1,5 +1,4 @@
 "use client";
-
 import { useState } from "react";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
@@ -7,10 +6,13 @@ import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { BsEmojiSmile } from "react-icons/bs";
 import { RxCross2 } from "react-icons/rx";
 import { FaRegImage } from "react-icons/fa6";
+import axios from "axios";
+import toast from "react-hot-toast";
 
 export default function Component() {
+	const [loading, setLoading] = useState(false);
 	const [postContent, setPostContent] = useState("");
-	const [selectedImage, setSelectedImage] = useState(null);
+	const [image, setImage] = useState<string | File>("");
 	const [isEmojiModalOpen, setIsEmojiModalOpen] = useState(false);
 	const [emojis, setEmojis] = useState([
 		"😀",
@@ -44,21 +46,49 @@ export default function Component() {
 		"🧐",
 		"🤓",
 	]);
-	const handlePostContentChange = (e: any) => {
-		setPostContent(e.target.value);
-	};
-	const handleImageUpload = () => {
-		const fileInput = document.createElement("input");
-		fileInput.type = "file";
-		fileInput.accept = "image/*";
-		fileInput.onchange = (e: any) => {
-			setSelectedImage(e.target.files[0]);
-		};
-		fileInput.click();
-	};
+
 	const handleEmojiSelect = (emoji: any) => {
 		setPostContent(postContent + emoji);
 		setIsEmojiModalOpen(false);
+	};
+
+	const uploadFile = async () => {
+		const data = new FormData();
+		data.append("file", image);
+		data.append("upload_preset", "images-preset");
+		try {
+			// const cloudname = process.env.CLOUDINARY_NAME;
+			const cloudname = "dfxxuq8qo";
+			const resourceType = "image";
+			const api = `https://api.cloudinary.com/v1_1/${cloudname}/${resourceType}/upload`;
+			const res = await axios.post(api, data);
+			const { secure_url } = res.data;
+			return secure_url;
+		} catch (error) {
+			console.log(error);
+			return "";
+		}
+	};
+
+	const handleSubmit = async (event: any) => {
+		event.preventDefault();
+		setLoading(true);
+		const picUrl = await uploadFile();
+		const data = {
+			postContent,
+			image: picUrl,
+		};
+
+		try {
+			await axios.post("/api/posts/createpost", data);
+			toast.success("Post Published successfully");
+			setLoading(false);
+			setPostContent("");
+			setImage("");
+		} catch (error: any) {
+			setLoading(false);
+			throw new Error(error);
+		}
 	};
 
 	return (
@@ -66,7 +96,7 @@ export default function Component() {
 			<div className='flex flex-col gap-4 w-full'>
 				<Textarea
 					value={postContent}
-					onChange={handlePostContentChange}
+					onChange={(e: any) => setPostContent(e.target.value)}
 					placeholder="What's on your mind?"
 					className='w-full resize-none border-gray-200 dark:border-gray-800 rounded-lg p-4 focus:outline-none focus:ring-2 focus:ring-gray-950 dark:focus:ring-gray-300'
 					rows={4}
@@ -74,18 +104,28 @@ export default function Component() {
 				<div className='flex items-center justify-between'>
 					<div className='flex items-center'>
 						<div className='flex items-center gap-2'>
-							<Button
-								onClick={handleImageUpload}
-								variant='ghost'
-								size='icon'
-								className='text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-50'>
-								<FaRegImage className='w-5 h-5' />
-								<span className='sr-only'>Upload image</span>
-							</Button>
-							{selectedImage && (
+							<input
+								type='file'
+								accept='image/*'
+								className='hidden'
+								id='profile-photo'
+								onChange={(e: any) =>
+									setImage(e.target.files[0])
+								}
+							/>
+							<label
+								htmlFor='profile-photo'
+								className='text-sm text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300 cursor-pointer'>
+								<FaRegImage className='w-6 h-6 mx-3' />
+							</label>
+							{image && (
 								<div className='flex items-center gap-2'>
 									<img
-										src={selectedImage}
+										src={
+											typeof image === "string"
+												? image
+												: URL.createObjectURL(image)
+										}
 										alt='Post image'
 										width={40}
 										height={40}
@@ -95,7 +135,10 @@ export default function Component() {
 										variant='ghost'
 										size='icon'
 										className='text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-50'>
-										<RxCross2 className='w-4 h-4' />
+										<RxCross2
+											className='w-4 h-4'
+											onClick={() => setImage("")}
+										/>
 										<span className='sr-only'>
 											Remove image
 										</span>
@@ -112,7 +155,15 @@ export default function Component() {
 							<span className='sr-only'>Add emoji</span>
 						</Button>
 					</div>
-					<Button>+Post</Button>
+					<Button onClick={handleSubmit}>
+						{loading ? (
+							<div className='flex items-center justify-center'>
+								<div className='w-6 h-6 rounded-full border-4 border-gray-400 border-t-white animate-spin' />
+							</div>
+						) : (
+							"+Post"
+						)}
+					</Button>
 				</div>
 			</div>
 			<Dialog open={isEmojiModalOpen} onOpenChange={setIsEmojiModalOpen}>

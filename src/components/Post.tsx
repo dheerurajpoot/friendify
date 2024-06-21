@@ -1,11 +1,10 @@
-"use client";
 import React, { useState } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import { Button } from "./ui/button";
 import { FaRegTrashAlt } from "react-icons/fa";
 import { HiOutlineDotsVertical } from "react-icons/hi";
 import { CiHeart } from "react-icons/ci";
-import { FaCommentDots } from "react-icons/fa6";
+import { FaCommentDots } from "react-icons/fa";
 import Link from "next/link";
 import { BsFillSendFill } from "react-icons/bs";
 import {
@@ -27,13 +26,20 @@ interface PostType {
 	createdBy: any;
 	createdAt: string;
 	likes: [];
-	comments: [];
+	comments: { _id: string; comment: string; createdAt: string }[];
 }
+
 interface PostProps {
 	data: PostType;
 }
+
 const Post: React.FC<PostProps> = ({ data }) => {
 	const [commentText, setCommentText] = useState("");
+	const [showComments, setShowComments] = useState(false); // State for comments visibility
+
+	const toggleComments = () => {
+		setShowComments(!showComments);
+	};
 
 	const commentHandler = async (postId: any) => {
 		try {
@@ -47,7 +53,6 @@ const Post: React.FC<PostProps> = ({ data }) => {
 			throw new Error(error);
 		}
 	};
-	console.log(data);
 
 	return (
 		<div className='bg-white my-4 dark:bg-gray-950 rounded-lg border border-gray-200 dark:border-gray-800 shadow-sm m-auto lg:w-[900px] md:w-[900px]'>
@@ -114,7 +119,10 @@ const Post: React.FC<PostProps> = ({ data }) => {
 							<CiHeart className='h-8 w-8' />
 							<span className='sr-only'>Like</span>
 						</Button>
-						<Button variant='ghost' size='icon'>
+						<Button
+							variant='ghost'
+							size='icon'
+							onClick={toggleComments}>
 							<FaCommentDots className='h-7 w-7' />
 							<span className='sr-only'>Comment</span>
 						</Button>
@@ -124,86 +132,94 @@ const Post: React.FC<PostProps> = ({ data }) => {
 						comments
 					</div>
 				</div>
-				<div className='mt-4 border-t border-gray-200 dark:border-gray-800 pt-4'>
-					<form className='flex items-center space-x-2'>
-						<Link href={"/profile"}>
-							<Avatar>
-								<AvatarImage
-									className='object-cover'
-									src={data?.createdBy?.profilepic}
-								/>
-								<AvatarFallback>CN</AvatarFallback>
-							</Avatar>
-						</Link>
-						<Input
-							placeholder='Write a comment...'
-							className='flex-1'
-							autoComplete='off'
-							value={commentText}
-							onChange={(e: any) =>
-								setCommentText(e.target.value)
-							}
-						/>
-						<Button
-							type='button'
-							onClick={() => commentHandler(data?._id)}
-							size='icon'>
-							<BsFillSendFill className='h-4 w-4' />
-							<span className='sr-only'>Send</span>
-						</Button>
-					</form>
-					{data.comments &&
-						data.comments.map((commentData: any) => (
-							<div className='mt-4 space-y-4'>
-								<div className='flex items-start space-x-4'>
-									<Link href={"/profile"}>
-										<Avatar>
-											<AvatarImage src='https://github.com/shadcn.png' />
-											<AvatarFallback>CN</AvatarFallback>
-										</Avatar>
-									</Link>
-									<div className='flex-1'>
-										<div className='flex items-center justify-between'>
-											<div>
-												<h4 className='font-semibold text-sm'>
-													Unknown
-												</h4>
-												<p className='text-gray-500 dark:text-gray-400 text-sm'>
-													{format(
-														commentData.createdAt
-													)}
-												</p>
+				{showComments && (
+					<div className='mt-4 border-t border-gray-200 dark:border-gray-800 pt-4'>
+						<form className='flex items-center space-x-2'>
+							<Link href={"/profile"}>
+								<Avatar>
+									<AvatarImage
+										className='object-cover'
+										src={data?.createdBy?.profilepic}
+									/>
+									<AvatarFallback>CN</AvatarFallback>
+								</Avatar>
+							</Link>
+							<Input
+								placeholder='Write a comment...'
+								className='flex-1'
+								autoComplete='off'
+								value={commentText}
+								onChange={(e: any) =>
+									setCommentText(e.target.value)
+								}
+							/>
+							<Button
+								type='button'
+								onClick={() => commentHandler(data?._id)}
+								size='icon'>
+								<BsFillSendFill className='h-4 w-4' />
+								<span className='sr-only'>Send</span>
+							</Button>
+						</form>
+						{data.comments &&
+							data.comments.map((commentData: any) => (
+								<div
+									key={commentData._id}
+									className='mt-4 space-y-4'>
+									<div className='flex items-start space-x-4'>
+										<Link href={"/profile"}>
+											<Avatar>
+												<AvatarImage src='https://github.com/shadcn.png' />
+												<AvatarFallback>
+													CN
+												</AvatarFallback>
+											</Avatar>
+										</Link>
+										<div className='flex-1'>
+											<div className='flex items-center justify-between'>
+												<div>
+													<h4 className='font-semibold text-sm'>
+														Unknown
+													</h4>
+													<p className='text-gray-500 dark:text-gray-400 text-sm'>
+														{format(
+															commentData.createdAt
+														)}
+													</p>
+												</div>
+												<DropdownMenu>
+													<DropdownMenuTrigger
+														asChild>
+														<Button
+															variant='ghost'
+															size='icon'
+															className='rounded-full'>
+															<HiOutlineDotsVertical className='h-6 w-6' />
+															<span className='sr-only'>
+																More options
+															</span>
+														</Button>
+													</DropdownMenuTrigger>
+													<DropdownMenuContent align='end'>
+														<DropdownMenuItem>
+															<FaRegTrashAlt className='h-4 w-4 mr-2' />
+															Delete Comment
+														</DropdownMenuItem>
+													</DropdownMenuContent>
+												</DropdownMenu>
 											</div>
-											<DropdownMenu>
-												<DropdownMenuTrigger asChild>
-													<Button
-														variant='ghost'
-														size='icon'
-														className='rounded-full'>
-														<HiOutlineDotsVertical className='h-6 w-6' />
-														<span className='sr-only'>
-															More options
-														</span>
-													</Button>
-												</DropdownMenuTrigger>
-												<DropdownMenuContent align='end'>
-													<DropdownMenuItem>
-														<FaRegTrashAlt className='h-4 w-4 mr-2' />
-														Delete Comment
-													</DropdownMenuItem>
-												</DropdownMenuContent>
-											</DropdownMenu>
+											<p className='text-gray-700 dark:text-gray-300 mt-2'>
+												{commentData.comment}
+											</p>
 										</div>
-										<p className='text-gray-700 dark:text-gray-300 mt-2'>
-											{commentData.comment}
-										</p>
 									</div>
 								</div>
-							</div>
-						))}
-				</div>
+							))}
+					</div>
+				)}
 			</div>
 		</div>
 	);
 };
+
 export default Post;

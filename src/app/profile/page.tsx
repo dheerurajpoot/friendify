@@ -19,6 +19,7 @@ import axios from "axios";
 import { toast } from "react-hot-toast";
 import { useRouter } from "next/navigation";
 import { format } from "timeago.js";
+import { PostType } from "../page";
 interface User {
 	name: string;
 	email: string;
@@ -26,10 +27,12 @@ interface User {
 	about: string;
 	profilepic: string;
 	profession: string;
+	_id: string;
 }
 const Profile = () => {
 	const [loading, setLoading] = useState(false);
 	const [user, setUser] = useState<User>();
+	const [posts, setPosts] = useState<PostType[]>([]);
 	const router = useRouter();
 
 	const getProfile = async () => {
@@ -46,6 +49,30 @@ const Profile = () => {
 	useEffect(() => {
 		getProfile();
 	}, []);
+
+	const getAllPosts = async () => {
+		try {
+			setLoading(true);
+			const response = await axios.get("/api/posts/getallposts");
+			setPosts(response.data.posts);
+			setLoading(false);
+		} catch (error: any) {
+			throw new Error(error);
+		}
+	};
+	useEffect(() => {
+		getAllPosts();
+	}, []);
+
+	const profilePosts =
+		posts?.filter((post: any) => post.createdBy._id === user?._id) || [];
+	const userposts = profilePosts
+		.slice()
+		.sort(
+			(a, b) =>
+				new Date(b.createdAt).getTime() -
+				new Date(a.createdAt).getTime()
+		);
 
 	return (
 		<div className='flex min-h-screen pt-4 flex-col relative items-center m-auto lg:w-[900px] md:w-[900px]'>
@@ -124,7 +151,8 @@ const Profile = () => {
 					</div>
 				</CardContent>
 			</Card>
-			{/* <Post /> */}
+			{userposts.length !== 0 &&
+				userposts.map((post) => <Post key={post._id} data={post} />)}
 		</div>
 	);
 };

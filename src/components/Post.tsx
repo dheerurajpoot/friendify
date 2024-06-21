@@ -3,10 +3,11 @@ import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import { Button } from "./ui/button";
 import { FaRegTrashAlt } from "react-icons/fa";
 import { HiOutlineDotsVertical } from "react-icons/hi";
-import { CiHeart } from "react-icons/ci";
+import { FaRegHeart } from "react-icons/fa6";
 import { FaCommentDots } from "react-icons/fa";
 import Link from "next/link";
 import { BsFillSendFill } from "react-icons/bs";
+import { FaHeart } from "react-icons/fa";
 import {
 	DropdownMenu,
 	DropdownMenuTrigger,
@@ -35,10 +36,14 @@ interface PostProps {
 
 const Post: React.FC<PostProps> = ({ data }) => {
 	const [commentText, setCommentText] = useState("");
-	const [showComments, setShowComments] = useState(false); // State for comments visibility
+	const [like, setLike] = useState(false);
+	const [showComments, setShowComments] = useState(false);
 
 	const toggleComments = () => {
 		setShowComments(!showComments);
+	};
+	const toggleLikes = () => {
+		setLike(!like);
 	};
 
 	const commentHandler = async (postId: any) => {
@@ -49,6 +54,17 @@ const Post: React.FC<PostProps> = ({ data }) => {
 			});
 			toast.success(res.data.message);
 			setCommentText("");
+		} catch (error: any) {
+			throw new Error(error);
+		}
+	};
+	const likeDislikeHandler = async (postId: any) => {
+		try {
+			const res = await axios.put("/api/posts/likedislike", {
+				postId,
+			});
+			toggleLikes();
+			toast.success(res.data.message);
 		} catch (error: any) {
 			throw new Error(error);
 		}
@@ -115,8 +131,15 @@ const Post: React.FC<PostProps> = ({ data }) => {
 				</div>
 				<div className='mt-4 flex items-center justify-between space-x-4 px-5'>
 					<div className='flex items-center justify-center gap-4'>
-						<Button variant='ghost' size='icon'>
-							<CiHeart className='h-8 w-8' />
+						<Button
+							onClick={() => likeDislikeHandler(data?._id)}
+							variant='ghost'
+							size='icon'>
+							{like ? (
+								<FaHeart className='h-8 w-8' color='#F1330A' />
+							) : (
+								<FaRegHeart className='h-8 w-8' />
+							)}
 							<span className='sr-only'>Like</span>
 						</Button>
 						<Button
@@ -134,7 +157,7 @@ const Post: React.FC<PostProps> = ({ data }) => {
 				</div>
 				{showComments && (
 					<div className='mt-4 border-t border-gray-200 dark:border-gray-800 pt-4'>
-						<form className='flex items-center space-x-2'>
+						<form className='flex items-center space-x-2 md:mx-10 lg:mx-10'>
 							<Link href={"/profile"}>
 								<Avatar>
 									<AvatarImage
@@ -165,7 +188,8 @@ const Post: React.FC<PostProps> = ({ data }) => {
 							data.comments.map((commentData: any) => (
 								<div
 									key={commentData._id}
-									className='mt-4 space-y-4'>
+									className='mt-4 space-y-4 md:mx-10 lg:mx-10'>
+									<hr />
 									<div className='flex items-start space-x-4'>
 										<Link href={"/profile"}>
 											<Avatar>

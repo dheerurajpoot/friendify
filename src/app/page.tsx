@@ -4,12 +4,14 @@ import Post from "@/components/Post";
 import axios from "axios";
 import { useEffect, useState } from "react";
 
-interface PostType {
+export interface PostType {
 	_id: string;
 	postContent: string;
 	image: string;
 	createdBy: string;
 	createdAt: string;
+	likes: [];
+	comments: [];
 }
 export default function Home() {
 	const [loading, setLoading] = useState(false);
@@ -29,10 +31,19 @@ export default function Home() {
 		getAllPosts();
 	}, []);
 
+	const allPosts = posts
+		.slice()
+		.sort(
+			(a, b) =>
+				new Date(b.createdAt).getTime() -
+				new Date(a.createdAt).getTime()
+		);
+
 	return (
 		<main className='w-full'>
 			<CreatePost />
-			{posts && posts.map((post) => <Post key={post._id} data={post} />)}
+			{allPosts &&
+				allPosts.map((post) => <Post key={post._id} data={post} />)}
 		</main>
 	);
 }

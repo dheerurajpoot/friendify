@@ -7,14 +7,12 @@ export async function POST(request: NextRequest) {
 	try {
 		const reqBody = await request.json();
 		const { userId } = reqBody;
-
 		if (!userId) {
 			return NextResponse.json(
 				{ error: "User ID is required" },
 				{ status: 400 }
 			);
 		}
-
 		const user = await User.findById(userId).select("-password");
 		if (!user) {
 			return NextResponse.json(
@@ -22,7 +20,6 @@ export async function POST(request: NextRequest) {
 				{ status: 404 }
 			);
 		}
-
 		const followers = await User.find({
 			_id: { $in: user.followers },
 		}).select("name profilepic");

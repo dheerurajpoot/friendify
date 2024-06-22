@@ -7,7 +7,6 @@ connectDb();
 export async function POST(request: NextRequest) {
 	const reqBody = await request.json();
 	const { userId } = reqBody;
-	console.log(userId);
 
 	// const userId = await getTokenData(request);
 	const user = await User.findOne({ _id: userId }).select("-password");

@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import Link from "next/link";
 import { HiOutlineDotsVertical } from "react-icons/hi";
@@ -20,8 +20,11 @@ import axios from "axios";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
 import { FaEdit } from "react-icons/fa";
+import { getUserFromLocalStorage } from "@/helpers/getUserFromLocalStorage";
+import { User } from "@/app/search/page";
 
 const Header = () => {
+	const [loggedInUser, setLoggedInUser] = useState<User | null>(null);
 	const router = useRouter();
 	const logOut = async () => {
 		try {
@@ -33,6 +36,13 @@ const Header = () => {
 			throw new Error(error);
 		}
 	};
+
+	useEffect(() => {
+		const userData = getUserFromLocalStorage();
+		if (userData) {
+			setLoggedInUser(userData);
+		}
+	}, []);
 	return (
 		<div className='flex fixed top-0 bg-white items-center justify-center z-10 w-full overflow-hidden h-[80px] border-y-[1px] border-gray-400 '>
 			<div className='flex justify-between items-center w-[900px] p-4'>
@@ -62,7 +72,7 @@ const Header = () => {
 							</Button>
 						</DropdownMenuTrigger>
 						<DropdownMenuContent align='end'>
-							<Link href={"/profile"}>
+							<Link href={`/profile/${loggedInUser?._id}`}>
 								<DropdownMenuItem className='cursor-pointer'>
 									<FaRegUserCircle className='h-4 w-4 mr-2' />
 									Profile

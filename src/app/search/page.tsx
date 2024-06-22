@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import axios from "axios";
 import { getUserFromLocalStorage } from "@/helpers/getUserFromLocalStorage";
+import Link from "next/link";
 
 export interface User {
 	name: string;
@@ -76,18 +77,20 @@ export default function Search() {
 					<div
 						key={user._id}
 						className='flex items-center justify-between bg-gray-100 dark:bg-gray-800 rounded-lg p-4'>
-						<div className='flex items-center'>
-							<Avatar>
-								<AvatarImage
-									src={user.profilepic}
-									className='object-cover'
-								/>
-								<AvatarFallback>CN</AvatarFallback>
-							</Avatar>
-							<div className='ml-4'>
-								<h3 className='font-medium'>{user.name}</h3>
+						<Link href={"/profile"}>
+							<div className='flex items-center'>
+								<Avatar>
+									<AvatarImage
+										src={user.profilepic}
+										className='object-cover'
+									/>
+									<AvatarFallback>CN</AvatarFallback>
+								</Avatar>
+								<div className='ml-4'>
+									<h3 className='font-medium'>{user.name}</h3>
+								</div>
 							</div>
-						</div>
+						</Link>
 						<div className='flex items-center space-x-4'>
 							<Button onClick={() => handleFollow(user?.id)}>
 								{user?.followers?.includes(loggedInUser?._id)

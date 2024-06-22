@@ -11,6 +11,7 @@ import Link from "next/link";
 export interface User {
 	name: string;
 	email: string;
+	username: string;
 	createdAt: any;
 	about: string;
 	profilepic: string;
@@ -81,10 +82,12 @@ export default function Search() {
 							<div className='flex items-center'>
 								<Avatar>
 									<AvatarImage
-										src={user.profilepic}
+										src={user?.profilepic}
 										className='object-cover'
 									/>
-									<AvatarFallback>CN</AvatarFallback>
+									<AvatarFallback>
+										{user?.name.charAt(0)}
+									</AvatarFallback>
 								</Avatar>
 								<div className='ml-4'>
 									<h3 className='font-medium'>{user.name}</h3>

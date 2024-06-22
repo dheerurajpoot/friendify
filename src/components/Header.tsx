@@ -47,10 +47,12 @@ const Header = () => {
 		<div className='flex fixed top-0 bg-white items-center justify-center z-10 w-full overflow-hidden h-[80px] border-y-[1px] border-gray-400 '>
 			<div className='flex justify-between items-center w-[900px] p-4'>
 				<div>
-					<Link href={"/profile"}>
+					<Link href={`/profile/${loggedInUser?._id}`}>
 						<Avatar>
-							<AvatarImage src='https://github.com/shadcn.png' />
-							<AvatarFallback>CN</AvatarFallback>
+							<AvatarImage src={loggedInUser?.profilepic} />
+							<AvatarFallback>
+								{loggedInUser?.name.charAt(0)}
+							</AvatarFallback>
 						</Avatar>
 					</Link>
 				</div>

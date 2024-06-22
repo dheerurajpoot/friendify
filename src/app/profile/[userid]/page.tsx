@@ -33,7 +33,7 @@ interface User {
 	following: string[];
 }
 
-const Profile = ({ params }: any) => {
+const Profile = ({ params }: { params: { userid: string } }) => {
 	const [loading, setLoading] = useState(false);
 	const [user, setUser] = useState<User>();
 	const [posts, setPosts] = useState<PostType[]>([]);
@@ -82,7 +82,8 @@ const Profile = ({ params }: any) => {
 	}, []);
 
 	const profilePosts =
-		posts?.filter((post: any) => post.createdBy._id === user?._id) || [];
+		posts?.filter((post: PostType) => post.createdBy._id === user?._id) ||
+		[];
 	const userposts = profilePosts
 		.slice()
 		.sort(
@@ -128,7 +129,9 @@ const Profile = ({ params }: any) => {
 									src={user?.profilepic!}
 									className='object-cover'
 								/>
-								<AvatarFallback>JD</AvatarFallback>
+								<AvatarFallback>
+									{user?.name.charAt(0)}
+								</AvatarFallback>
 							</Avatar>
 						</div>
 					</CardHeader>
@@ -137,14 +140,16 @@ const Profile = ({ params }: any) => {
 					<div className='grid gap-2'>
 						<div className='flex items-center justify-between'>
 							<h2 className='text-2xl font-bold'>{user?.name}</h2>
-							<Link href={"/updateprofile"}>
-								<Button
-									variant='outline'
-									className='flex items-center justify-center'>
-									<IoSettingsOutline className='mr-2 h-4 w-4' />
-									Edit Profile
-								</Button>
-							</Link>
+							{userId === loggedInUser?._id && (
+								<Link href={"/updateprofile"}>
+									<Button
+										variant='outline'
+										className='flex items-center justify-center'>
+										<IoSettingsOutline className='mr-2 h-4 w-4' />
+										Edit Profile
+									</Button>
+								</Link>
+							)}
 						</div>
 						<p className='text-gray-500 dark:text-gray-400'>
 							{user?.profession}
@@ -174,27 +179,29 @@ const Profile = ({ params }: any) => {
 								</div>
 							)}
 						</div>
-						<div className='flex items-center justify-center gap-8 mt-4'>
-							<Link href={"/chat"}>
-								<Button variant='outline' size='sm'>
-									<FiMessageCircle className='w-4 h-4 mr-2' />
-									Message
+						{userId !== loggedInUser?._id && (
+							<div className='flex items-center justify-center gap-8 mt-4'>
+								<Link href={"/chat"}>
+									<Button variant='outline' size='sm'>
+										<FiMessageCircle className='w-4 h-4 mr-2' />
+										Message
+									</Button>
+								</Link>
+								<Button size='sm' onClick={handleFollow}>
+									{isFollowing ? (
+										<>
+											<FaUserCheck className='w-4 h-4 mr-2' />
+											Unfollow
+										</>
+									) : (
+										<>
+											<FiUserPlus className='w-4 h-4 mr-2' />
+											Follow
+										</>
+									)}
 								</Button>
-							</Link>
-							<Button size='sm' onClick={handleFollow}>
-								{isFollowing ? (
-									<>
-										<FaUserCheck className='w-4 h-4 mr-2' />
-										Unfollow
-									</>
-								) : (
-									<>
-										<FiUserPlus className='w-4 h-4 mr-2' />
-										Follow
-									</>
-								)}
-							</Button>
-						</div>
+							</div>
+						)}
 					</div>
 				</CardContent>
 			</Card>

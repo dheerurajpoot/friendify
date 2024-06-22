@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import { Button } from "./ui/button";
 import { FaRegTrashAlt } from "react-icons/fa";
@@ -8,6 +8,7 @@ import { FaCommentDots } from "react-icons/fa";
 import Link from "next/link";
 import { BsFillSendFill } from "react-icons/bs";
 import { FaHeart } from "react-icons/fa";
+import { FaRegUserCircle } from "react-icons/fa";
 import {
 	DropdownMenu,
 	DropdownMenuTrigger,
@@ -19,6 +20,8 @@ import Image from "next/image";
 import { format } from "timeago.js";
 import axios from "axios";
 import toast from "react-hot-toast";
+import { getUserFromLocalStorage } from "@/helpers/getUserFromLocalStorage";
+import { User } from "@/app/search/page";
 
 interface PostType {
 	_id: string;
@@ -38,6 +41,7 @@ const Post: React.FC<PostProps> = ({ data }) => {
 	const [commentText, setCommentText] = useState("");
 	const [like, setLike] = useState(false);
 	const [showComments, setShowComments] = useState(false);
+	const [loggedInUser, setLoggedInUser] = useState<User | null>(null);
 
 	const toggleComments = () => {
 		setShowComments(!showComments);
@@ -70,6 +74,13 @@ const Post: React.FC<PostProps> = ({ data }) => {
 		}
 	};
 
+	useEffect(() => {
+		const userData = getUserFromLocalStorage();
+		if (userData) {
+			setLoggedInUser(userData);
+		}
+	}, []);
+
 	return (
 		<div className='bg-white my-4 dark:bg-gray-950 rounded-lg border border-gray-200 dark:border-gray-800 shadow-sm m-auto lg:w-[900px] md:w-[900px]'>
 			<div className='p-4'>
@@ -80,7 +91,9 @@ const Post: React.FC<PostProps> = ({ data }) => {
 								src={data?.createdBy?.profilepic}
 								className='object-cover'
 							/>
-							<AvatarFallback>CN</AvatarFallback>
+							<AvatarFallback>
+								{data?.createdBy?.name.charAt(0)}
+							</AvatarFallback>
 						</Avatar>
 					</Link>
 					<div className='flex-1'>
@@ -108,10 +121,20 @@ const Post: React.FC<PostProps> = ({ data }) => {
 									</Button>
 								</DropdownMenuTrigger>
 								<DropdownMenuContent align='end'>
-									<DropdownMenuItem>
-										<FaRegTrashAlt className='h-4 w-4 mr-2' />
-										Delete Post
-									</DropdownMenuItem>
+									<Link
+										href={`/profile/${data?.createdBy?._id}`}>
+										<DropdownMenuItem className='cursor-pointer'>
+											<FaRegUserCircle className='h-4 w-4 mr-2' />
+											View Profile
+										</DropdownMenuItem>
+									</Link>
+									{data?.createdBy?._id ===
+										loggedInUser?._id && (
+										<DropdownMenuItem className='cursor-pointer'>
+											<FaRegTrashAlt className='h-4 w-4 mr-2' />
+											Delete Post
+										</DropdownMenuItem>
+									)}
 								</DropdownMenuContent>
 							</DropdownMenu>
 						</div>
@@ -164,7 +187,9 @@ const Post: React.FC<PostProps> = ({ data }) => {
 										className='object-cover'
 										src={data?.createdBy?.profilepic}
 									/>
-									<AvatarFallback>CN</AvatarFallback>
+									<AvatarFallback>
+										{data?.createdBy?.name.charAt(0)}
+									</AvatarFallback>
 								</Avatar>
 							</Link>
 							<Input

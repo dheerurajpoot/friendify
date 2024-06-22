@@ -8,7 +8,7 @@ export interface PostType {
 	_id: string;
 	postContent: string;
 	image: string;
-	createdBy: string;
+	createdBy: { _id: string };
 	createdAt: string;
 	likes: [];
 	comments: [];

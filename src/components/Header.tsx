@@ -96,13 +96,6 @@ const Header = () => {
 								Delete Profile
 							</DropdownMenuItem>
 							<DropdownMenuSeparator />
-							<DropdownMenuItem
-								onClick={logOut}
-								className='cursor-pointer'>
-								<MdLogout className='w-4 h-4 mr-2' />
-								Logout
-							</DropdownMenuItem>
-							<DropdownMenuSeparator />
 							<Link href={"/"}>
 								<DropdownMenuItem className='cursor-pointer'>
 									<BiSupport className='h-4 w-4 mr-2' />
@@ -116,6 +109,13 @@ const Header = () => {
 									About
 								</DropdownMenuItem>
 							</Link>
+							<DropdownMenuSeparator />
+							<DropdownMenuItem
+								onClick={logOut}
+								className='cursor-pointer'>
+								<MdLogout className='w-4 h-4 mr-2' />
+								Logout
+							</DropdownMenuItem>
 						</DropdownMenuContent>
 					</DropdownMenu>
 				</div>

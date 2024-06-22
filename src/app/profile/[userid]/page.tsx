@@ -54,10 +54,11 @@ const Profile = ({ params }: { params: { userid: string } }) => {
 	}, [userId]);
 
 	useEffect(() => {
+		if (user?.followers.length === 0) return;
 		if (user && loggedInUser) {
-			setIsFollowing(user.followers.includes(loggedInUser._id));
+			setIsFollowing(user?.followers.includes(loggedInUser?._id));
 		}
-	}, [user, loggedInUser]);
+	}, [user?.followers, loggedInUser]);
 
 	const getAllPosts = async () => {
 		try {
@@ -92,7 +93,7 @@ const Profile = ({ params }: { params: { userid: string } }) => {
 				id: user?._id,
 			});
 			if (response.data.success) {
-				setIsFollowing(!isFollowing);
+				// setIsFollowing(!isFollowing);
 				toast.success(response.data.message);
 			} else {
 				toast.error(response.data.error);

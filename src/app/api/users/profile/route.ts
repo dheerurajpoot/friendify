@@ -8,10 +8,7 @@ export async function POST(request: NextRequest) {
 	const reqBody = await request.json();
 	const { userId } = reqBody;
 	// const userId = await getTokenData(request);
-	const user = await User.findOne({ _id: userId })
-		.select("-password")
-		.populate("following", "name username profilepic")
-		.populate("followers", "name username profilepic");
+	const user = await User.findOne({ _id: userId }).select("-password");
 	if (!user) {
 		return NextResponse.json({ error: "User not found" }, { status: 400 });
 	}

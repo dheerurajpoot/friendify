@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
@@ -8,11 +8,15 @@ import { RxCross2 } from "react-icons/rx";
 import { FaRegImage } from "react-icons/fa6";
 import axios from "axios";
 import toast from "react-hot-toast";
+import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
+import { getUserFromLocalStorage } from "@/helpers/getUserFromLocalStorage";
+import { User } from "@/app/search/page";
 
 export default function Component() {
 	const [loading, setLoading] = useState(false);
 	const [postContent, setPostContent] = useState("");
 	const [image, setImage] = useState<string | File>("");
+	const [loggedInUser, setLoggedInUser] = useState<User | null>(null);
 	const [isEmojiModalOpen, setIsEmojiModalOpen] = useState(false);
 	const [emojis, setEmojis] = useState([
 		"😀",
@@ -90,9 +94,26 @@ export default function Component() {
 			throw new Error(error);
 		}
 	};
+	useEffect(() => {
+		const userData = getUserFromLocalStorage();
+		if (userData) {
+			setLoggedInUser(userData);
+		}
+	}, []);
 
 	return (
-		<div className='bg-white dark:bg-gray-950 rounded-lg shadow-md p-4 sm:p-6 flex flex-col min-h-sm relative items-center justify-center pt-5 m-auto lg:w-[900px] md:w-[900px]'>
+		<div className='bg-white dark:bg-gray-950 rounded-lg shadow-md p-4 sm:p-6 flex min-h-sm relative items-center justify-center pt-5 m-auto lg:w-[900px] md:w-[900px]'>
+			<div className='mr-4'>
+				<Avatar>
+					<AvatarImage
+						src={loggedInUser?.profilepic}
+						className='object-cover cursor-pointer'
+					/>
+					<AvatarFallback>
+						{loggedInUser?.name.charAt(0)}
+					</AvatarFallback>
+				</Avatar>
+			</div>
 			<div className='flex flex-col gap-4 w-full'>
 				<Textarea
 					value={postContent}

@@ -9,19 +9,16 @@ import { User } from "../search/page";
 import { getUserFromLocalStorage } from "@/helpers/getUserFromLocalStorage";
 import axios from "axios";
 import Link from "next/link";
-import { FaUserCheck } from "react-icons/fa";
-import { FiUserPlus } from "react-icons/fi";
-import toast from "react-hot-toast";
+import { useRouter } from "next/navigation";
+import { CgProfile } from "react-icons/cg";
 
 export default function Friends() {
 	const [searchTerm, setSearchTerm] = useState("");
 	const [loading, setLoading] = useState(false);
 	const [friends, setFriends] = useState<User[]>([]);
-	const [user, setUser] = useState<User>();
 	const [filteredFriends, setFilteredFriends] = useState<User[]>([]);
 	const [loggedInUser, setLoggedInUser] = useState<User | null>(null);
-	const [isFollowing, setIsFollowing] = useState(false);
-
+	const router = useRouter();
 	useEffect(() => {
 		const userData = getUserFromLocalStorage();
 		if (userData) {
@@ -30,26 +27,31 @@ export default function Friends() {
 	}, []);
 
 	const userId = loggedInUser?._id;
-	const getProfile = async () => {
+
+	const getFriends = async () => {
 		try {
-			setLoading(true);
 			if (!userId) return;
-			const response = await axios.post("/api/users/profile", { userId });
-			setUser(response?.data?.data);
+			setLoading(true);
+			const response = await axios.post("/api/users/getfriends", {
+				userId,
+			});
+			// const { followers, following } = response.data.data;
+			// const allFriends = [...followers, ...following];
 			const followingUser = response?.data?.data?.following;
+
 			if (followingUser.length === 0) return;
 			setFriends(followingUser);
 			setFilteredFriends(followingUser);
-
 			setLoading(false);
 		} catch (error: any) {
+			setLoading(false);
 			throw new Error(error);
 		}
 	};
 
 	useEffect(() => {
-		getProfile();
-	}, [userId]);
+		getFriends();
+	}, [loggedInUser, userId]);
 
 	const handleSearch = (e: any) => {
 		const term = e.target.value.toLowerCase();
@@ -61,29 +63,11 @@ export default function Friends() {
 		);
 	};
 
-	useEffect(() => {
-		if (user && loggedInUser) {
-			setIsFollowing(user.followers.includes(loggedInUser._id));
-		}
-	}, [user, loggedInUser]);
-
-	const handleFollow = async (fId: string) => {
-		try {
-			setLoading(true);
-			const response = await axios.put("/api/users/followunfollow", {
-				id: fId,
-			});
-			if (response.data.success) {
-				setIsFollowing(!isFollowing);
-				toast.success(response.data.message);
-			} else {
-				toast.error(response.data.error);
-			}
-			setLoading(false);
-		} catch (error: any) {
-			toast.error("Something went wrong");
-			setLoading(false);
-		}
+	const toProfile = (fId: string) => {
+		router.push(`/profile/${fId}`);
+	};
+	const toMessage = (fId: string) => {
+		router.push(`/message/${fId}`);
 	};
 
 	return (
@@ -109,7 +93,10 @@ export default function Friends() {
 						<Link href={`/profile/${friend?._id}`}>
 							<div className='flex items-center gap-4'>
 								<Avatar>
-									<AvatarImage src={friend.profilepic} />
+									<AvatarImage
+										src={friend.profilepic}
+										className='object-cover'
+									/>
 									<AvatarFallback>
 										{friend?.name.charAt(0)}
 									</AvatarFallback>
@@ -125,23 +112,18 @@ export default function Friends() {
 							</div>
 						</Link>
 						<div className='flex items-center gap-2'>
-							<Button variant='outline' size='sm'>
+							<Button
+								variant='outline'
+								size='sm'
+								onClick={() => toMessage(friend?._id)}>
+								<FiMessageCircle className='w-4 h-4 mr-2' />
 								Message
 							</Button>
 							<Button
 								size='sm'
-								onClick={() => handleFollow(friend?._id)}>
-								{isFollowing ? (
-									<>
-										<FaUserCheck className='w-4 h-4 mr-2' />
-										Unfollow
-									</>
-								) : (
-									<>
-										<FiUserPlus className='w-4 h-4 mr-2' />
-										Follow
-									</>
-								)}
+								onClick={() => toProfile(friend?._id)}>
+								<CgProfile className='w-4 h-4 mr-2' />
+								View Profile
 							</Button>
 						</div>
 					</div>

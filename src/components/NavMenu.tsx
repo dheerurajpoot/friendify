@@ -10,57 +10,61 @@ import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import Link from "next/link";
 import { User } from "@/app/search/page";
 import { getUserFromLocalStorage } from "@/helpers/getUserFromLocalStorage";
+import { useRouter } from "next/navigation";
 
 const NavMenu = () => {
 	const [loggedInUser, setLoggedInUser] = useState<User | null>(null);
-
+	const router = useRouter();
 	useEffect(() => {
 		const userData = getUserFromLocalStorage();
 		if (userData) {
 			setLoggedInUser(userData);
 		}
 	}, []);
+	const toFriends = () => {
+		router.push("/friends");
+	};
 	return (
 		<div className='flex justify-center items-center w-full fixed bottom-4 bg-white  '>
 			<Menubar className='flex justify-between items-center w-[900px] h-[80px] p-4 px-12 shadow-2xl'>
 				<MenubarMenu>
-					<MenubarTrigger>
-						<Link href={"/"}>
+					<Link href={"/"}>
+						<MenubarTrigger className='cursor-pointer'>
 							<FaHome size={30} />
-						</Link>
-					</MenubarTrigger>
+						</MenubarTrigger>
+					</Link>
 				</MenubarMenu>
 				<MenubarMenu>
-					<MenubarTrigger>
-						<Link href={"/friends"}>
+					<Link href={"/friends"}>
+						<MenubarTrigger className='cursor-pointer'>
 							<FaUserFriends size={30} />
-						</Link>
-					</MenubarTrigger>
+						</MenubarTrigger>
+					</Link>
 				</MenubarMenu>
 				<MenubarMenu>
-					<MenubarTrigger>
-						<Link href={"/chat"}>
+					<Link href={"/chat"}>
+						<MenubarTrigger className='cursor-pointer'>
 							<FaFacebookMessenger size={30} />
-						</Link>
-					</MenubarTrigger>
+						</MenubarTrigger>
+					</Link>
 				</MenubarMenu>
 				<MenubarMenu>
-					<MenubarTrigger>
-						<Link href={"/search"}>
+					<Link href={"/search"}>
+						<MenubarTrigger className='cursor-pointer'>
 							<IoSearchSharp size={30} />
-						</Link>
-					</MenubarTrigger>
+						</MenubarTrigger>
+					</Link>
 				</MenubarMenu>
 				<MenubarMenu>
-					<MenubarTrigger>
-						<Link href={"/notification"}>
+					<Link href={"/notification"}>
+						<MenubarTrigger className='cursor-pointer'>
 							<IoNotifications size={30} />
-						</Link>
-					</MenubarTrigger>
+						</MenubarTrigger>
+					</Link>
 				</MenubarMenu>
 				<MenubarMenu>
-					<MenubarTrigger>
-						<Link href={`/profile/${loggedInUser?._id}`}>
+					<Link href={`/profile/${loggedInUser?._id}`}>
+						<MenubarTrigger className='cursor-pointer'>
 							<Avatar>
 								<AvatarImage
 									src={loggedInUser?.profilepic}
@@ -70,8 +74,8 @@ const NavMenu = () => {
 									{loggedInUser?.name.charAt(0)}
 								</AvatarFallback>
 							</Avatar>
-						</Link>
-					</MenubarTrigger>
+						</MenubarTrigger>
+					</Link>
 				</MenubarMenu>
 			</Menubar>
 		</div>

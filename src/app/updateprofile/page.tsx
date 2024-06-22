@@ -19,6 +19,8 @@ import Link from "next/link";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import { toast } from "react-hot-toast";
+import { getUserFromLocalStorage } from "@/helpers/getUserFromLocalStorage";
+import { User } from "../search/page";
 
 export default function Component() {
 	const [name, setName] = useState("");
@@ -28,6 +30,7 @@ export default function Component() {
 	const [about, setAbout] = useState("");
 	const [profilePhoto, setProfilePhoto] = useState<string | File>("");
 	const [loading, setLoading] = useState(false);
+	const [loggedInUser, setLoggedInUser] = useState<User | null>(null);
 	const router = useRouter();
 
 	const uploadFile = async () => {
@@ -49,10 +52,19 @@ export default function Component() {
 		}
 	};
 
+	useEffect(() => {
+		const userData = getUserFromLocalStorage();
+		if (userData) {
+			setLoggedInUser(userData);
+		}
+	}, []);
+	const userId = loggedInUser?._id;
 	const getProfile = async () => {
 		try {
 			setLoading(true);
-			const response = await axios.post("/api/users/profile");
+			if (!userId) return;
+			const response = await axios.post("/api/users/profile", { userId });
+
 			const userData = response.data.data;
 
 			setProfilePhoto(userData?.profilepic || ProfilePic.src);
@@ -68,7 +80,7 @@ export default function Component() {
 	};
 	useEffect(() => {
 		getProfile();
-	}, []);
+	}, [userId]);
 
 	const handleSubmit = async (event: any) => {
 		event.preventDefault();
@@ -100,7 +112,7 @@ export default function Component() {
 			<form className='w-full'>
 				<Card className='w-full mx-auto'>
 					<div className='flex items-center ml-4'>
-						<Link href={"/profile"}>
+						<Link href={`/profile/${loggedInUser?._id}`}>
 							<Button
 								variant='ghost'
 								size='icon'

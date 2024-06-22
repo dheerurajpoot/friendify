@@ -10,13 +10,15 @@ import Link from "next/link";
 
 export interface User {
 	name: string;
-	email: string;
 	username: string;
+	email: string;
 	createdAt: any;
 	about: string;
 	profilepic: string;
 	profession: string;
 	_id: string;
+	followers: string[];
+	following: string[];
 }
 
 export default function Search() {

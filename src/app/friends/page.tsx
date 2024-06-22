@@ -9,13 +9,18 @@ import { User } from "../search/page";
 import { getUserFromLocalStorage } from "@/helpers/getUserFromLocalStorage";
 import axios from "axios";
 import Link from "next/link";
+import { FaUserCheck } from "react-icons/fa";
+import { FiUserPlus } from "react-icons/fi";
+import toast from "react-hot-toast";
 
 export default function Friends() {
 	const [searchTerm, setSearchTerm] = useState("");
 	const [loading, setLoading] = useState(false);
 	const [friends, setFriends] = useState<User[]>([]);
+	const [user, setUser] = useState<User>();
 	const [filteredFriends, setFilteredFriends] = useState<User[]>([]);
 	const [loggedInUser, setLoggedInUser] = useState<User | null>(null);
+	const [isFollowing, setIsFollowing] = useState(false);
 
 	useEffect(() => {
 		const userData = getUserFromLocalStorage();
@@ -25,23 +30,20 @@ export default function Friends() {
 	}, []);
 
 	const userId = loggedInUser?._id;
-
 	const getProfile = async () => {
 		try {
-			if (!userId) return;
 			setLoading(true);
-			const response = await axios.post("/api/users/getfriends", {
-				userId,
-			});
-			const { followers, following } = response.data.data;
-			const allFriends = [...followers, ...following];
+			if (!userId) return;
+			const response = await axios.post("/api/users/profile", { userId });
+			setUser(response?.data?.data);
+			const followingUser = response?.data?.data?.following;
+			if (followingUser.length === 0) return;
+			setFriends(followingUser);
+			setFilteredFriends(followingUser);
 
-			setFriends(allFriends);
-			setFilteredFriends(allFriends);
 			setLoading(false);
 		} catch (error: any) {
-			console.error(error);
-			setLoading(false);
+			throw new Error(error);
 		}
 	};
 
@@ -57,6 +59,31 @@ export default function Friends() {
 				friend.name.toLowerCase().includes(term)
 			)
 		);
+	};
+
+	useEffect(() => {
+		if (user && loggedInUser) {
+			setIsFollowing(user.followers.includes(loggedInUser._id));
+		}
+	}, [user, loggedInUser]);
+
+	const handleFollow = async (fId: string) => {
+		try {
+			setLoading(true);
+			const response = await axios.put("/api/users/followunfollow", {
+				id: fId,
+			});
+			if (response.data.success) {
+				setIsFollowing(!isFollowing);
+				toast.success(response.data.message);
+			} else {
+				toast.error(response.data.error);
+			}
+			setLoading(false);
+		} catch (error: any) {
+			toast.error("Something went wrong");
+			setLoading(false);
+		}
 	};
 
 	return (
@@ -75,7 +102,7 @@ export default function Friends() {
 				</div>
 			</div>
 			<div className='grid gap-4'>
-				{filteredFriends.map((friend: User) => (
+				{filteredFriends?.map((friend: User) => (
 					<div
 						key={friend._id}
 						className='flex items-center justify-between bg-gray-100 dark:bg-gray-800 rounded-lg p-4'>
@@ -101,7 +128,21 @@ export default function Friends() {
 							<Button variant='outline' size='sm'>
 								Message
 							</Button>
-							<Button size='sm'>Unfollow</Button>
+							<Button
+								size='sm'
+								onClick={() => handleFollow(friend?._id)}>
+								{isFollowing ? (
+									<>
+										<FaUserCheck className='w-4 h-4 mr-2' />
+										Unfollow
+									</>
+								) : (
+									<>
+										<FiUserPlus className='w-4 h-4 mr-2' />
+										Follow
+									</>
+								)}
+							</Button>
 						</div>
 					</div>
 				))}

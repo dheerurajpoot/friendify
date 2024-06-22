@@ -20,18 +20,7 @@ import { useRouter } from "next/navigation";
 import { format } from "timeago.js";
 import { getUserFromLocalStorage } from "@/helpers/getUserFromLocalStorage";
 import { PostType } from "@/app/page";
-
-interface User {
-	name: string;
-	email: string;
-	createdAt: any;
-	about: string;
-	profilepic: string;
-	profession: string;
-	_id: string;
-	followers: string[];
-	following: string[];
-}
+import { User } from "@/app/search/page";
 
 const Profile = ({ params }: { params: { userid: string } }) => {
 	const [loading, setLoading] = useState(false);
@@ -54,9 +43,6 @@ const Profile = ({ params }: { params: { userid: string } }) => {
 			setLoading(true);
 			const response = await axios.post("/api/users/profile", { userId });
 			setUser(response?.data?.data);
-			setIsFollowing(
-				response?.data?.data?.followers?.includes(loggedInUser?._id)
-			);
 			setLoading(false);
 		} catch (error: any) {
 			throw new Error(error);
@@ -65,7 +51,13 @@ const Profile = ({ params }: { params: { userid: string } }) => {
 
 	useEffect(() => {
 		getProfile();
-	}, []);
+	}, [userId]);
+
+	useEffect(() => {
+		if (user && loggedInUser) {
+			setIsFollowing(user.followers.includes(loggedInUser._id));
+		}
+	}, [user, loggedInUser]);
 
 	const getAllPosts = async () => {
 		try {
@@ -77,6 +69,7 @@ const Profile = ({ params }: { params: { userid: string } }) => {
 			throw new Error(error);
 		}
 	};
+
 	useEffect(() => {
 		getAllPosts();
 	}, []);

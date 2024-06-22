@@ -29,7 +29,7 @@ interface PostType {
 	image: string;
 	createdBy: any;
 	createdAt: string;
-	likes: [];
+	likes: string[];
 	comments: { _id: string; comment: string; createdAt: string }[];
 }
 
@@ -39,18 +39,15 @@ interface PostProps {
 
 const Post: React.FC<PostProps> = ({ data }) => {
 	const [commentText, setCommentText] = useState("");
-	const [like, setLike] = useState(false);
+	const [isLike, setIsLike] = useState(false);
 	const [showComments, setShowComments] = useState(false);
 	const [loggedInUser, setLoggedInUser] = useState<User | null>(null);
 
 	const toggleComments = () => {
 		setShowComments(!showComments);
 	};
-	const toggleLikes = () => {
-		setLike(!like);
-	};
 
-	const commentHandler = async (postId: any) => {
+	const commentHandler = async (postId: string) => {
 		try {
 			const res = await axios.post("/api/posts/createcomment", {
 				commentText,
@@ -62,12 +59,21 @@ const Post: React.FC<PostProps> = ({ data }) => {
 			throw new Error(error);
 		}
 	};
-	const likeDislikeHandler = async (postId: any) => {
+
+	useEffect(() => {
+		if (data && loggedInUser) {
+			setIsLike(data.likes.includes(loggedInUser._id));
+		}
+	}, [data, loggedInUser]);
+
+	const likeDislikeHandler = async (postId: string) => {
 		try {
 			const res = await axios.put("/api/posts/likedislike", {
 				postId,
 			});
-			toggleLikes();
+			if (res.data.success) {
+				setIsLike(!isLike);
+			}
 			toast.success(res.data.message);
 		} catch (error: any) {
 			throw new Error(error);
@@ -85,27 +91,27 @@ const Post: React.FC<PostProps> = ({ data }) => {
 		<div className='bg-white my-4 dark:bg-gray-950 rounded-lg border border-gray-200 dark:border-gray-800 shadow-sm m-auto lg:w-[900px] md:w-[900px]'>
 			<div className='p-4'>
 				<div className='flex items-start space-x-4'>
-					<Link href={`/profile/${data?.createdBy?._id}`}>
+					<Link href={`/profile/${data.createdBy._id}`}>
 						<Avatar>
 							<AvatarImage
-								src={data?.createdBy?.profilepic}
+								src={data.createdBy.profilepic}
 								className='object-cover'
 							/>
 							<AvatarFallback>
-								{data?.createdBy?.name.charAt(0)}
+								{data.createdBy.name.charAt(0)}
 							</AvatarFallback>
 						</Avatar>
 					</Link>
 					<div className='flex-1'>
 						<div className='flex items-center justify-between'>
 							<div>
-								<Link href={`/profile/${data?.createdBy?._id}`}>
+								<Link href={`/profile/${data.createdBy._id}`}>
 									<h4 className='font-semibold text-base'>
-										{data?.createdBy.name}
+										{data.createdBy.name}
 									</h4>
 								</Link>
 								<p className='text-gray-500 dark:text-gray-400 text-sm'>
-									{format(data?.createdAt)}
+									{format(data.createdAt)}
 								</p>
 							</div>
 							<DropdownMenu>
@@ -122,13 +128,13 @@ const Post: React.FC<PostProps> = ({ data }) => {
 								</DropdownMenuTrigger>
 								<DropdownMenuContent align='end'>
 									<Link
-										href={`/profile/${data?.createdBy?._id}`}>
+										href={`/profile/${data.createdBy._id}`}>
 										<DropdownMenuItem className='cursor-pointer'>
 											<FaRegUserCircle className='h-4 w-4 mr-2' />
 											View Profile
 										</DropdownMenuItem>
 									</Link>
-									{data?.createdBy?._id ===
+									{data.createdBy._id ===
 										loggedInUser?._id && (
 										<DropdownMenuItem className='cursor-pointer'>
 											<FaRegTrashAlt className='h-4 w-4 mr-2' />
@@ -139,11 +145,11 @@ const Post: React.FC<PostProps> = ({ data }) => {
 							</DropdownMenu>
 						</div>
 						<p className='text-gray-700 dark:text-gray-300 mt-2'>
-							{data?.postContent}
+							{data.postContent}
 						</p>
-						{data?.image && (
+						{data.image && (
 							<Image
-								src={data?.image}
+								src={data.image}
 								width={700}
 								height={450}
 								alt='Post Image'
@@ -155,10 +161,10 @@ const Post: React.FC<PostProps> = ({ data }) => {
 				<div className='mt-4 flex items-center justify-between space-x-4 px-5'>
 					<div className='flex items-center justify-center gap-4'>
 						<Button
-							onClick={() => likeDislikeHandler(data?._id)}
+							onClick={() => likeDislikeHandler(data._id)}
 							variant='ghost'
 							size='icon'>
-							{like ? (
+							{isLike ? (
 								<FaHeart className='h-8 w-8' color='#F1330A' />
 							) : (
 								<FaRegHeart className='h-8 w-8' />
@@ -174,7 +180,7 @@ const Post: React.FC<PostProps> = ({ data }) => {
 						</Button>
 					</div>
 					<div className='text-gray-500 dark:text-gray-400 text-base'>
-						{data?.likes?.length} likes • {data?.comments?.length}{" "}
+						{data.likes.length} likes • {data.comments.length}{" "}
 						comments
 					</div>
 				</div>
@@ -185,10 +191,10 @@ const Post: React.FC<PostProps> = ({ data }) => {
 								<Avatar>
 									<AvatarImage
 										className='object-cover'
-										src={data?.createdBy?.profilepic}
+										src={data.createdBy.profilepic}
 									/>
 									<AvatarFallback>
-										{data?.createdBy?.name.charAt(0)}
+										{data.createdBy.name.charAt(0)}
 									</AvatarFallback>
 								</Avatar>
 							</Link>
@@ -197,13 +203,13 @@ const Post: React.FC<PostProps> = ({ data }) => {
 								className='flex-1'
 								autoComplete='off'
 								value={commentText}
-								onChange={(e: any) =>
-									setCommentText(e.target.value)
-								}
+								onChange={(
+									e: React.ChangeEvent<HTMLInputElement>
+								) => setCommentText(e.target.value)}
 							/>
 							<Button
 								type='button'
-								onClick={() => commentHandler(data?._id)}
+								onClick={() => commentHandler(data._id)}
 								size='icon'>
 								<BsFillSendFill className='h-4 w-4' />
 								<span className='sr-only'>Send</span>

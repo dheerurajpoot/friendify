@@ -49,7 +49,10 @@ const Header = () => {
 				<div>
 					<Link href={`/profile/${loggedInUser?._id}`}>
 						<Avatar>
-							<AvatarImage src={loggedInUser?.profilepic} />
+							<AvatarImage
+								src={loggedInUser?.profilepic}
+								className='object-cover'
+							/>
 							<AvatarFallback>
 								{loggedInUser?.name.charAt(0)}
 							</AvatarFallback>

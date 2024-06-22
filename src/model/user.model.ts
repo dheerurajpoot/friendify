@@ -13,6 +13,8 @@ export interface userInterface {
 	verifyTokenExpiry: string;
 	profession: string;
 	about: string;
+	followers: any;
+	following: any;
 }
 export interface userDocument extends userInterface, Document {
 	createdAt: Date;
@@ -50,6 +52,18 @@ const userModel = new mongoose.Schema<userDocument>(
 			type: Boolean,
 			default: false,
 		},
+		followers: [
+			{
+				type: mongoose.Schema.Types.ObjectId,
+				ref: "User",
+			},
+		],
+		following: [
+			{
+				type: mongoose.Schema.Types.ObjectId,
+				ref: "User",
+			},
+		],
 		forgotPasswordToken: String,
 		forgotPasswordTokenExpiry: Date,
 		verifyToken: String,

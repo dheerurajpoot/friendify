@@ -20,6 +20,7 @@ const Signin = () => {
 		try {
 			setLoading(true);
 			const response = await axios.post("/api/users/login", user);
+			localStorage.setItem("user", JSON.stringify(response.data.user));
 
 			toast.success(response.data.message);
 			router.push("/");

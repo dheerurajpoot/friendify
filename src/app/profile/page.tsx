@@ -4,7 +4,6 @@ import ProfilePic from "./../../../public/post.jpg";
 import Post from "@/components/Post";
 import Link from "next/link";
 import { FaUserCheck } from "react-icons/fa";
-
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -20,6 +19,8 @@ import { toast } from "react-hot-toast";
 import { useRouter } from "next/navigation";
 import { format } from "timeago.js";
 import { PostType } from "../page";
+import { getUserFromLocalStorage } from "@/helpers/getUserFromLocalStorage";
+
 interface User {
 	name: string;
 	email: string;
@@ -28,18 +29,33 @@ interface User {
 	profilepic: string;
 	profession: string;
 	_id: string;
+	followers: string[];
+	following: string[];
 }
+
 const Profile = () => {
 	const [loading, setLoading] = useState(false);
 	const [user, setUser] = useState<User>();
 	const [posts, setPosts] = useState<PostType[]>([]);
+	const [isFollowing, setIsFollowing] = useState(false);
+	const [loggedInUser, setLoggedInUser] = useState<User | null>(null);
 	const router = useRouter();
+
+	useEffect(() => {
+		const userData = getUserFromLocalStorage();
+		if (userData) {
+			setLoggedInUser(userData);
+		}
+	}, []);
 
 	const getProfile = async () => {
 		try {
 			setLoading(true);
 			const response = await axios.post("/api/users/profile");
-			setUser(response.data.data);
+			setUser(response?.data?.data);
+			setIsFollowing(
+				response?.data?.data?.followers?.includes(loggedInUser?._id)
+			);
 			setLoading(false);
 		} catch (error: any) {
 			throw new Error(error);
@@ -73,6 +89,25 @@ const Profile = () => {
 				new Date(b.createdAt).getTime() -
 				new Date(a.createdAt).getTime()
 		);
+
+	const handleFollow = async () => {
+		try {
+			setLoading(true);
+			const response = await axios.put("/api/users/followunfollow", {
+				id: user?._id,
+			});
+			if (response.data.success) {
+				setIsFollowing(!isFollowing);
+				toast.success(response.data.message);
+			} else {
+				toast.error(response.data.error);
+			}
+			setLoading(false);
+		} catch (error: any) {
+			toast.error("Something went wrong");
+			setLoading(false);
+		}
+	};
 
 	return (
 		<div className='flex min-h-screen pt-4 flex-col relative items-center m-auto lg:w-[900px] md:w-[900px]'>
@@ -127,14 +162,16 @@ const Profile = () => {
 									{format(user?.createdAt)}
 								</span>
 							</div>
-							<div className='flex items-start gap-2'>
-								<FaUserCheck className='w-5 h-5 text-gray-500 dark:text-gray-400 mt-1' />
-								<div>
-									<p className='text-gray-500 dark:text-gray-400'>
-										{user?.about}
-									</p>
+							{user?.about && (
+								<div className='flex items-start gap-2'>
+									<FaUserCheck className='w-5 h-5 text-gray-500 dark:text-gray-400 mt-1' />
+									<div>
+										<p className='text-gray-500 dark:text-gray-400'>
+											{user?.about}
+										</p>
+									</div>
 								</div>
-							</div>
+							)}
 						</div>
 						<div className='flex items-center justify-center gap-8 mt-4'>
 							<Link href={"/chat"}>
@@ -143,16 +180,28 @@ const Profile = () => {
 									Message
 								</Button>
 							</Link>
-							<Button size='sm'>
-								<FiUserPlus className='w-4 h-4 mr-2' />
-								Follow
+							<Button size='sm' onClick={handleFollow}>
+								{isFollowing ? (
+									<>
+										<FaUserCheck className='w-4 h-4 mr-2' />
+										Unfollow
+									</>
+								) : (
+									<>
+										<FiUserPlus className='w-4 h-4 mr-2' />
+										Follow
+									</>
+								)}
 							</Button>
 						</div>
 					</div>
 				</CardContent>
 			</Card>
-			{userposts.length !== 0 &&
-				userposts.map((post) => <Post key={post._id} data={post} />)}
+			{userposts && userposts.length !== 0 ? (
+				userposts.map((post) => <Post key={post._id} data={post} />)
+			) : (
+				<p className='mt-10'>You have not posted yet </p>
+			)}
 		</div>
 	);
 };

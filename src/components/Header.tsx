@@ -22,10 +22,11 @@ import { useRouter } from "next/navigation";
 import { FaEdit } from "react-icons/fa";
 
 const Header = () => {
+	const router = useRouter();
 	const logOut = async () => {
-		const router = useRouter();
 		try {
 			await axios.get("/api/users/logout");
+			localStorage.removeItem("user");
 			toast.success("Logout Successfully");
 			router.push("/login");
 		} catch (error: any) {

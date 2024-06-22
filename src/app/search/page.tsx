@@ -77,7 +77,7 @@ export default function Search() {
 					<div
 						key={user._id}
 						className='flex items-center justify-between bg-gray-100 dark:bg-gray-800 rounded-lg p-4'>
-						<Link href={"/profile"}>
+						<Link href={`/profile/${user?._id}`}>
 							<div className='flex items-center'>
 								<Avatar>
 									<AvatarImage

@@ -22,7 +22,7 @@ export default function RootLayout({
 			<body className={inter.className}>
 				<Header />
 				<Toaster />
-				<div className='my-20'>{children}</div>
+				<div className='my-24'>{children}</div>
 				<NavMenu />
 			</body>
 		</html>

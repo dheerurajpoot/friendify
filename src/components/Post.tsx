@@ -150,10 +150,10 @@ const Post: React.FC<PostProps> = ({ data }) => {
 						{data.image && (
 							<Image
 								src={data.image}
-								width={700}
-								height={450}
+								width={400}
+								height={400}
 								alt='Post Image'
-								className='mt-4 rounded-lg w-full object-cover'
+								className='mt-4 rounded-lg w-[90%] object-cover border-[1px]'
 							/>
 						)}
 					</div>

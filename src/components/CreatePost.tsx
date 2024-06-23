@@ -102,9 +102,9 @@ export default function Component() {
 	}, []);
 
 	return (
-		<div className='bg-white dark:bg-gray-950 rounded-lg shadow-md p-4 sm:p-6 flex min-h-sm relative items-center justify-center pt-5 m-auto lg:w-[900px] md:w-[900px]'>
-			<div className='mr-4'>
-				<Avatar>
+		<div className='bg-white dark:bg-gray-950 rounded-lg shadow-md p-4 sm:p-6 flex min-h-sm relative justify-center pt-5 m-auto lg:w-[900px] md:w-[900px]'>
+			<div className='mr-4 mt-4'>
+				<Avatar className='h-14 w-14'>
 					<AvatarImage
 						src={loggedInUser?.profilepic}
 						className='object-cover cursor-pointer'
@@ -120,7 +120,7 @@ export default function Component() {
 					onChange={(e: any) => setPostContent(e.target.value)}
 					placeholder="What's on your mind?"
 					className='w-full resize-none border-gray-200 dark:border-gray-800 rounded-lg p-4 focus:outline-none focus:ring-2 focus:ring-gray-950 dark:focus:ring-gray-300'
-					rows={4}
+					rows={3}
 				/>
 				<div className='flex items-center justify-between'>
 					<div className='flex items-center'>

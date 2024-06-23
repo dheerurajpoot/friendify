@@ -97,12 +97,12 @@ export default function Search() {
 							</div>
 						</Link>
 						<div className='flex items-center space-x-4'>
-							<Button onClick={() => handleFollow(user?.id)}>
-								{user?.followers?.includes(loggedInUser?._id)
-									? "Unfollow"
-									: "Follow"}
-							</Button>
-							<Button variant='outline'>Message</Button>
+							<Link href={`/profile/${user?._id}`}>
+								<Button>View Profile</Button>
+							</Link>
+							<Link href={`/message/${user?._id}`}>
+								<Button variant='outline'>Message</Button>
+							</Link>
 						</div>
 					</div>
 				))}

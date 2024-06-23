@@ -1,78 +1,22 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { IoSearch } from "react-icons/io5";
 import { FiMessageCircle } from "react-icons/fi";
 import Link from "next/link";
+import { getUserFromLocalStorage } from "@/helpers/getUserFromLocalStorage";
+import { User } from "../search/page";
+import axios from "axios";
 
 export default function Chat() {
-	const friends = [
-		{
-			id: 1,
-			name: "Sofia Davis",
-			avatar: "/placeholder-user.jpg",
-			status: "Active 2h ago",
-		},
-		{
-			id: 2,
-			name: "Alex Johnson",
-			avatar: "/alex-avatar.jpg",
-			status: "Offline",
-		},
-		{
-			id: 3,
-			name: "Maria Gonzalez",
-			avatar: "/maria-avatar.jpg",
-			status: "Online",
-		},
-		{
-			id: 4,
-			name: "Kevin Brown",
-			avatar: "/kevin-avatar.jpg",
-			status: "Busy",
-		},
-		{
-			id: 5,
-			name: "Lily White",
-			avatar: "/lily-avatar.jpg",
-			status: "Away",
-		},
-		{
-			id: 6,
-			name: "John Doe",
-			avatar: "/placeholder-user.jpg",
-			status: "Active 30m ago",
-		},
-		{
-			id: 7,
-			name: "Jane Smith",
-			avatar: "/placeholder-user.jpg",
-			status: "Offline",
-		},
-		{
-			id: 8,
-			name: "Michael Johnson",
-			avatar: "/placeholder-user.jpg",
-			status: "Online",
-		},
-		{
-			id: 9,
-			name: "Emily Davis",
-			avatar: "/placeholder-user.jpg",
-			status: "Busy",
-		},
-		{
-			id: 10,
-			name: "David Lee",
-			avatar: "/placeholder-user.jpg",
-			status: "Away",
-		},
-	];
 	const [searchTerm, setSearchTerm] = useState("");
-	const [filteredFriends, setFilteredFriends] = useState(friends);
+	const [filteredFriends, setFilteredFriends] = useState<User[]>([]);
+	const [loggedInUser, setLoggedInUser] = useState<User | null>(null);
+	const [loading, setLoading] = useState(false);
+	const [friends, setFriends] = useState<User[]>([]);
 	const handleSearch = (e: any) => {
 		const term = e.target.value.toLowerCase();
 		setSearchTerm(term);
@@ -80,10 +24,44 @@ export default function Chat() {
 			friends.filter((friend) => friend.name.toLowerCase().includes(term))
 		);
 	};
+	useEffect(() => {
+		const userData = getUserFromLocalStorage();
+		if (userData) {
+			setLoggedInUser(userData);
+		}
+	}, []);
+
+	const userId = loggedInUser?._id;
+
+	const getFriends = async () => {
+		try {
+			if (!userId) return;
+			setLoading(true);
+			const response = await axios.post("/api/users/getfriends", {
+				userId,
+			});
+			// const { followers, following } = response.data.data;
+			// const allFriends = [...followers, ...following];
+			const followingUser = response?.data?.data?.following;
+
+			if (followingUser.length === 0) return;
+			setFriends(followingUser);
+			setFilteredFriends(followingUser);
+			setLoading(false);
+		} catch (error: any) {
+			setLoading(false);
+			throw new Error(error);
+		}
+	};
+
+	useEffect(() => {
+		getFriends();
+	}, [loggedInUser, userId]);
+
 	return (
 		<div className='flex flex-col w-full max-w-4xl mx-auto p-4 md:p-6'>
 			<div className='flex items-center justify-between mb-4'>
-				<h1 className='text-2xl font-bold'>Friends</h1>
+				<h1 className='text-2xl font-bold'>Message</h1>
 				<div className='relative'>
 					<IoSearch className='absolute left-2.5 top-2.5 h-4 w-4 text-gray-500 dark:text-gray-400' />
 					<Input
@@ -95,23 +73,29 @@ export default function Chat() {
 					/>
 				</div>
 			</div>
-			<div className='grid gap-4'>
+			<div className='grid gap-4 shadow p-2'>
 				{filteredFriends.map((friend) => (
 					<Link
 						href={"/chat/message"}
-						key={friend.id}
+						key={friend?._id}
 						className='flex items-center justify-between bg-gray-100 dark:bg-gray-800 rounded-lg p-4'>
 						<div className='flex items-center gap-4'>
 							<Avatar>
-								<AvatarImage src='https://github.com/shadcn.png' />
-								<AvatarFallback>CN</AvatarFallback>
+								<AvatarImage
+									src={friend?.profilepic}
+									className='object-cover'
+								/>
+								<AvatarFallback>
+									{friend?.name.charAt(0)}
+								</AvatarFallback>
 							</Avatar>
 							<div className='grid gap-0.5'>
 								<p className='text-sm font-medium'>
-									{friend.name}
+									{friend?.name}
 								</p>
 								<p className='text-xs text-gray-500 dark:text-gray-400'>
-									{friend.status}
+									{/* {friend.status} */}
+									onliine
 								</p>
 							</div>
 						</div>
@@ -119,15 +103,9 @@ export default function Chat() {
 							<Button variant='outline' size='icon'>
 								<FiMessageCircle className='h-4 w-4' />
 								<span className='sr-only'>
-									Message {friend.name}
+									Message {friend?.name}
 								</span>
 							</Button>
-							{/* <Button variant='outline' size='icon'>
-								<UserMinusIcon className='h-4 w-4' />
-								<span className='sr-only'>
-									Unfollow {friend.name}
-								</span>
-							</Button> */}
 						</div>
 					</Link>
 				))}

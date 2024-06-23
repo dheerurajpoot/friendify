@@ -49,10 +49,11 @@ const Post: React.FC<PostProps> = ({ data }) => {
 
 	const commentHandler = async (postId: string) => {
 		try {
-			const res = await axios.post("/api/posts/createcomment", {
+			const res = await axios.put("/api/posts/createcomment", {
 				commentText,
 				postId,
 			});
+
 			toast.success(res.data.message);
 			setCommentText("");
 		} catch (error: any) {
@@ -224,9 +225,17 @@ const Post: React.FC<PostProps> = ({ data }) => {
 									<div className='flex items-start space-x-4'>
 										<Link href={"/profile"}>
 											<Avatar>
-												<AvatarImage src='https://github.com/shadcn.png' />
+												<AvatarImage
+													src={
+														commentData?.author
+															?.profilepic
+													}
+													className='object-cover'
+												/>
 												<AvatarFallback>
-													CN
+													{commentData?.author?.name.charAt(
+														0
+													) || "U"}
 												</AvatarFallback>
 											</Avatar>
 										</Link>
@@ -234,7 +243,8 @@ const Post: React.FC<PostProps> = ({ data }) => {
 											<div className='flex items-center justify-between'>
 												<div>
 													<h4 className='font-semibold text-sm'>
-														Unknown
+														{commentData?.author
+															?.name || "Unknown"}
 													</h4>
 													<p className='text-gray-500 dark:text-gray-400 text-sm'>
 														{format(

@@ -1,7 +1,7 @@
 import mongoose, { Types, Schema, Document, Model } from "mongoose";
 
 export interface Comment {
-	author: Types.ObjectId | string;
+	author: mongoose.Schema.Types.ObjectId;
 	commentText: string;
 	createdAt: Date;
 }
@@ -35,7 +35,7 @@ const postModel = new mongoose.Schema<postDocument>(
 		comments: [
 			{
 				author: {
-					type: Schema.Types.ObjectId,
+					type: mongoose.Schema.Types.ObjectId,
 					ref: "User",
 					required: true,
 				},

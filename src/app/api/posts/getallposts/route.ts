@@ -5,14 +5,12 @@ import { NextRequest, NextResponse } from "next/server";
 connectDb();
 export async function GET(request: NextRequest) {
 	try {
-		const posts = await Post.find().populate(
-			"createdBy",
-			"name profilepic"
-		);
-		// .populate({
-		// 	path: "comments.author",
-		// 	select: "name profilepic",
-		// });
+		const posts = await Post.find()
+			.populate("createdBy", "name profilepic")
+			.populate({
+				path: "comments.author",
+				select: "name profilepic",
+			});
 		return NextResponse.json({
 			message: "Posts Found",
 			success: true,

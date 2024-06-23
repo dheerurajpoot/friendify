@@ -4,7 +4,7 @@ import { Post, postDocument } from "@/model/post.model";
 import { NextRequest, NextResponse } from "next/server";
 connectDb();
 
-export async function POST(request: NextRequest) {
+export async function PUT(request: NextRequest) {
 	try {
 		const userId = await getTokenData(request);
 		const reqBody = await request.json();
@@ -34,7 +34,6 @@ export async function POST(request: NextRequest) {
 			comment: commentText,
 			createdAt: new Date(),
 		};
-		console.log(newComment);
 
 		post.comments.push(newComment);
 		const savedPost = await post.save();

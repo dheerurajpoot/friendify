@@ -102,8 +102,13 @@ export default function Friends() {
 			{/* tabs  */}
 			<Tabs defaultValue='following' className='w-full'>
 				<TabsList className='w-full justify-around'>
-					<TabsTrigger value='following'>Following</TabsTrigger>
-					<TabsTrigger value='followers'>Followers</TabsTrigger>
+					<TabsTrigger value='following' className='border-2'>
+						Following
+					</TabsTrigger>
+					<div className='border border-gray h-full'></div>
+					<TabsTrigger value='followers' className='border-2'>
+						Followers
+					</TabsTrigger>
 				</TabsList>
 				<TabsContent value='following'>
 					{/* following */}

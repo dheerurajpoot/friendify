@@ -16,8 +16,12 @@ import { CgProfile } from "react-icons/cg";
 export default function Friends() {
 	const [searchTerm, setSearchTerm] = useState("");
 	const [loading, setLoading] = useState(false);
-	const [friends, setFriends] = useState<User[]>([]);
+	const [followingFriends, setFollowingFriends] = useState<User[]>([]);
+	const [followerFriends, setFollowerFriends] = useState<User[]>([]);
 	const [filteredFriends, setFilteredFriends] = useState<User[]>([]);
+	const [filteredFollowerFriends, setFilteredFollowerFriends] = useState<
+		User[]
+	>([]);
 	const [loggedInUser, setLoggedInUser] = useState<User | null>(null);
 	const router = useRouter();
 	useEffect(() => {
@@ -39,10 +43,14 @@ export default function Friends() {
 			// const { followers, following } = response.data.data;
 			// const allFriends = [...followers, ...following];
 			const followingUser = response?.data?.data?.following;
+			const followersUser = response?.data?.data?.followers;
 
-			if (followingUser.length === 0) return;
-			setFriends(followingUser);
+			if (followingUser.length === 0 && followersUser.length === 0)
+				return;
+			setFollowingFriends(followingUser);
+			setFollowerFriends(followersUser);
 			setFilteredFriends(followingUser);
+			setFilteredFollowerFriends(followersUser);
 			setLoading(false);
 		} catch (error: any) {
 			setLoading(false);
@@ -58,7 +66,12 @@ export default function Friends() {
 		const term = e.target.value.toLowerCase();
 		setSearchTerm(term);
 		setFilteredFriends(
-			friends.filter((friend: User) =>
+			followingFriends.filter((friend: User) =>
+				friend.name.toLowerCase().includes(term)
+			)
+		);
+		setFilteredFollowerFriends(
+			followerFriends.filter((friend: User) =>
 				friend.name.toLowerCase().includes(term)
 			)
 		);
@@ -86,50 +99,107 @@ export default function Friends() {
 					/>
 				</div>
 			</div>
-			<div className='grid gap-4'>
-				{filteredFriends?.map((friend: User) => (
-					<div
-						key={friend._id}
-						className='flex items-center justify-between bg-gray-100 dark:bg-gray-800 rounded-lg p-4'>
-						<Link href={`/profile/${friend?._id}`}>
-							<div className='flex items-center gap-4'>
-								<Avatar>
-									<AvatarImage
-										src={friend.profilepic}
-										className='object-cover'
-									/>
-									<AvatarFallback>
-										{friend?.name.charAt(0)}
-									</AvatarFallback>
-								</Avatar>
-								<div className='grid gap-0.5'>
-									<p className='text-sm font-medium'>
-										{friend.name}
-									</p>
-									<p className='text-xs text-gray-500 dark:text-gray-400'>
-										{friend?.username}
-									</p>
+			{/* tabs  */}
+			<Tabs defaultValue='following' className='w-full'>
+				<TabsList className='w-full justify-around'>
+					<TabsTrigger value='following'>Following</TabsTrigger>
+					<TabsTrigger value='followers'>Followers</TabsTrigger>
+				</TabsList>
+				<TabsContent value='following'>
+					{/* following */}
+					<div className='grid gap-4'>
+						{filteredFriends?.map((friend: User) => (
+							<div
+								key={friend._id}
+								className='flex items-center justify-between bg-gray-100 dark:bg-gray-800 rounded-lg p-4'>
+								<Link href={`/profile/${friend?._id}`}>
+									<div className='flex items-center gap-4'>
+										<Avatar>
+											<AvatarImage
+												src={friend.profilepic}
+												className='object-cover'
+											/>
+											<AvatarFallback>
+												{friend?.name.charAt(0)}
+											</AvatarFallback>
+										</Avatar>
+										<div className='grid gap-0.5'>
+											<p className='text-sm font-medium'>
+												{friend.name}
+											</p>
+											<p className='text-xs text-gray-500 dark:text-gray-400'>
+												{friend?.username}
+											</p>
+										</div>
+									</div>
+								</Link>
+								<div className='flex items-center gap-2'>
+									<Button
+										variant='outline'
+										size='sm'
+										onClick={() => toMessage(friend?._id)}>
+										<FiMessageCircle className='w-4 h-4 mr-2' />
+										Message
+									</Button>
+									<Button
+										size='sm'
+										onClick={() => toProfile(friend?._id)}>
+										<CgProfile className='w-4 h-4 mr-2' />
+										View Profile
+									</Button>
 								</div>
 							</div>
-						</Link>
-						<div className='flex items-center gap-2'>
-							<Button
-								variant='outline'
-								size='sm'
-								onClick={() => toMessage(friend?._id)}>
-								<FiMessageCircle className='w-4 h-4 mr-2' />
-								Message
-							</Button>
-							<Button
-								size='sm'
-								onClick={() => toProfile(friend?._id)}>
-								<CgProfile className='w-4 h-4 mr-2' />
-								View Profile
-							</Button>
-						</div>
+						))}
 					</div>
-				))}
-			</div>
+				</TabsContent>
+				<TabsContent value='followers'>
+					{/* followers */}
+					<div className='grid gap-4'>
+						{filteredFollowerFriends?.map((friend: User) => (
+							<div
+								key={friend._id}
+								className='flex items-center justify-between bg-gray-100 dark:bg-gray-800 rounded-lg p-4'>
+								<Link href={`/profile/${friend?._id}`}>
+									<div className='flex items-center gap-4'>
+										<Avatar>
+											<AvatarImage
+												src={friend.profilepic}
+												className='object-cover'
+											/>
+											<AvatarFallback>
+												{friend?.name.charAt(0)}
+											</AvatarFallback>
+										</Avatar>
+										<div className='grid gap-0.5'>
+											<p className='text-sm font-medium'>
+												{friend.name}
+											</p>
+											<p className='text-xs text-gray-500 dark:text-gray-400'>
+												{friend?.username}
+											</p>
+										</div>
+									</div>
+								</Link>
+								<div className='flex items-center gap-2'>
+									<Button
+										variant='outline'
+										size='sm'
+										onClick={() => toMessage(friend?._id)}>
+										<FiMessageCircle className='w-4 h-4 mr-2' />
+										Message
+									</Button>
+									<Button
+										size='sm'
+										onClick={() => toProfile(friend?._id)}>
+										<CgProfile className='w-4 h-4 mr-2' />
+										View Profile
+									</Button>
+								</div>
+							</div>
+						))}
+					</div>
+				</TabsContent>
+			</Tabs>
 		</div>
 	);
 }

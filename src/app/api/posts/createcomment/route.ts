@@ -34,6 +34,7 @@ export async function PUT(request: NextRequest) {
 			comment: commentText,
 			createdAt: new Date(),
 		};
+		console.log(newComment);
 
 		post.comments.push(newComment);
 		const savedPost = await post.save();

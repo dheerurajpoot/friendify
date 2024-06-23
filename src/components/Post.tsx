@@ -47,6 +47,8 @@ const Post: React.FC<PostProps> = ({ data }) => {
 		setShowComments(!showComments);
 	};
 
+	// create comment
+
 	const commentHandler = async (postId: string) => {
 		try {
 			const res = await axios.put("/api/posts/createcomment", {
@@ -61,11 +63,31 @@ const Post: React.FC<PostProps> = ({ data }) => {
 		}
 	};
 
+	// delete comment
+	const commentDeleteHandler = async (postId: string, commentId: string) => {
+		try {
+			const res = await axios.delete("/api/posts/deletecomment", {
+				data: { postId, commentId },
+			});
+
+			if (res.data.success) {
+				toast.success(res.data.message);
+			} else {
+				toast.error(res.data.message);
+			}
+		} catch (error: any) {
+			toast.error(error.message);
+			throw new Error(error);
+		}
+	};
+
 	useEffect(() => {
 		if (data && loggedInUser) {
 			setIsLike(data.likes.includes(loggedInUser._id));
 		}
 	}, [data, loggedInUser]);
+
+	// like post
 
 	const likeDislikeHandler = async (postId: string) => {
 		try {
@@ -81,12 +103,33 @@ const Post: React.FC<PostProps> = ({ data }) => {
 		}
 	};
 
+	// get loggedIn user from localstorage
+
 	useEffect(() => {
 		const userData = getUserFromLocalStorage();
 		if (userData) {
 			setLoggedInUser(userData);
 		}
 	}, []);
+
+	// delete post
+
+	const postDeleteHandler = async (postId: string) => {
+		try {
+			const res = await axios.delete("/api/posts/deletepost", {
+				data: { postId },
+			});
+
+			if (res.data.success) {
+				toast.success(res.data.message);
+			} else {
+				toast.error(res.data.message);
+			}
+		} catch (error: any) {
+			toast.error(error.message);
+			throw new Error(error);
+		}
+	};
 
 	return (
 		<div className='bg-white my-4 dark:bg-gray-950 rounded-lg border border-gray-200 dark:border-gray-800 shadow-sm m-auto lg:w-[900px] md:w-[900px]'>
@@ -137,7 +180,11 @@ const Post: React.FC<PostProps> = ({ data }) => {
 									</Link>
 									{data.createdBy._id ===
 										loggedInUser?._id && (
-										<DropdownMenuItem className='cursor-pointer'>
+										<DropdownMenuItem
+											className='cursor-pointer'
+											onClick={() =>
+												postDeleteHandler(data?._id)
+											}>
 											<FaRegTrashAlt className='h-4 w-4 mr-2' />
 											Delete Post
 										</DropdownMenuItem>
@@ -266,10 +313,28 @@ const Post: React.FC<PostProps> = ({ data }) => {
 														</Button>
 													</DropdownMenuTrigger>
 													<DropdownMenuContent align='end'>
-														<DropdownMenuItem>
-															<FaRegTrashAlt className='h-4 w-4 mr-2' />
-															Delete Comment
-														</DropdownMenuItem>
+														{commentData?.author
+															?._id ===
+															loggedInUser?._id && (
+															<DropdownMenuItem
+																onClick={() =>
+																	commentDeleteHandler(
+																		data?._id,
+																		commentData?._id
+																	)
+																}
+																className='cursor-pointer'>
+																<FaRegTrashAlt className='h-4 w-4 mr-2' />
+																Delete Comment
+															</DropdownMenuItem>
+														)}
+														<Link
+															href={`/profile/${commentData?.author?._id}`}>
+															<DropdownMenuItem className='cursor-pointer'>
+																<FaRegUserCircle className='h-4 w-4 mr-2' />
+																View Profile
+															</DropdownMenuItem>
+														</Link>
 													</DropdownMenuContent>
 												</DropdownMenu>
 											</div>

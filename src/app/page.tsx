@@ -3,6 +3,7 @@ import CreatePost from "@/components/CreatePost";
 import Post from "@/components/Post";
 import axios from "axios";
 import { useEffect, useState } from "react";
+import { Skeleton } from "@/components/ui/skeleton";
 
 export interface PostType {
 	_id: string;
@@ -42,8 +43,22 @@ export default function Home() {
 	return (
 		<main className='w-full'>
 			<CreatePost />
-			{allPosts &&
-				allPosts.map((post) => <Post key={post._id} data={post} />)}
+			{loading && loading ? (
+				<div className='flex flex-col p-4 space-y-3 bg-white my-4 dark:bg-gray-950 rounded-lg border border-gray-200 dark:border-gray-800 shadow-sm m-auto lg:w-[900px] md:w-[900px]'>
+					<div className='space-y-2'>
+						<Skeleton className='h-4 w-full' />
+						<Skeleton className='h-4 w-full' />
+					</div>
+					<Skeleton className='h-[450px] w-full rounded-xl' />
+				</div>
+			) : (
+				<div>
+					{allPosts &&
+						allPosts.map((post) => (
+							<Post key={post._id} data={post} />
+						))}
+				</div>
+			)}
 		</main>
 	);
 }

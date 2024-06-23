@@ -21,6 +21,7 @@ import { format } from "timeago.js";
 import { getUserFromLocalStorage } from "@/helpers/getUserFromLocalStorage";
 import { PostType } from "@/app/page";
 import { User } from "@/app/search/page";
+import { Skeleton } from "@/components/ui/skeleton";
 
 const Profile = ({ params }: { params: { userid: string } }) => {
 	const [loading, setLoading] = useState(false);
@@ -131,78 +132,105 @@ const Profile = ({ params }: { params: { userid: string } }) => {
 					</CardHeader>
 				</div>
 				<CardContent className='p-6 px-20'>
-					<div className='grid gap-2'>
-						<div className='flex items-center justify-between'>
-							<h2 className='text-2xl font-bold'>{user?.name}</h2>
-							{userId === loggedInUser?._id && (
-								<Link href={"/updateprofile"}>
-									<Button
-										variant='outline'
-										className='flex items-center justify-center'>
-										<IoSettingsOutline className='mr-2 h-4 w-4' />
-										Edit Profile
-									</Button>
-								</Link>
-							)}
+					{loading && loading ? (
+						<div className='flex flex-col p-4 space-y-3'>
+							<div className='space-y-2'>
+								<Skeleton className='h-6 w-full' />
+								<Skeleton className='h-6 w-full' />
+								<Skeleton className='h-6 w-full' />
+								<Skeleton className='h-6 w-full' />
+							</div>
 						</div>
-						<p className='text-gray-500 dark:text-gray-400'>
-							{user?.profession}
-						</p>
-						<Separator className='my-4' />
-						<div className='grid gap-4'>
-							<div className='flex items-center gap-2'>
-								<IoMailOpenOutline className='w-5 h-5 text-gray-500 dark:text-gray-400' />
-								<span className='text-gray-500 dark:text-gray-400'>
-									{user?.email}
-								</span>
+					) : (
+						<div className='grid gap-2'>
+							<div className='flex items-center justify-between'>
+								<h2 className='text-2xl font-bold'>
+									{user?.name}
+								</h2>
+								{userId === loggedInUser?._id && (
+									<Link href={"/updateprofile"}>
+										<Button
+											variant='outline'
+											className='flex items-center justify-center'>
+											<IoSettingsOutline className='mr-2 h-4 w-4' />
+											Edit Profile
+										</Button>
+									</Link>
+								)}
 							</div>
-							<div className='flex items-center gap-2'>
-								<SlCalender className='w-5 h-5 text-gray-500 dark:text-gray-400' />
-								<span className='text-gray-500 dark:text-gray-400'>
-									{format(user?.createdAt)}
-								</span>
-							</div>
-							{user?.about && (
-								<div className='flex items-start gap-2'>
-									<FaUserCheck className='w-5 h-5 text-gray-500 dark:text-gray-400 mt-1' />
-									<div>
-										<p className='text-gray-500 dark:text-gray-400'>
-											{user?.about}
-										</p>
+							<p className='text-gray-500 dark:text-gray-400'>
+								{user?.profession}
+							</p>
+							<Separator className='my-4' />
+							<div className='grid gap-4'>
+								<div className='flex items-center gap-2'>
+									<IoMailOpenOutline className='w-5 h-5 text-gray-500 dark:text-gray-400' />
+									<span className='text-gray-500 dark:text-gray-400'>
+										{user?.email}
+									</span>
+								</div>
+								<div className='flex items-center gap-2'>
+									<SlCalender className='w-5 h-5 text-gray-500 dark:text-gray-400' />
+									<span className='text-gray-500 dark:text-gray-400'>
+										{format(user?.createdAt)}
+									</span>
+								</div>
+								{user?.about && (
+									<div className='flex items-start gap-2'>
+										<FaUserCheck className='w-5 h-5 text-gray-500 dark:text-gray-400 mt-1' />
+										<div>
+											<p className='text-gray-500 dark:text-gray-400'>
+												{user?.about}
+											</p>
+										</div>
 									</div>
+								)}
+							</div>
+							{userId !== loggedInUser?._id && (
+								<div className='flex items-center justify-center gap-8 mt-4'>
+									<Link href={"/chat"}>
+										<Button variant='outline' size='sm'>
+											<FiMessageCircle className='w-4 h-4 mr-2' />
+											Message
+										</Button>
+									</Link>
+									<Button size='sm' onClick={handleFollow}>
+										{isFollowing ? (
+											<>
+												<FaUserCheck className='w-4 h-4 mr-2' />
+												Unfollow
+											</>
+										) : (
+											<>
+												<FiUserPlus className='w-4 h-4 mr-2' />
+												Follow
+											</>
+										)}
+									</Button>
 								</div>
 							)}
 						</div>
-						{userId !== loggedInUser?._id && (
-							<div className='flex items-center justify-center gap-8 mt-4'>
-								<Link href={"/chat"}>
-									<Button variant='outline' size='sm'>
-										<FiMessageCircle className='w-4 h-4 mr-2' />
-										Message
-									</Button>
-								</Link>
-								<Button size='sm' onClick={handleFollow}>
-									{isFollowing ? (
-										<>
-											<FaUserCheck className='w-4 h-4 mr-2' />
-											Unfollow
-										</>
-									) : (
-										<>
-											<FiUserPlus className='w-4 h-4 mr-2' />
-											Follow
-										</>
-									)}
-								</Button>
-							</div>
-						)}
-					</div>
+					)}
 				</CardContent>
 			</Card>
-			{userposts && userposts.length !== 0 ? (
-				userposts.map((post) => <Post key={post._id} data={post} />)
+			{loading && loading ? (
+				<div className='flex flex-col p-4 space-y-3 bg-white my-4 dark:bg-gray-950 rounded-lg border border-gray-200 dark:border-gray-800 shadow-sm m-auto lg:w-[900px] md:w-[900px]'>
+					<div className='space-y-2'>
+						<Skeleton className='h-4 w-full' />
+						<Skeleton className='h-4 w-full' />
+					</div>
+					<Skeleton className='h-[450px] w-full rounded-xl' />
+				</div>
 			) : (
-				<p className='mt-10'>You have not posted yet </p>
+				<div>
+					{userposts && userposts.length !== 0 ? (
+						userposts.map((post) => (
+							<Post key={post._id} data={post} />
+						))
+					) : (
+						<p className='mt-10'>You have not posted yet </p>
+					)}
+				</div>
 			)}
 		</div>
 	);

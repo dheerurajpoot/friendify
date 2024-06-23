@@ -10,6 +10,7 @@ import Link from "next/link";
 import { getUserFromLocalStorage } from "@/helpers/getUserFromLocalStorage";
 import { User } from "../search/page";
 import axios from "axios";
+import { useRouter } from "next/navigation";
 
 export default function Chat() {
 	const [searchTerm, setSearchTerm] = useState("");
@@ -17,6 +18,8 @@ export default function Chat() {
 	const [loggedInUser, setLoggedInUser] = useState<User | null>(null);
 	const [loading, setLoading] = useState(false);
 	const [friends, setFriends] = useState<User[]>([]);
+	const router = useRouter();
+
 	const handleSearch = (e: any) => {
 		const term = e.target.value.toLowerCase();
 		setSearchTerm(term);
@@ -32,7 +35,6 @@ export default function Chat() {
 	}, []);
 
 	const userId = loggedInUser?._id;
-
 	const getFriends = async () => {
 		try {
 			if (!userId) return;
@@ -53,10 +55,31 @@ export default function Chat() {
 			throw new Error(error);
 		}
 	};
-
 	useEffect(() => {
 		getFriends();
 	}, [loggedInUser, userId]);
+
+	// create conversion
+
+	const createConversation = async (userId2: string) => {
+		try {
+			setLoading(true);
+			const response = await axios.post("/api/conversation", {
+				userId1: userId,
+				userId2,
+			});
+
+			if (response?.data?.success) {
+				router.push(
+					`/chat/message/${response?.data?.conversation?._id}`
+				);
+			}
+			setLoading(false);
+		} catch (error: any) {
+			setLoading(false);
+			throw new Error(error);
+		}
+	};
 
 	return (
 		<div className='flex flex-col w-full max-w-4xl mx-auto p-4 md:p-6'>
@@ -75,10 +98,10 @@ export default function Chat() {
 			</div>
 			<div className='grid gap-4 shadow p-2'>
 				{filteredFriends.map((friend) => (
-					<Link
-						href={"/chat/message"}
+					<div
+						onClick={() => createConversation(friend?._id)}
 						key={friend?._id}
-						className='flex items-center justify-between bg-gray-100 dark:bg-gray-800 rounded-lg p-4'>
+						className='flex items-center justify-between bg-gray-100 dark:bg-gray-800 rounded-lg p-4 cursor-pointer'>
 						<div className='flex items-center gap-4'>
 							<Avatar>
 								<AvatarImage
@@ -107,7 +130,7 @@ export default function Chat() {
 								</span>
 							</Button>
 						</div>
-					</Link>
+					</div>
 				))}
 			</div>
 		</div>

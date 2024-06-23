@@ -14,9 +14,12 @@ import { FaUserCheck } from "react-icons/fa";
 import Link from "next/link";
 import { IoMdArrowRoundBack } from "react-icons/io";
 
-export default function Message() {
+export default function Message({ params }: { params: { chatId: string } }) {
+	const conversationId = params.chatId;
+	console.log(conversationId);
+
 	return (
-		<div className='flex flex-col w-full h-[calc(100vh-180px)] rounded-lg border border-gray-200 dark:border-gray-800 overflow-hidden m-auto lg:w-[900px] md:w-[900px]'>
+		<div className='flex flex-col w-full h-[calc(100vh-190px)] rounded-lg border border-gray-200 dark:border-gray-800 overflow-hidden m-auto lg:w-[900px] md:w-[900px]'>
 			<div className='bg-gray-100 dark:bg-gray-900 px-4 py-3 flex items-center justify-between'>
 				<div className='flex items-center gap-3'>
 					<Link href={"/chat"}>

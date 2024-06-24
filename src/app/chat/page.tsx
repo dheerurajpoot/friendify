@@ -20,6 +20,7 @@ export default function Chat() {
 	const [friends, setFriends] = useState<User[]>([]);
 	const router = useRouter();
 
+	// handle search friends
 	const handleSearch = (e: any) => {
 		const term = e.target.value.toLowerCase();
 		setSearchTerm(term);
@@ -27,6 +28,8 @@ export default function Chat() {
 			friends.filter((friend) => friend.name.toLowerCase().includes(term))
 		);
 	};
+
+	// getting loggedIn user from localstorage
 	useEffect(() => {
 		const userData = getUserFromLocalStorage();
 		if (userData) {
@@ -34,6 +37,7 @@ export default function Chat() {
 		}
 	}, []);
 
+	// getting friends
 	const userId = loggedInUser?._id;
 	const getFriends = async () => {
 		try {
@@ -42,10 +46,7 @@ export default function Chat() {
 			const response = await axios.post("/api/users/getfriends", {
 				userId,
 			});
-			// const { followers, following } = response.data.data;
-			// const allFriends = [...followers, ...following];
 			const followingUser = response?.data?.data?.following;
-
 			if (followingUser.length === 0) return;
 			setFriends(followingUser);
 			setFilteredFriends(followingUser);
@@ -59,8 +60,7 @@ export default function Chat() {
 		getFriends();
 	}, [loggedInUser, userId]);
 
-	// create conversion
-
+	// create conversion between two friends
 	const createConversation = async (userId2: string) => {
 		try {
 			setLoading(true);

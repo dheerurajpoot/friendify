@@ -13,17 +13,19 @@ import {
 import { FaRegTrashAlt } from "react-icons/fa";
 import { FaUserCheck } from "react-icons/fa";
 import Link from "next/link";
-import { IoMdArrowRoundBack } from "react-icons/io";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { getUserFromLocalStorage } from "@/helpers/getUserFromLocalStorage";
 import { User } from "@/app/search/page";
+import { IoMdArrowRoundBack } from "react-icons/io";
+import { format } from "timeago.js";
 
 export default function Message({ params }: { params: { chatId: string } }) {
 	const conversationId = params.chatId;
 	const [loggedInUser, setLoggedInUser] = useState<User | null>(null);
 	const [messageText, setMessageText] = useState("");
 	const [messages, setMessages] = useState([]);
+	const [receiverId, setReceiverId] = useState<string | null>(null);
 
 	useEffect(() => {
 		const userData = getUserFromLocalStorage();
@@ -32,20 +34,38 @@ export default function Message({ params }: { params: { chatId: string } }) {
 		}
 	}, []);
 
+	useEffect(() => {
+		if (loggedInUser) {
+			fetchMessages();
+		}
+	}, [loggedInUser, conversationId]);
+
 	const fetchMessages = async () => {
+		if (!loggedInUser) return;
 		try {
-			const res = await axios.get("/api/getmessages");
+			const res = await axios.get(
+				`/api/getmessage?conversationId=${conversationId}`
+			);
+			console.log(res.data);
+
 			setMessages(res.data.messages);
+			const conversation = res.data.conversation;
+			const receiver = conversation.participants.find(
+				(id: string) => id !== loggedInUser?._id
+			);
+
+			setReceiverId(receiver);
 		} catch (error: any) {
-			throw error(error.message);
+			console.error(error.message);
 		}
 	};
 
 	const sendMessage = async () => {
+		if (!messageText.trim() || !receiverId) return;
 		try {
 			const res = await axios.post("/api/sendmessage", {
 				sender: loggedInUser?._id,
-				receiver: "receiverId",
+				receiver: receiverId,
 				content: messageText,
 				conversationId,
 			});
@@ -55,13 +75,9 @@ export default function Message({ params }: { params: { chatId: string } }) {
 				fetchMessages();
 			}
 		} catch (error: any) {
-			throw error(error.message);
+			console.error(error.message);
 		}
 	};
-
-	useEffect(() => {
-		fetchMessages();
-	}, [conversationId]);
 
 	return (
 		<div className='flex flex-col w-full h-[calc(100vh-190px)] rounded-lg border border-gray-200 dark:border-gray-800 overflow-hidden m-auto lg:w-[900px] md:w-[900px]'>
@@ -75,14 +91,14 @@ export default function Message({ params }: { params: { chatId: string } }) {
 							<IoMdArrowRoundBack className='w-5 h-5 text-gray-500 dark:text-gray-400' />
 						</Button>
 					</Link>
-					<Link href={"/profile"}>
+					<Link href={`/profile/${receiverId}`}>
 						<Avatar>
 							<AvatarImage src='https://github.com/shadcn.png' />
 							<AvatarFallback>CN</AvatarFallback>
 						</Avatar>
 					</Link>
 					<div>
-						<div className='font-medium'>John Doe</div>
+						<div className='font-medium'>Receiver Name</div>
 						<div className='text-sm text-gray-500 dark:text-gray-400'>
 							Online
 						</div>
@@ -119,44 +135,56 @@ export default function Message({ params }: { params: { chatId: string } }) {
 				</div>
 			</div>
 			<div className='flex-1 overflow-auto p-4 space-y-4'>
-				<div className='flex items-start gap-3'>
-					<Link href={"/profile"}>
-						<Avatar>
-							<AvatarImage src='https://github.com/shadcn.png' />
-							<AvatarFallback>CN</AvatarFallback>
-						</Avatar>
-					</Link>
-					<div className='bg-gray-100 dark:bg-gray-800 rounded-lg p-3 max-w-[70%]'>
-						<p className='text-sm'>Hey, how's it going?</p>
-						<div className='text-xs text-gray-500 dark:text-gray-400 mt-1'>
-							John Doe • 2:30 PM
+				{messages.map((msg: any) => (
+					<div
+						key={msg._id}
+						className={`flex items-start gap-3 ${
+							msg.sender === loggedInUser?._id
+								? "justify-end"
+								: ""
+						}`}>
+						{msg.sender !== loggedInUser?._id && (
+							<Link href={`/profile/${msg.sender}`}>
+								<Avatar>
+									<AvatarImage src='https://github.com/shadcn.png' />
+									<AvatarFallback>CN</AvatarFallback>
+								</Avatar>
+							</Link>
+						)}
+						<div
+							className={`bg-gray-100 dark:bg-gray-800 rounded-lg p-3 max-w-[70%] ${
+								msg.sender === loggedInUser?._id
+									? "bg-blue-100 dark:bg-blue-900"
+									: ""
+							}`}>
+							<p className='text-sm'>{msg.content}</p>
+							<div className='text-xs text-gray-500 dark:text-gray-400 mt-1'>
+								{msg.sender === loggedInUser?._id
+									? "You"
+									: "John Doe"}{" "}
+								• {format(msg?.createdAt)}
+							</div>
 						</div>
+						{msg.sender === loggedInUser?._id && (
+							<Link href={`/profile/${msg.sender}`}>
+								<Avatar>
+									<AvatarImage src='https://github.com/shadcn.png' />
+									<AvatarFallback>CN</AvatarFallback>
+								</Avatar>
+							</Link>
+						)}
 					</div>
-				</div>
-				<div className='flex items-start gap-3 justify-end'>
-					<div className='bg-blue-100 dark:bg-blue-900 rounded-lg p-3 max-w-[70%]'>
-						<p className='text-sm'>
-							Pretty good, thanks for asking!
-						</p>
-						<div className='text-xs text-gray-500 dark:text-gray-400 mt-1'>
-							You • 2:31 PM
-						</div>
-					</div>
-					<Link href={"/profile"}>
-						<Avatar>
-							<AvatarImage src='https://github.com/shadcn.png' />
-							<AvatarFallback>CN</AvatarFallback>
-						</Avatar>
-					</Link>
-				</div>
+				))}
 			</div>
 			<div className='bg-gray-100 dark:bg-gray-900 px-4 py-3 flex items-center gap-2'>
 				<Input
 					type='text'
 					placeholder='Type your message...'
+					value={messageText}
+					onChange={(e) => setMessageText(e.target.value)}
 					className='flex-1 px-4 py-2 rounded-lg bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent'
 				/>
-				<Button>Send</Button>
+				<Button onClick={sendMessage}>Send</Button>
 			</div>
 		</div>
 	);

@@ -1,6 +1,6 @@
 import { connectDb } from "@/dbConfig/connectDb";
-import { Chat } from "@/model/chat.model";
 import { Message } from "@/model/message.model";
+import { Chat } from "@/model/chat.model";
 import { NextRequest, NextResponse } from "next/server";
 
 connectDb();
@@ -10,22 +10,33 @@ export async function POST(request: NextRequest) {
 		const { sender, receiver, content, conversationId } =
 			await request.json();
 
-		const message = new Message({
+		if (!sender || !receiver || !content || !conversationId) {
+			return NextResponse.json(
+				{ error: "All fields are required" },
+				{ status: 400 }
+			);
+		}
+
+		const conversation = await Chat.findById(conversationId);
+		if (!conversation) {
+			return NextResponse.json(
+				{ error: "Conversation not found" },
+				{ status: 404 }
+			);
+		}
+
+		const newMessage = new Message({
 			sender,
 			receiver,
 			content,
+			conversationId,
 		});
 
-		const savedMessage = await message.save();
-
-		await Chat.findByIdAndUpdate(conversationId, {
-			latestMessage: message._id,
-		});
+		await newMessage.save();
 
 		return NextResponse.json({
-			message: "Message sent successfully",
 			success: true,
-			savedMessage,
+			message: newMessage,
 		});
 	} catch (error: any) {
 		return NextResponse.json({ error: error.message }, { status: 500 });

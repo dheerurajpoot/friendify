@@ -26,6 +26,8 @@ export default function Message({ params }: { params: { chatId: string } }) {
 	const [messageText, setMessageText] = useState("");
 	const [messages, setMessages] = useState([]);
 	const [receiverId, setReceiverId] = useState<string | null>(null);
+	const [loading, setLoading] = useState(false);
+	const [receiverUser, setReceiverUser] = useState<User>();
 
 	useEffect(() => {
 		const userData = getUserFromLocalStorage();
@@ -46,7 +48,6 @@ export default function Message({ params }: { params: { chatId: string } }) {
 			const res = await axios.get(
 				`/api/getmessage?conversationId=${conversationId}`
 			);
-			console.log(res.data);
 
 			setMessages(res.data.messages);
 			const conversation = res.data.conversation;
@@ -79,8 +80,28 @@ export default function Message({ params }: { params: { chatId: string } }) {
 		}
 	};
 
+	const getProfile = async () => {
+		if (!receiverId) return;
+
+		try {
+			setLoading(true);
+			const response = await axios.post("/api/users/profile", {
+				userId: receiverId,
+			});
+			setReceiverUser(response?.data?.data);
+			setLoading(false);
+		} catch (error: any) {
+			throw new Error(error);
+		}
+	};
+
+	useEffect(() => {
+		if (!receiverId) return;
+		getProfile();
+	}, [conversationId, messages]);
+
 	return (
-		<div className='flex flex-col w-full h-[calc(100vh-190px)] rounded-lg border border-gray-200 dark:border-gray-800 overflow-hidden m-auto lg:w-[900px] md:w-[900px]'>
+		<div className='flex flex-col w-full h-[calc(100vh-190px)] mt-[-12px] rounded-lg border border-gray-200 dark:border-gray-800 overflow-hidden m-auto lg:w-[900px] md:w-[900px]'>
 			<div className='bg-gray-100 dark:bg-gray-900 px-4 py-3 flex items-center justify-between'>
 				<div className='flex items-center gap-3'>
 					<Link href={"/chat"}>
@@ -93,12 +114,17 @@ export default function Message({ params }: { params: { chatId: string } }) {
 					</Link>
 					<Link href={`/profile/${receiverId}`}>
 						<Avatar>
-							<AvatarImage src='https://github.com/shadcn.png' />
-							<AvatarFallback>CN</AvatarFallback>
+							<AvatarImage
+								src={receiverUser?.profilepic}
+								className='object-cover'
+							/>
+							<AvatarFallback>
+								{receiverUser?.name.charAt(0)}
+							</AvatarFallback>
 						</Avatar>
 					</Link>
 					<div>
-						<div className='font-medium'>Receiver Name</div>
+						<div className='font-medium'>{receiverUser?.name}</div>
 						<div className='text-sm text-gray-500 dark:text-gray-400'>
 							Online
 						</div>
@@ -122,11 +148,13 @@ export default function Message({ params }: { params: { chatId: string } }) {
 							</Button>
 						</DropdownMenuTrigger>
 						<DropdownMenuContent align='end'>
-							<DropdownMenuItem>
-								<FaUserCheck className='h-4 w-4 mr-2' />
-								View Profile
-							</DropdownMenuItem>
-							<DropdownMenuItem>
+							<Link href={`/profile/${receiverUser?._id}`}>
+								<DropdownMenuItem className='cursor-pointer'>
+									<FaUserCheck className='h-4 w-4 mr-2' />
+									View Profile
+								</DropdownMenuItem>
+							</Link>
+							<DropdownMenuItem className='cursor-pointer'>
 								<FaRegTrashAlt className='h-4 w-4 mr-2' />
 								Clear Chat
 							</DropdownMenuItem>
@@ -144,32 +172,41 @@ export default function Message({ params }: { params: { chatId: string } }) {
 								: ""
 						}`}>
 						{msg.sender !== loggedInUser?._id && (
-							<Link href={`/profile/${msg.sender}`}>
+							<Link href={`/profile/${msg.receiverId}`}>
 								<Avatar>
-									<AvatarImage src='https://github.com/shadcn.png' />
-									<AvatarFallback>CN</AvatarFallback>
+									<AvatarImage
+										src={receiverUser?.profilepic}
+									/>
+									<AvatarFallback>
+										{receiverUser?.name.charAt(0)}
+									</AvatarFallback>
 								</Avatar>
 							</Link>
 						)}
 						<div
 							className={`bg-gray-100 dark:bg-gray-800 rounded-lg p-3 max-w-[70%] ${
 								msg.sender === loggedInUser?._id
-									? "bg-blue-100 dark:bg-blue-900"
+									? "bg-blue-200 dark:bg-blue-900"
 									: ""
 							}`}>
 							<p className='text-sm'>{msg.content}</p>
 							<div className='text-xs text-gray-500 dark:text-gray-400 mt-1'>
 								{msg.sender === loggedInUser?._id
 									? "You"
-									: "John Doe"}{" "}
+									: receiverUser?.name}{" "}
 								• {format(msg?.createdAt)}
 							</div>
 						</div>
 						{msg.sender === loggedInUser?._id && (
 							<Link href={`/profile/${msg.sender}`}>
 								<Avatar>
-									<AvatarImage src='https://github.com/shadcn.png' />
-									<AvatarFallback>CN</AvatarFallback>
+									<AvatarImage
+										src={loggedInUser?.profilepic}
+										className='object-cover'
+									/>
+									<AvatarFallback>
+										{loggedInUser?.name.charAt(0)}
+									</AvatarFallback>
 								</Avatar>
 							</Link>
 						)}

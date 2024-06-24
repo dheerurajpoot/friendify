@@ -1,3 +1,4 @@
+"use client";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { Input } from "@/components/ui/input";
@@ -13,10 +14,54 @@ import { FaRegTrashAlt } from "react-icons/fa";
 import { FaUserCheck } from "react-icons/fa";
 import Link from "next/link";
 import { IoMdArrowRoundBack } from "react-icons/io";
+import { useEffect, useState } from "react";
+import axios from "axios";
+import { getUserFromLocalStorage } from "@/helpers/getUserFromLocalStorage";
+import { User } from "@/app/search/page";
 
 export default function Message({ params }: { params: { chatId: string } }) {
 	const conversationId = params.chatId;
-	console.log(conversationId);
+	const [loggedInUser, setLoggedInUser] = useState<User | null>(null);
+	const [messageText, setMessageText] = useState("");
+	const [messages, setMessages] = useState([]);
+
+	useEffect(() => {
+		const userData = getUserFromLocalStorage();
+		if (userData) {
+			setLoggedInUser(userData);
+		}
+	}, []);
+
+	const fetchMessages = async () => {
+		try {
+			const res = await axios.get("/api/getmessages");
+			setMessages(res.data.messages);
+		} catch (error: any) {
+			throw error(error.message);
+		}
+	};
+
+	const sendMessage = async () => {
+		try {
+			const res = await axios.post("/api/sendmessage", {
+				sender: loggedInUser?._id,
+				receiver: "receiverId",
+				content: messageText,
+				conversationId,
+			});
+
+			if (res.data.success) {
+				setMessageText("");
+				fetchMessages();
+			}
+		} catch (error: any) {
+			throw error(error.message);
+		}
+	};
+
+	useEffect(() => {
+		fetchMessages();
+	}, [conversationId]);
 
 	return (
 		<div className='flex flex-col w-full h-[calc(100vh-190px)] rounded-lg border border-gray-200 dark:border-gray-800 overflow-hidden m-auto lg:w-[900px] md:w-[900px]'>
@@ -95,40 +140,6 @@ export default function Message({ params }: { params: { chatId: string } }) {
 						</p>
 						<div className='text-xs text-gray-500 dark:text-gray-400 mt-1'>
 							You • 2:31 PM
-						</div>
-					</div>
-					<Link href={"/profile"}>
-						<Avatar>
-							<AvatarImage src='https://github.com/shadcn.png' />
-							<AvatarFallback>CN</AvatarFallback>
-						</Avatar>
-					</Link>
-				</div>
-				<div className='flex items-start gap-3'>
-					<Link href={"/profile"}>
-						<Avatar>
-							<AvatarImage src='https://github.com/shadcn.png' />
-							<AvatarFallback>CN</AvatarFallback>
-						</Avatar>
-					</Link>
-					<div className='bg-gray-100 dark:bg-gray-800 rounded-lg p-3 max-w-[70%]'>
-						<p className='text-sm'>
-							That's great to hear! Did you have any plans for the
-							weekend?
-						</p>
-						<div className='text-xs text-gray-500 dark:text-gray-400 mt-1'>
-							John Doe • 2:32 PM
-						</div>
-					</div>
-				</div>
-				<div className='flex items-start gap-3 justify-end'>
-					<div className='bg-blue-100 dark:bg-blue-900 rounded-lg p-3 max-w-[70%]'>
-						<p className='text-sm'>
-							I was thinking of going for a hike, maybe you'd like
-							to join?
-						</p>
-						<div className='text-xs text-gray-500 dark:text-gray-400 mt-1'>
-							You • 2:33 PM
 						</div>
 					</div>
 					<Link href={"/profile"}>

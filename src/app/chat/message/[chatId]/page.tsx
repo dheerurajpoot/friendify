@@ -29,6 +29,7 @@ export default function Message({ params }: { params: { chatId: string } }) {
 	const [loading, setLoading] = useState(false);
 	const [receiverUser, setReceiverUser] = useState<User>();
 
+	// getting loggedIn user from localstorage
 	useEffect(() => {
 		const userData = getUserFromLocalStorage();
 		if (userData) {
@@ -42,24 +43,25 @@ export default function Message({ params }: { params: { chatId: string } }) {
 		}
 	}, [loggedInUser, conversationId]);
 
+	// getting messages from database
 	const fetchMessages = async () => {
 		if (!loggedInUser) return;
 		try {
 			const res = await axios.get(
 				`/api/getmessage?conversationId=${conversationId}`
 			);
-
 			setMessages(res.data.messages);
 			const conversation = res.data.conversation;
 			const receiver = conversation.participants.find(
 				(id: string) => id !== loggedInUser?._id
 			);
-
 			setReceiverId(receiver);
 		} catch (error: any) {
 			console.error(error.message);
 		}
 	};
+
+	// send messages to database
 
 	const sendMessage = async () => {
 		if (!messageText.trim() || !receiverId) return;
@@ -79,6 +81,8 @@ export default function Message({ params }: { params: { chatId: string } }) {
 			console.error(error.message);
 		}
 	};
+
+	// getting receiver user profile
 
 	const getProfile = async () => {
 		if (!receiverId) return;

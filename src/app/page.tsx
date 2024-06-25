@@ -4,6 +4,7 @@ import Post from "@/components/Post";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
+import toast from "react-hot-toast";
 
 export interface PostType {
 	_id: string;
@@ -22,6 +23,9 @@ export default function Home() {
 		try {
 			setLoading(true);
 			const response = await axios.get("/api/posts/getallposts");
+			if (!response.data.success) {
+				toast("Something Went Wront! Please Try Again Letter");
+			}
 			setPosts(response.data.posts);
 			setLoading(false);
 		} catch (error: any) {

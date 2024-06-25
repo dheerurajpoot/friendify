@@ -58,6 +58,7 @@ export default function Component() {
 
 	const uploadFile = async () => {
 		const data = new FormData();
+		if (!image) return "";
 		data.append("file", image);
 		data.append("upload_preset", "images-preset");
 		try {
@@ -84,7 +85,10 @@ export default function Component() {
 		};
 
 		try {
-			await axios.post("/api/posts/createpost", data);
+			const res = await axios.post("/api/posts/createpost", data);
+			if (!res.data.success) {
+				toast("Something Went Wront! Please Try Again Letter");
+			}
 			toast.success("Post Published successfully");
 			setLoading(false);
 			setPostContent("");

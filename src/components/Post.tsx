@@ -4,7 +4,7 @@ import { Button } from "./ui/button";
 import { FaRegTrashAlt } from "react-icons/fa";
 import { HiOutlineDotsVertical } from "react-icons/hi";
 import { FaRegHeart } from "react-icons/fa6";
-import { FaCommentDots } from "react-icons/fa";
+import { FaRegCommentDots } from "react-icons/fa6";
 import Link from "next/link";
 import { BsFillSendFill } from "react-icons/bs";
 import { FaHeart } from "react-icons/fa";
@@ -213,9 +213,9 @@ const Post: React.FC<PostProps> = ({ data }) => {
 							variant='ghost'
 							size='icon'>
 							{isLike ? (
-								<FaHeart className='h-8 w-8' color='#F1330A' />
+								<FaHeart className='h-7 w-7' color='#F1330A' />
 							) : (
-								<FaRegHeart className='h-8 w-8' />
+								<FaRegHeart className='h-7 w-7' />
 							)}
 							<span className='sr-only'>Like</span>
 						</Button>
@@ -223,7 +223,7 @@ const Post: React.FC<PostProps> = ({ data }) => {
 							variant='ghost'
 							size='icon'
 							onClick={toggleComments}>
-							<FaCommentDots className='h-7 w-7' />
+							<FaRegCommentDots className='h-7 w-7' />
 							<span className='sr-only'>Comment</span>
 						</Button>
 					</div>

@@ -120,7 +120,7 @@ export default function Component() {
 					onChange={(e: any) => setPostContent(e.target.value)}
 					placeholder="What's on your mind?"
 					className='w-full resize-none border-gray-200 dark:border-gray-800 rounded-lg p-4 focus:outline-none focus:ring-2 focus:ring-gray-950 dark:focus:ring-gray-300'
-					rows={3}
+					rows={2}
 				/>
 				<div className='flex items-center justify-between'>
 					<div className='flex items-center'>
@@ -172,7 +172,7 @@ export default function Component() {
 							variant='ghost'
 							size='icon'
 							className='text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-50'>
-							<BsEmojiSmile className='w-5 h-5' />
+							<BsEmojiSmile className='w-6 h-6' />
 							<span className='sr-only'>Add emoji</span>
 						</Button>
 					</div>

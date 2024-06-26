@@ -28,17 +28,14 @@ export async function PUT(request: NextRequest) {
 				{ status: 404 }
 			);
 		}
-
 		const newComment: any = {
 			author: userId,
 			comment: commentText,
 			createdAt: new Date(),
 		};
-		console.log(newComment);
 
 		post.comments.push(newComment);
 		const savedPost = await post.save();
-		console.log(savedPost);
 
 		return NextResponse.json({
 			message: "Comment Published Successfully",

@@ -35,9 +35,10 @@ interface PostType {
 
 interface PostProps {
 	data: PostType;
+	onDeletePost: (postId: string) => void;
 }
 
-const Post: React.FC<PostProps> = ({ data }) => {
+const Post: React.FC<PostProps> = ({ data, onDeletePost }) => {
 	const [commentText, setCommentText] = useState("");
 	const [isLike, setIsLike] = useState(false);
 	const [showComments, setShowComments] = useState(false);
@@ -122,6 +123,7 @@ const Post: React.FC<PostProps> = ({ data }) => {
 
 			if (res.data.success) {
 				toast.success(res.data.message);
+				onDeletePost(postId);
 			} else {
 				toast.error(res.data.message);
 			}

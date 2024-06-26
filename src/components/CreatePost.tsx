@@ -15,7 +15,7 @@ import { Skeleton } from "./ui/skeleton";
 import Post from "./Post";
 import { PostType } from "@/app/page";
 
-export default function Component() {
+export default function CreatePost() {
 	const [loading, setLoading] = useState(false);
 	const [posts, setPosts] = useState<PostType[]>([]);
 	const [postContent, setPostContent] = useState("");
@@ -134,6 +134,10 @@ export default function Component() {
 				new Date(b.createdAt).getTime() -
 				new Date(a.createdAt).getTime()
 		);
+
+	const handleDeletePost = (postId: string) => {
+		setPosts(posts.filter((post) => post._id !== postId));
+	};
 
 	return (
 		<div className='m-auto lg:w-[900px] md:w-[900px]'>
@@ -254,7 +258,11 @@ export default function Component() {
 					<div>
 						{allPosts &&
 							allPosts.map((post) => (
-								<Post key={post._id} data={post} />
+								<Post
+									key={post._id}
+									data={post}
+									onDeletePost={handleDeletePost}
+								/>
 							))}
 					</div>
 				)}

@@ -3,14 +3,13 @@ import React, { useEffect, useState } from "react";
 import ProfilePic from "./../../../../public/post.jpg";
 import Post from "@/components/Post";
 import Link from "next/link";
-import { FaUserCheck } from "react-icons/fa";
+import { FaEdit, FaUserCheck } from "react-icons/fa";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { IoMailOpenOutline } from "react-icons/io5";
 import { SlCalender } from "react-icons/sl";
 import { Separator } from "@/components/ui/separator";
-import { IoSettingsOutline } from "react-icons/io5";
 import Image from "next/image";
 import { FiMessageCircle } from "react-icons/fi";
 import { FiUserPlus } from "react-icons/fi";
@@ -94,7 +93,6 @@ const Profile = ({ params }: { params: { userid: string } }) => {
 				id: user?._id,
 			});
 			if (response.data.success) {
-				// setIsFollowing(!isFollowing);
 				toast.success(response.data.message);
 			} else {
 				toast.error(response.data.error);
@@ -104,6 +102,9 @@ const Profile = ({ params }: { params: { userid: string } }) => {
 			toast.error("Something went wrong");
 			setLoading(false);
 		}
+	};
+	const handleDeletePost = (postId: string) => {
+		setPosts(posts.filter((post) => post._id !== postId));
 	};
 
 	return (
@@ -131,7 +132,7 @@ const Profile = ({ params }: { params: { userid: string } }) => {
 						</div>
 					</CardHeader>
 				</div>
-				<CardContent className='p-6 px-20'>
+				<CardContent className='p-6 md:px-20'>
 					{loading && loading ? (
 						<div className='flex flex-col p-4 space-y-3'>
 							<div className='space-y-2'>
@@ -152,8 +153,10 @@ const Profile = ({ params }: { params: { userid: string } }) => {
 										<Button
 											variant='outline'
 											className='flex items-center justify-center'>
-											<IoSettingsOutline className='mr-2 h-4 w-4' />
-											Edit Profile
+											<FaEdit className='md:mr-2 h-4 w-4' />
+											<span className='hidden md:block'>
+												Edit Profile
+											</span>
 										</Button>
 									</Link>
 								)}
@@ -225,7 +228,11 @@ const Profile = ({ params }: { params: { userid: string } }) => {
 				<div>
 					{userposts && userposts.length !== 0 ? (
 						userposts.map((post) => (
-							<Post key={post._id} data={post} />
+							<Post
+								key={post._id}
+								data={post}
+								onDeletePost={handleDeletePost}
+							/>
 						))
 					) : (
 						<p className='mt-10'>You have not posted yet </p>

@@ -7,6 +7,8 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import axios from "axios";
 import { getUserFromLocalStorage } from "@/helpers/getUserFromLocalStorage";
 import Link from "next/link";
+import { CgProfile } from "react-icons/cg";
+import { FiMessageCircle } from "react-icons/fi";
 
 export interface User {
 	name: string;
@@ -96,12 +98,22 @@ export default function Search() {
 								</div>
 							</div>
 						</Link>
-						<div className='flex items-center space-x-4'>
+						<div className='flex items-center gap-2'>
 							<Link href={`/profile/${user?._id}`}>
-								<Button>View Profile</Button>
+								<Button size='sm'>
+									<CgProfile className='w-4 h-4 md:mr-2' />
+									<span className='hidden md:block'>
+										View Profile
+									</span>
+								</Button>
 							</Link>
 							<Link href={`/message/${user?._id}`}>
-								<Button variant='outline'>Message</Button>
+								<Button variant='outline'>
+									<FiMessageCircle className='w-4 h-4 md:mr-2' />
+									<span className='hidden md:block'>
+										Message
+									</span>
+								</Button>
 							</Link>
 						</div>
 					</div>

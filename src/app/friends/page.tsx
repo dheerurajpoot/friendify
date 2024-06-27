@@ -143,14 +143,18 @@ export default function Friends() {
 										variant='outline'
 										size='sm'
 										onClick={() => toMessage(friend?._id)}>
-										<FiMessageCircle className='w-4 h-4 mr-2' />
-										Message
+										<FiMessageCircle className='w-4 h-4 md:mr-2' />
+										<span className='hidden md:block'>
+											Message
+										</span>
 									</Button>
 									<Button
 										size='sm'
 										onClick={() => toProfile(friend?._id)}>
-										<CgProfile className='w-4 h-4 mr-2' />
-										View Profile
+										<CgProfile className='w-4 h-4 md:mr-2' />
+										<span className='hidden md:block'>
+											View Profile
+										</span>
 									</Button>
 								</div>
 							</div>
@@ -190,14 +194,18 @@ export default function Friends() {
 										variant='outline'
 										size='sm'
 										onClick={() => toMessage(friend?._id)}>
-										<FiMessageCircle className='w-4 h-4 mr-2' />
-										Message
+										<FiMessageCircle className='w-4 h-4 md:mr-2' />
+										<span className='hidden md:block'>
+											Message
+										</span>
 									</Button>
 									<Button
 										size='sm'
 										onClick={() => toProfile(friend?._id)}>
-										<CgProfile className='w-4 h-4 mr-2' />
-										View Profile
+										<CgProfile className='w-4 h-4 md:mr-2' />
+										<span className='hidden md:block'>
+											View Profile
+										</span>
 									</Button>
 								</div>
 							</div>

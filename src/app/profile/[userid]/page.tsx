@@ -15,7 +15,6 @@ import { FiMessageCircle } from "react-icons/fi";
 import { FiUserPlus } from "react-icons/fi";
 import axios from "axios";
 import { toast } from "react-hot-toast";
-import { useRouter } from "next/navigation";
 import { format } from "timeago.js";
 import { getUserFromLocalStorage } from "@/helpers/getUserFromLocalStorage";
 import { PostType } from "@/app/page";
@@ -28,7 +27,6 @@ const Profile = ({ params }: { params: { userid: string } }) => {
 	const [posts, setPosts] = useState<PostType[]>([]);
 	const [isFollowing, setIsFollowing] = useState(false);
 	const [loggedInUser, setLoggedInUser] = useState<User | null>(null);
-	const router = useRouter();
 
 	useEffect(() => {
 		const userData = getUserFromLocalStorage();

@@ -9,6 +9,7 @@ import { getUserFromLocalStorage } from "@/helpers/getUserFromLocalStorage";
 import Link from "next/link";
 import { CgProfile } from "react-icons/cg";
 import { FiMessageCircle } from "react-icons/fi";
+import { IoSearch } from "react-icons/io5";
 
 export interface User {
 	name: string;
@@ -35,20 +36,12 @@ export default function Search() {
 		);
 	}, [users, searchTerm]);
 
-	const handleFollow = (userId: any) => {
-		// setUsers((prevUsers) =>
-		// 	prevUsers.map((user) =>
-		// 		user.id === userId
-		// 			? { ...user, isFollowing: !user.isFollowing }
-		// 			: user
-		// 	)
-		// );
-	};
 	const getAllUsers = async () => {
 		try {
 			setLoading(true);
 			const response = await axios.get("/api/users/getallusers");
-			setUsers(response.data.users);
+
+			setUsers(response.data.users || []);
 			setLoading(false);
 		} catch (error: any) {
 			throw new Error(error);
@@ -65,20 +58,29 @@ export default function Search() {
 		}
 	}, []);
 
+	const searchedUsers = useMemo(() => {
+		return filteredUsers.filter(
+			(user: User) => user?._id !== loggedInUser?._id
+		);
+	}, [filteredUsers, loggedInUser]);
+
 	return (
 		<div className='bg-white dark:bg-gray-950 rounded-lg shadow-md p-4 mx-auto lg:w-[900px] md:w-[900px]'>
-			<div className='flex items-center mb-4'>
-				<Input
-					type='text'
-					placeholder='Search for users'
-					value={searchTerm}
-					onChange={(e) => setSearchTerm(e.target.value)}
-					className='flex-1 mr-4'
-				/>
-				<Button>Search</Button>
+			<div className='flex items-center justify-between mb-4'>
+				<h1 className='text-2xl font-bold'>Search</h1>
+				<div className='relative'>
+					<IoSearch className='absolute left-2.5 top-2.5 h-4 w-4 text-gray-500 dark:text-gray-400' />
+					<Input
+						type='text'
+						placeholder='Search for users'
+						value={searchTerm}
+						onChange={(e) => setSearchTerm(e.target.value)}
+						className='pl-8 w-[200px] md:w-[300px]'
+					/>
+				</div>
 			</div>
 			<div className='space-y-4'>
-				{filteredUsers.map((user: any) => (
+				{searchedUsers.map((user: any) => (
 					<div
 						key={user._id}
 						className='flex items-center justify-between bg-gray-100 dark:bg-gray-800 rounded-lg p-4'>
@@ -107,7 +109,7 @@ export default function Search() {
 									</span>
 								</Button>
 							</Link>
-							<Link href={`/message/${user?._id}`}>
+							<Link href={`/chat`}>
 								<Button variant='outline'>
 									<FiMessageCircle className='w-4 h-4 md:mr-2' />
 									<span className='hidden md:block'>

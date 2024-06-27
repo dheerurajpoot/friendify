@@ -180,6 +180,7 @@ export default function Message({ params }: { params: { chatId: string } }) {
 								<Avatar>
 									<AvatarImage
 										src={receiverUser?.profilepic}
+										className='object-cover'
 									/>
 									<AvatarFallback>
 										{receiverUser?.name.charAt(0)}

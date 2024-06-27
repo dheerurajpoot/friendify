@@ -190,7 +190,7 @@ export default function Message({ params }: { params: { chatId: string } }) {
 						<div
 							className={`bg-gray-100 dark:bg-gray-800 rounded-lg p-3 max-w-[70%] ${
 								msg.sender === loggedInUser?._id
-									? "bg-blue-200 dark:bg-blue-900"
+									? "bg-blue-300 dark:bg-blue-900"
 									: ""
 							}`}>
 							<p className='text-sm'>{msg.content}</p>

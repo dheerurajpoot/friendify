@@ -23,8 +23,9 @@ export const sendMail = async ({ email, emailType, userId }: any) => {
 			});
 		}
 		const transporter = nodemailer.createTransport({
-			host: process.env.MAIL_SERVER,
-			port: 2525,
+			host: "smtp.gmail.com",
+			port: 587,
+			secure: false,
 			auth: {
 				user: process.env.MAIL_USER,
 				pass: process.env.MAIL_PASS,
@@ -32,7 +33,7 @@ export const sendMail = async ({ email, emailType, userId }: any) => {
 		});
 
 		const mailOptions = {
-			from: "contact@dheeru.org",
+			from: `${process.env.COMPANY_NAME} ✅ <rajpootdheeru90@gmail.com>`,
 			to: email,
 			subject:
 				emailType === "VERIFY"

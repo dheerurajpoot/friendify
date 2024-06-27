@@ -1,6 +1,7 @@
 "use client";
 import { Button } from "@/components/ui/button";
 import axios from "axios";
+import Link from "next/link";
 import React, { useEffect, useState } from "react";
 
 export default function VerifyEmailPage() {
@@ -25,13 +26,26 @@ export default function VerifyEmailPage() {
 	}, []);
 	return (
 		<div className='flex flex-col mt-[10%] relative items-center justify-center pt-5 m-auto lg:w-[900px] md:w-[900px]'>
-			<h2 className='text-2xl mb-4 font-semibold'>Verify your email</h2>
-			<Button onClick={verifyUserMail}>Click to verify email</Button>
-			{verified && (
+			{!verified && (
 				<div>
+					<h2 className='text-2xl mb-4 font-semibold'>
+						Verify your email
+					</h2>
+					<Button onClick={verifyUserMail}>
+						Click to verify email
+					</Button>
+				</div>
+			)}
+			{verified && (
+				<div className='text-center'>
 					<h3 className='text-2xl font-semibold text-green-700'>
 						Verification Successfull
 					</h3>
+					<Link
+						href={"/login"}
+						className='text-blue-600 font-semibold underline '>
+						Login to Account
+					</Link>
 				</div>
 			)}
 			{error && (

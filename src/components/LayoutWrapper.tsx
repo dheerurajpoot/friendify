@@ -11,7 +11,7 @@ export default function LayoutWrapper({
 	children: React.ReactNode;
 }) {
 	const pathname = usePathname();
-	const noLayoutPaths = ["/login", "/sign-up"];
+	const noLayoutPaths = ["/login", "/sign-up", "/verifyemail"];
 
 	return (
 		<>

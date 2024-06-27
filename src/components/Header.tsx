@@ -96,14 +96,14 @@ const Header = () => {
 								Delete Profile
 							</DropdownMenuItem>
 							<DropdownMenuSeparator />
-							<Link href={"/"}>
+							<Link href={"/support"}>
 								<DropdownMenuItem className='cursor-pointer'>
 									<BiSupport className='h-4 w-4 mr-2' />
 									Support
 								</DropdownMenuItem>
 							</Link>
 							<DropdownMenuSeparator />
-							<Link href={"/"}>
+							<Link href={"/about"}>
 								<DropdownMenuItem className='cursor-pointer'>
 									<FcAbout className='h-4 w-4 mr-2' />
 									About

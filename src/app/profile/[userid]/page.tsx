@@ -49,14 +49,14 @@ const Profile = ({ params }: { params: { userid: string } }) => {
 
 	useEffect(() => {
 		getProfile();
-	}, [userId]);
+	}, [userId, getProfile]);
 
 	useEffect(() => {
 		if (user?.followers.length === 0) return;
 		if (user && loggedInUser) {
 			setIsFollowing(user?.followers.includes(loggedInUser?._id));
 		}
-	}, [user?.followers, loggedInUser]);
+	}, [user?.followers, loggedInUser, user]);
 
 	const getAllPosts = async () => {
 		try {

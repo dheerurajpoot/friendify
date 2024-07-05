@@ -37,12 +37,6 @@ export default function Message({ params }: { params: { chatId: string } }) {
 		}
 	}, []);
 
-	useEffect(() => {
-		if (loggedInUser) {
-			fetchMessages();
-		}
-	}, [loggedInUser, conversationId]);
-
 	// getting messages from database
 	const fetchMessages = async () => {
 		if (!loggedInUser) return;
@@ -60,6 +54,12 @@ export default function Message({ params }: { params: { chatId: string } }) {
 			console.error(error.message);
 		}
 	};
+
+	useEffect(() => {
+		if (loggedInUser) {
+			fetchMessages();
+		}
+	}, [loggedInUser, conversationId, fetchMessages]);
 
 	// send messages to database
 
@@ -102,7 +102,7 @@ export default function Message({ params }: { params: { chatId: string } }) {
 	useEffect(() => {
 		if (!receiverId) return;
 		getProfile();
-	}, [conversationId, messages]);
+	}, [conversationId, messages, getProfile, receiverId]);
 
 	return (
 		<div className='flex flex-col w-full h-[calc(100vh-190px)] mt-[-12px] rounded-lg border border-gray-200 dark:border-gray-800 overflow-hidden m-auto lg:w-[900px] md:w-[900px]'>

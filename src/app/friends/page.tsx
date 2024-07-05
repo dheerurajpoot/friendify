@@ -58,7 +58,7 @@ export default function Friends() {
 
 	useEffect(() => {
 		getFriends();
-	}, [loggedInUser, userId]);
+	}, [loggedInUser, userId, getFriends]);
 
 	const handleSearch = (e: any) => {
 		const term = e.target.value.toLowerCase();

@@ -80,7 +80,7 @@ export default function Component() {
 	};
 	useEffect(() => {
 		getProfile();
-	}, [userId]);
+	}, [userId, getProfile]);
 
 	const handleSubmit = async (event: any) => {
 		event.preventDefault();

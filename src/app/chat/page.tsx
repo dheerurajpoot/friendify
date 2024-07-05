@@ -58,7 +58,7 @@ export default function Chat() {
 	};
 	useEffect(() => {
 		getFriends();
-	}, [loggedInUser, userId]);
+	}, [loggedInUser, userId, getFriends]);
 
 	// create conversion between two friends
 	const createConversation = async (userId2: string) => {

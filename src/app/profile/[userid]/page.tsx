@@ -49,7 +49,7 @@ const Profile = ({ params }: { params: { userid: string } }) => {
 
 	useEffect(() => {
 		getProfile();
-	}, [userId, getProfile]);
+	}, [userId]);
 
 	useEffect(() => {
 		if (user?.followers.length === 0) return;

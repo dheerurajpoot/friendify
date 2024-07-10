@@ -125,7 +125,7 @@ export default function CreatePost() {
 	};
 	useEffect(() => {
 		getAllPosts();
-	}, []);
+	}, [, handleSubmit, loading]);
 
 	const allPosts = posts
 		.slice()

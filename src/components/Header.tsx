@@ -61,7 +61,7 @@ const Header = () => {
 				</div>
 				<div>
 					<Link href={"/"}>
-						<h2 className='text-xl font-bold'>Friendify</h2>
+						<h2 className='text-xl font-bold'>HikeTok</h2>
 					</Link>
 				</div>
 

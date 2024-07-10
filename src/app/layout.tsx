@@ -7,7 +7,7 @@ import LayoutWrapper from "@/components/LayoutWrapper";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-	title: "Friendify: Connect with your friends",
+	title: "HikeTok: Connect with your friends",
 	description: "Connect with your friends everywhere in the World",
 };
 

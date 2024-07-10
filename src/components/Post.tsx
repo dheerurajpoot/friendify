@@ -144,7 +144,7 @@ const Post: React.FC<PostProps> = ({ data, onDeletePost }) => {
 								className='object-cover'
 							/>
 							<AvatarFallback>
-								{data.createdBy.name.charAt(0)}
+								{data?.createdBy?.name?.charAt(0) || "U"}
 							</AvatarFallback>
 						</Avatar>
 					</Link>

@@ -7,21 +7,22 @@ export const sendMail = async ({ email, emailType, userId }: any) => {
 	try {
 		const token = jwt.sign({ userId: userId }, process.env.TOKEN_SECRET!);
 
-		if ((emailType = "VERIFY")) {
+		if (emailType === "VERIFY") {
 			await User.findByIdAndUpdate(userId, {
 				$set: {
 					verifyToken: token,
-					verifyTokenExpiry: Date.now() + 3600000,
+					verifyTokenExpiry: Date.now() + 3600000, // 1 hour
 				},
 			});
-		} else if ((emailType = "RESET")) {
+		} else if (emailType === "RESET") {
 			await User.findByIdAndUpdate(userId, {
 				$set: {
 					forgotPasswordToken: token,
-					forgotPasswordTokenExpiry: Date.now() + 3600000,
+					forgotPasswordTokenExpiry: Date.now() + 3600000, // 1 hour
 				},
 			});
 		}
+
 		const transporter = nodemailer.createTransport({
 			host: "smtp.gmail.com",
 			port: 587,
@@ -33,7 +34,7 @@ export const sendMail = async ({ email, emailType, userId }: any) => {
 		});
 
 		const mailOptions = {
-			from: `"${process.env.COMPANY_NAME}✅"<rajpootdheeru90@gmail.com>`,
+			from: '"HikeTok ✅" <drexpress90@gmail.com>',
 			to: email,
 			subject:
 				emailType === "VERIFY"
@@ -47,8 +48,9 @@ export const sendMail = async ({ email, emailType, userId }: any) => {
 		};
 
 		const mailResponse = await transporter.sendMail(mailOptions);
+
 		return mailResponse;
 	} catch (error: any) {
-		throw new Error(error.message);
+		throw new Error(`Error sending email: ${error.message}`);
 	}
 };

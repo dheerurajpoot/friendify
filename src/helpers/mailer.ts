@@ -33,7 +33,7 @@ export const sendMail = async ({ email, emailType, userId }: any) => {
 		});
 
 		const mailOptions = {
-			from: `${process.env.COMPANY_NAME} ✅ <rajpootdheeru90@gmail.com>`,
+			from: `"${process.env.COMPANY_NAME}✅"<rajpootdheeru90@gmail.com>`,
 			to: email,
 			subject:
 				emailType === "VERIFY"

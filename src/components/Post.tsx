@@ -137,10 +137,10 @@ const Post: React.FC<PostProps> = ({ data, onDeletePost }) => {
 		<div className='bg-white my-4 dark:bg-gray-950 rounded-lg border border-gray-200 dark:border-gray-800 shadow-sm m-auto lg:w-[900px] md:w-[900px]'>
 			<div className='p-4'>
 				<div className='flex items-start space-x-4'>
-					<Link href={`/profile/${data.createdBy._id}`}>
+					<Link href={`/profile/${data.createdBy?._id}`}>
 						<Avatar>
 							<AvatarImage
-								src={data.createdBy.profilepic}
+								src={data.createdBy?.profilepic}
 								className='object-cover'
 							/>
 							<AvatarFallback>
@@ -151,13 +151,13 @@ const Post: React.FC<PostProps> = ({ data, onDeletePost }) => {
 					<div className='flex-1'>
 						<div className='flex items-center justify-between'>
 							<div>
-								<Link href={`/profile/${data.createdBy._id}`}>
+								<Link href={`/profile/${data?.createdBy?._id}`}>
 									<h4 className='font-semibold text-base'>
-										{data.createdBy.name}
+										{data?.createdBy?.name || "Unknown"}
 									</h4>
 								</Link>
 								<p className='text-gray-500 dark:text-gray-400 text-sm'>
-									{format(data.createdAt)}
+									{format(data?.createdAt)}
 								</p>
 							</div>
 							<DropdownMenu>
@@ -174,13 +174,13 @@ const Post: React.FC<PostProps> = ({ data, onDeletePost }) => {
 								</DropdownMenuTrigger>
 								<DropdownMenuContent align='end'>
 									<Link
-										href={`/profile/${data.createdBy._id}`}>
+										href={`/profile/${data?.createdBy?._id}`}>
 										<DropdownMenuItem className='cursor-pointer'>
 											<FaRegUserCircle className='h-4 w-4 mr-2' />
 											View Profile
 										</DropdownMenuItem>
 									</Link>
-									{data.createdBy._id ===
+									{data?.createdBy?._id ===
 										loggedInUser?._id && (
 										<DropdownMenuItem
 											className='cursor-pointer'
@@ -195,11 +195,11 @@ const Post: React.FC<PostProps> = ({ data, onDeletePost }) => {
 							</DropdownMenu>
 						</div>
 						<p className='text-gray-700 dark:text-gray-300 mt-2'>
-							{data.postContent}
+							{data?.postContent}
 						</p>
 						{data.image && (
 							<Image
-								src={data.image}
+								src={data?.image}
 								width={400}
 								height={400}
 								alt='Post Image'
@@ -211,7 +211,7 @@ const Post: React.FC<PostProps> = ({ data, onDeletePost }) => {
 				<div className='mt-4 flex items-center justify-between space-x-4 px-5'>
 					<div className='flex items-center justify-center gap-4'>
 						<Button
-							onClick={() => likeDislikeHandler(data._id)}
+							onClick={() => likeDislikeHandler(data?._id)}
 							variant='ghost'
 							size='icon'>
 							{isLike ? (
@@ -241,10 +241,10 @@ const Post: React.FC<PostProps> = ({ data, onDeletePost }) => {
 								<Avatar>
 									<AvatarImage
 										className='object-cover'
-										src={data.createdBy.profilepic}
+										src={data?.createdBy?.profilepic}
 									/>
 									<AvatarFallback>
-										{data.createdBy.name.charAt(0)}
+										{data.createdBy?.name?.charAt(0) || "U"}
 									</AvatarFallback>
 								</Avatar>
 							</Link>
@@ -259,7 +259,7 @@ const Post: React.FC<PostProps> = ({ data, onDeletePost }) => {
 							/>
 							<Button
 								type='button'
-								onClick={() => commentHandler(data._id)}
+								onClick={() => commentHandler(data?._id)}
 								size='icon'>
 								<BsFillSendFill className='h-4 w-4' />
 								<span className='sr-only'>Send</span>
@@ -268,7 +268,7 @@ const Post: React.FC<PostProps> = ({ data, onDeletePost }) => {
 						{data.comments &&
 							data.comments.map((commentData: any) => (
 								<div
-									key={commentData._id}
+									key={commentData?._id}
 									className='mt-4 space-y-4 md:mx-10 lg:mx-10'>
 									<hr />
 									<div className='flex items-start space-x-4'>
@@ -282,7 +282,7 @@ const Post: React.FC<PostProps> = ({ data, onDeletePost }) => {
 													className='object-cover'
 												/>
 												<AvatarFallback>
-													{commentData?.author?.name.charAt(
+													{commentData?.author?.name?.charAt(
 														0
 													) || "U"}
 												</AvatarFallback>
@@ -297,7 +297,7 @@ const Post: React.FC<PostProps> = ({ data, onDeletePost }) => {
 													</h4>
 													<p className='text-gray-500 dark:text-gray-400 text-sm'>
 														{format(
-															commentData.createdAt
+															commentData?.createdAt
 														)}
 													</p>
 												</div>
@@ -341,7 +341,7 @@ const Post: React.FC<PostProps> = ({ data, onDeletePost }) => {
 												</DropdownMenu>
 											</div>
 											<p className='text-gray-700 dark:text-gray-300 mt-2'>
-												{commentData.comment}
+												{commentData?.comment}
 											</p>
 										</div>
 									</div>

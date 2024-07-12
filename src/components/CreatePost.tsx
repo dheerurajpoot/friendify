@@ -136,7 +136,7 @@ export default function CreatePost() {
 		);
 
 	const handleDeletePost = (postId: string) => {
-		setPosts(posts.filter((post) => post._id !== postId));
+		setPosts(posts.filter((post) => post?._id !== postId));
 	};
 
 	return (
@@ -259,7 +259,7 @@ export default function CreatePost() {
 						{allPosts &&
 							allPosts.map((post) => (
 								<Post
-									key={post._id}
+									key={post?._id}
 									data={post}
 									onDeletePost={handleDeletePost}
 								/>

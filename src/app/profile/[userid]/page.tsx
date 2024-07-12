@@ -74,7 +74,7 @@ const Profile = ({ params }: { params: { userid: string } }) => {
 	}, []);
 
 	const profilePosts =
-		posts?.filter((post: PostType) => post.createdBy._id === user?._id) ||
+		posts?.filter((post: PostType) => post.createdBy?._id === user?._id) ||
 		[];
 	const userposts = profilePosts
 		.slice()
@@ -102,7 +102,7 @@ const Profile = ({ params }: { params: { userid: string } }) => {
 		}
 	};
 	const handleDeletePost = (postId: string) => {
-		setPosts(posts.filter((post) => post._id !== postId));
+		setPosts(posts.filter((post) => post?._id !== postId));
 	};
 
 	return (
@@ -124,7 +124,7 @@ const Profile = ({ params }: { params: { userid: string } }) => {
 									className='object-cover'
 								/>
 								<AvatarFallback>
-									{user?.name.charAt(0)}
+									{user?.name.charAt(0) || "U"}
 								</AvatarFallback>
 							</Avatar>
 						</div>
@@ -227,7 +227,7 @@ const Profile = ({ params }: { params: { userid: string } }) => {
 					{userposts && userposts.length !== 0 ? (
 						userposts.map((post) => (
 							<Post
-								key={post._id}
+								key={post?._id}
 								data={post}
 								onDeletePost={handleDeletePost}
 							/>

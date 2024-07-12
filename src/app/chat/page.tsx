@@ -58,7 +58,7 @@ export default function Chat() {
 	};
 	useEffect(() => {
 		getFriends();
-	}, [loggedInUser, userId, getFriends]);
+	}, [loggedInUser, userId]);
 
 	// create conversion between two friends
 	const createConversation = async (userId2: string) => {
@@ -97,41 +97,45 @@ export default function Chat() {
 				</div>
 			</div>
 			<div className='grid gap-4 shadow p-2'>
-				{filteredFriends.map((friend) => (
-					<div
-						onClick={() => createConversation(friend?._id)}
-						key={friend?._id}
-						className='flex items-center justify-between bg-gray-100 dark:bg-gray-800 rounded-lg p-4 cursor-pointer'>
-						<div className='flex items-center gap-4'>
-							<Avatar>
-								<AvatarImage
-									src={friend?.profilepic}
-									className='object-cover'
-								/>
-								<AvatarFallback>
-									{friend?.name.charAt(0)}
-								</AvatarFallback>
-							</Avatar>
-							<div className='grid gap-0.5'>
-								<p className='text-sm font-medium'>
-									{friend?.name}
-								</p>
-								<p className='text-xs text-gray-500 dark:text-gray-400'>
-									{/* {friend.status} */}
-									onliine
-								</p>
+				{filteredFriends.length == 0 ? (
+					<span className='text-center'>You have no Chat.</span>
+				) : (
+					filteredFriends.map((friend) => (
+						<div
+							onClick={() => createConversation(friend?._id)}
+							key={friend?._id}
+							className='flex items-center justify-between bg-gray-100 dark:bg-gray-800 rounded-lg p-4 cursor-pointer'>
+							<div className='flex items-center gap-4'>
+								<Avatar>
+									<AvatarImage
+										src={friend?.profilepic}
+										className='object-cover'
+									/>
+									<AvatarFallback>
+										{friend?.name.charAt(0)}
+									</AvatarFallback>
+								</Avatar>
+								<div className='grid gap-0.5'>
+									<p className='text-sm font-medium'>
+										{friend?.name}
+									</p>
+									<p className='text-xs text-gray-500 dark:text-gray-400'>
+										{/* {friend.status} */}
+										onliine
+									</p>
+								</div>
+							</div>
+							<div className='flex items-center gap-2'>
+								<Button variant='outline' size='icon'>
+									<FiMessageCircle className='h-4 w-4' />
+									<span className='sr-only'>
+										Message {friend?.name}
+									</span>
+								</Button>
 							</div>
 						</div>
-						<div className='flex items-center gap-2'>
-							<Button variant='outline' size='icon'>
-								<FiMessageCircle className='h-4 w-4' />
-								<span className='sr-only'>
-									Message {friend?.name}
-								</span>
-							</Button>
-						</div>
-					</div>
-				))}
+					))
+				)}
 			</div>
 		</div>
 	);

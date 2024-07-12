@@ -22,6 +22,8 @@ import { useRouter } from "next/navigation";
 import { FaEdit } from "react-icons/fa";
 import { getUserFromLocalStorage } from "@/helpers/getUserFromLocalStorage";
 import { User } from "@/app/search/page";
+import logo from "./../../public/hikelogo.png";
+import Image from "next/image";
 
 const Header = () => {
 	const [loggedInUser, setLoggedInUser] = useState<User | null>(null);
@@ -61,7 +63,13 @@ const Header = () => {
 				</div>
 				<div>
 					<Link href={"/"}>
-						<h2 className='text-xl font-bold'>HikeTok</h2>
+						{/* <h2 className='text-3xl font-bold'>HikeTok</h2> */}
+						<Image
+							src={logo}
+							height={100}
+							width={160}
+							alt='HikeTok'
+						/>
 					</Link>
 				</div>
 

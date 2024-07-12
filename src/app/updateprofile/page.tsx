@@ -100,7 +100,7 @@ export default function Component() {
 			await axios.put("/api/users/updateprofile", data);
 			toast.success("Profile updated successfully");
 			setLoading(false);
-			router.push("/profile");
+			router.push(`/profile/${userId}`);
 		} catch (error: any) {
 			setLoading(false);
 			throw new Error(error);

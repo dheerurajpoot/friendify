@@ -208,7 +208,8 @@ const Post: React.FC<PostProps> = ({ data, onDeletePost }) => {
 						)}
 					</div>
 				</div>
-				<div className='mt-4 flex items-center justify-between space-x-4 px-5'>
+				<hr className='mt-4' />
+				<div className='mt-2 flex items-center justify-between space-x-4 px-5'>
 					<div className='flex items-center justify-center gap-4'>
 						<Button
 							onClick={() => likeDislikeHandler(data?._id)}

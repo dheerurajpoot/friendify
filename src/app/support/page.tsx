@@ -161,7 +161,7 @@ const Support = () => {
 					</section>
 				</main>
 				<footer className='p-6 md:p-8 text-sm'>
-					<div className='container flex flex-col md:flex-row items-center justify-between'>
+					<div className='container flex flex-col-reverse md:flex-row items-center justify-between'>
 						<p>&copy; 2024 HikeTok. All rights reserved.</p>
 						<div className='flex space-x-4 mt-4 md:mt-0'>
 							<Link

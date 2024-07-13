@@ -21,7 +21,7 @@ const NavMenu = () => {
 	}, []);
 	return (
 		<div className='flex justify-center items-center w-full fixed bottom-0 bg-white  '>
-			<Menubar className='flex justify-between items-center w-[900px] h-[80px] p-4 px-12 shadow-2xl'>
+			<Menubar className='flex justify-between items-center w-[900px] h-[80px] p-4 lg:px-12 md:px-12 shadow-2xl'>
 				<MenubarMenu>
 					<Link href={"/"}>
 						<MenubarTrigger className='cursor-pointer'>

@@ -35,8 +35,8 @@ const Signin = () => {
 					<div className='space-y-2 text-center'>
 						<h1 className='text-3xl font-bold'>Sign In</h1>
 						<p className='text-gray-500 dark:text-gray-400'>
-							Enter your email and password to login to your
-							account.
+							Enter your email and password to <br /> login to
+							your account.
 						</p>
 					</div>
 					<form className='space-y-4'>
@@ -84,7 +84,7 @@ const Signin = () => {
 						<Link
 							href={"/sign-up"}
 							className='text-blue-500 font-semibold'>
-							Create Account
+							Sign Up
 						</Link>
 					</div>
 				</div>

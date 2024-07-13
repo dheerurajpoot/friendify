@@ -59,7 +59,7 @@ export default function Message({ params }: { params: { chatId: string } }) {
 		if (loggedInUser) {
 			fetchMessages();
 		}
-	}, [loggedInUser, conversationId, fetchMessages]);
+	}, [loggedInUser, conversationId]);
 
 	// send messages to database
 
@@ -102,7 +102,7 @@ export default function Message({ params }: { params: { chatId: string } }) {
 	useEffect(() => {
 		if (!receiverId) return;
 		getProfile();
-	}, [conversationId, messages, getProfile, receiverId]);
+	}, [conversationId, messages, receiverId]);
 
 	return (
 		<div className='flex flex-col w-full h-[calc(100vh-190px)] mt-[-12px] rounded-lg border border-gray-200 dark:border-gray-800 overflow-hidden m-auto lg:w-[900px] md:w-[900px]'>

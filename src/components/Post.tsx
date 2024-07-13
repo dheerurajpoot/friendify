@@ -230,14 +230,18 @@ const Post: React.FC<PostProps> = ({ data, onDeletePost }) => {
 						</Button>
 					</div>
 					<div className='text-gray-500 dark:text-gray-400 text-base'>
-						{data.likes.length} likes • {data.comments.length}{" "}
-						comments
+						{data.likes.length} likes •{" "}
+						<span
+							className='cursor-pointer underline'
+							onClick={toggleComments}>
+							{data.comments.length} comments
+						</span>
 					</div>
 				</div>
 				{showComments && (
 					<div className='mt-4 border-t border-gray-200 dark:border-gray-800 pt-4'>
 						<form className='flex items-center space-x-2 md:mx-10 lg:mx-10'>
-							<Link href={"/profile"}>
+							<Link href={`/profile/${data?.createdBy?._id}`}>
 								<Avatar>
 									<AvatarImage
 										className='object-cover'
@@ -272,7 +276,8 @@ const Post: React.FC<PostProps> = ({ data, onDeletePost }) => {
 									className='mt-4 space-y-4 md:mx-10 lg:mx-10'>
 									<hr />
 									<div className='flex items-start space-x-4'>
-										<Link href={"/profile"}>
+										<Link
+											href={`/profile/${commentData?.author?._id}`}>
 											<Avatar>
 												<AvatarImage
 													src={

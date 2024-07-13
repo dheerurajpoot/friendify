@@ -12,6 +12,7 @@ import axios from "axios";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { CgProfile } from "react-icons/cg";
+import { Skeleton } from "@/components/ui/skeleton";
 
 export default function Friends() {
 	const [searchTerm, setSearchTerm] = useState("");
@@ -110,125 +111,139 @@ export default function Friends() {
 				</TabsList>
 				<TabsContent value='following'>
 					{/* following */}
-					<div className='grid gap-4'>
-						{filteredFriends.length == 0 ? (
-							<span className='text-center'>
-								You are not following to anyone.
-							</span>
-						) : (
-							filteredFriends?.map((friend: User) => (
-								<div
-									key={friend._id}
-									className='flex items-center justify-between bg-gray-100 dark:bg-gray-800 rounded-lg p-4'>
-									<Link href={`/profile/${friend?._id}`}>
-										<div className='flex items-center gap-4'>
-											<Avatar>
-												<AvatarImage
-													src={friend.profilepic}
-													className='object-cover'
-												/>
-												<AvatarFallback>
-													{friend?.name.charAt(0)}
-												</AvatarFallback>
-											</Avatar>
-											<div className='grid gap-0.5'>
-												<p className='text-sm font-medium'>
-													{friend.name}
-												</p>
-												<p className='text-xs text-gray-500 dark:text-gray-400'>
-													{friend?.username}
-												</p>
+					{loading ? (
+						<div>
+							<Skeleton className='h-16 w-full my-4' />
+							<Skeleton className='h-16 w-full my-4' />
+						</div>
+					) : (
+						<div className='grid gap-4'>
+							{filteredFriends.length == 0 && !loading ? (
+								<span className='text-center'>
+									You are not following to anyone.
+								</span>
+							) : (
+								filteredFriends?.map((friend: User) => (
+									<div
+										key={friend._id}
+										className='flex items-center justify-between bg-gray-100 dark:bg-gray-800 rounded-lg p-4'>
+										<Link href={`/profile/${friend?._id}`}>
+											<div className='flex items-center gap-4'>
+												<Avatar>
+													<AvatarImage
+														src={friend.profilepic}
+														className='object-cover'
+													/>
+													<AvatarFallback>
+														{friend?.name.charAt(0)}
+													</AvatarFallback>
+												</Avatar>
+												<div className='grid gap-0.5'>
+													<p className='text-sm font-medium'>
+														{friend.name}
+													</p>
+													<p className='text-xs text-gray-500 dark:text-gray-400'>
+														{friend?.username}
+													</p>
+												</div>
 											</div>
+										</Link>
+										<div className='flex items-center gap-2'>
+											<Button
+												variant='outline'
+												size='sm'
+												onClick={() =>
+													toMessage(friend?._id)
+												}>
+												<FiMessageCircle className='w-4 h-4 md:mr-2' />
+												<span className='hidden md:block'>
+													Message
+												</span>
+											</Button>
+											<Button
+												size='sm'
+												onClick={() =>
+													toProfile(friend?._id)
+												}>
+												<CgProfile className='w-4 h-4 md:mr-2' />
+												<span className='hidden md:block'>
+													View Profile
+												</span>
+											</Button>
 										</div>
-									</Link>
-									<div className='flex items-center gap-2'>
-										<Button
-											variant='outline'
-											size='sm'
-											onClick={() =>
-												toMessage(friend?._id)
-											}>
-											<FiMessageCircle className='w-4 h-4 md:mr-2' />
-											<span className='hidden md:block'>
-												Message
-											</span>
-										</Button>
-										<Button
-											size='sm'
-											onClick={() =>
-												toProfile(friend?._id)
-											}>
-											<CgProfile className='w-4 h-4 md:mr-2' />
-											<span className='hidden md:block'>
-												View Profile
-											</span>
-										</Button>
 									</div>
-								</div>
-							))
-						)}
-					</div>
+								))
+							)}
+						</div>
+					)}
 				</TabsContent>
 				<TabsContent value='followers'>
 					{/* followers */}
-					<div className='grid gap-4'>
-						{filteredFollowerFriends.length == 0 ? (
-							<span className='text-center'>
-								You have 0 followers
-							</span>
-						) : (
-							filteredFollowerFriends?.map((friend: User) => (
-								<div
-									key={friend._id}
-									className='flex items-center justify-between bg-gray-100 dark:bg-gray-800 rounded-lg p-4'>
-									<Link href={`/profile/${friend?._id}`}>
-										<div className='flex items-center gap-4'>
-											<Avatar>
-												<AvatarImage
-													src={friend.profilepic}
-													className='object-cover'
-												/>
-												<AvatarFallback>
-													{friend?.name.charAt(0)}
-												</AvatarFallback>
-											</Avatar>
-											<div className='grid gap-0.5'>
-												<p className='text-sm font-medium'>
-													{friend.name}
-												</p>
-												<p className='text-xs text-gray-500 dark:text-gray-400'>
-													{friend?.username}
-												</p>
+					{loading ? (
+						<div>
+							<Skeleton className='h-16 w-full my-4' />
+							<Skeleton className='h-16 w-full my-4' />
+						</div>
+					) : (
+						<div className='grid gap-4'>
+							{filteredFollowerFriends.length == 0 && !loading ? (
+								<span className='text-center'>
+									You have 0 followers
+								</span>
+							) : (
+								filteredFollowerFriends?.map((friend: User) => (
+									<div
+										key={friend._id}
+										className='flex items-center justify-between bg-gray-100 dark:bg-gray-800 rounded-lg p-4'>
+										<Link href={`/profile/${friend?._id}`}>
+											<div className='flex items-center gap-4'>
+												<Avatar>
+													<AvatarImage
+														src={friend.profilepic}
+														className='object-cover'
+													/>
+													<AvatarFallback>
+														{friend?.name.charAt(0)}
+													</AvatarFallback>
+												</Avatar>
+												<div className='grid gap-0.5'>
+													<p className='text-sm font-medium'>
+														{friend.name}
+													</p>
+													<p className='text-xs text-gray-500 dark:text-gray-400'>
+														{friend?.username}
+													</p>
+												</div>
 											</div>
+										</Link>
+										<div className='flex items-center gap-2'>
+											<Button
+												variant='outline'
+												size='sm'
+												onClick={() =>
+													toMessage(friend?._id)
+												}>
+												<FiMessageCircle className='w-4 h-4 md:mr-2' />
+												<span className='hidden md:block'>
+													Message
+												</span>
+											</Button>
+											<Button
+												size='sm'
+												onClick={() =>
+													toProfile(friend?._id)
+												}>
+												<CgProfile className='w-4 h-4 md:mr-2' />
+												<span className='hidden md:block'>
+													View Profile
+												</span>
+											</Button>
 										</div>
-									</Link>
-									<div className='flex items-center gap-2'>
-										<Button
-											variant='outline'
-											size='sm'
-											onClick={() =>
-												toMessage(friend?._id)
-											}>
-											<FiMessageCircle className='w-4 h-4 md:mr-2' />
-											<span className='hidden md:block'>
-												Message
-											</span>
-										</Button>
-										<Button
-											size='sm'
-											onClick={() =>
-												toProfile(friend?._id)
-											}>
-											<CgProfile className='w-4 h-4 md:mr-2' />
-											<span className='hidden md:block'>
-												View Profile
-											</span>
-										</Button>
 									</div>
-								</div>
-							))
-						)}
-					</div>
+								))
+							)}
+						</div>
+					)}
 				</TabsContent>
 			</Tabs>
 		</div>

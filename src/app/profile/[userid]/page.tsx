@@ -224,7 +224,7 @@ const Profile = ({ params }: { params: { userid: string } }) => {
 				</div>
 			) : (
 				<div>
-					{userposts && userposts.length !== 0 ? (
+					{userposts && userposts.length !== 0 && !loading ? (
 						userposts.map((post) => (
 							<Post
 								key={post?._id}

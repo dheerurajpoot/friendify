@@ -1,6 +1,6 @@
-import mongoose, { Connection } from "mongoose";
+import mongoose from "mongoose";
 
-let isConnected: Connection | boolean = false;
+let isConnected: mongoose.Connection | boolean = false;
 
 export const connectDb = async () => {
 	if (isConnected) {
@@ -13,7 +13,7 @@ export const connectDb = async () => {
 		console.log("Database connected Successfully");
 		return isConnected;
 	} catch (error) {
-		console.log(error);
+		console.error("Error connecting to database:", error);
 		throw error;
 	}
 };

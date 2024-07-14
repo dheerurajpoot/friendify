@@ -120,6 +120,7 @@ export default function CreatePost() {
 			setPosts(response.data.posts);
 			setLoading(false);
 		} catch (error: any) {
+			console.log(error);
 			throw new Error(error);
 		}
 	};

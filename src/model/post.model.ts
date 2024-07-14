@@ -1,4 +1,4 @@
-import mongoose, { Types, Schema, Document, Model } from "mongoose";
+import mongoose, { Types, Document, Model } from "mongoose";
 
 export interface Comment {
 	author: mongoose.Schema.Types.ObjectId;
@@ -6,7 +6,7 @@ export interface Comment {
 	createdAt: Date;
 }
 
-export interface postInterface {
+export interface PostInterface {
 	postContent: string;
 	image: string;
 	likes: Types.ObjectId[];
@@ -14,7 +14,7 @@ export interface postInterface {
 	createdBy: mongoose.Schema.Types.ObjectId;
 }
 
-export interface postDocument extends postInterface, Document {
+export interface postDocument extends PostInterface, Document {
 	createdAt: Date;
 	updatedAt: Date;
 }

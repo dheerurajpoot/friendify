@@ -1,4 +1,4 @@
-import mongoose, { Document, Model } from "mongoose";
+import mongoose from "mongoose";
 
 export interface userInterface {
 	name: string;
@@ -6,26 +6,25 @@ export interface userInterface {
 	email: string;
 	profilepic: string;
 	password: string;
-	isVerified: Boolean;
+	isVerified: boolean;
 	forgotPasswordToken: string;
-	forgotPasswordTokenExpiry: string;
+	forgotPasswordTokenExpiry: Date;
 	verifyToken: string;
-	verifyTokenExpiry: string;
+	verifyTokenExpiry: Date;
 	profession: string;
 	about: string;
-	followers: any;
-	following: any;
+	followers: mongoose.Types.ObjectId[];
+	following: mongoose.Types.ObjectId[];
 }
-export interface userDocument extends userInterface, Document {
+
+export interface userDocument extends userInterface, mongoose.Document {
 	createdAt: Date;
 	updatedAt: Date;
 }
 
 const userModel = new mongoose.Schema<userDocument>(
 	{
-		name: {
-			type: String,
-		},
+		name: String,
 		username: {
 			type: String,
 			unique: true,
@@ -35,19 +34,13 @@ const userModel = new mongoose.Schema<userDocument>(
 			required: true,
 			unique: true,
 		},
-		profilepic: {
-			type: String,
-		},
+		profilepic: String,
 		password: {
 			type: String,
 			required: true,
 		},
-		profession: {
-			type: String,
-		},
-		about: {
-			type: String,
-		},
+		profession: String,
+		about: String,
 		isVerified: {
 			type: Boolean,
 			default: false,
@@ -72,5 +65,5 @@ const userModel = new mongoose.Schema<userDocument>(
 	{ timestamps: true }
 );
 
-export const User: Model<userDocument> =
-	mongoose?.models?.User || mongoose.model("User", userModel);
+export const User: mongoose.Model<userDocument> =
+	mongoose.models.User || mongoose.model<userDocument>("User", userModel);

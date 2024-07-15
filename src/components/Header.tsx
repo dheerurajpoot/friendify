@@ -28,14 +28,20 @@ import Image from "next/image";
 const Header = () => {
 	const [loggedInUser, setLoggedInUser] = useState<User | null>(null);
 	const router = useRouter();
+
 	const logOut = async () => {
 		try {
-			await axios.get("/api/users/logout");
-			localStorage.removeItem("user");
-			toast.success("Logout Successfully");
-			router.push("/login");
+			const response = await axios.get("/api/users/logout");
+			if (response.status === 200) {
+				localStorage.removeItem("user");
+				toast.success("Logout Successfully");
+				router.push("/login");
+			} else {
+				toast.error("Failed to logout");
+			}
 		} catch (error: any) {
-			throw new Error(error);
+			toast.error("An error occurred during logout");
+			console.error(error);
 		}
 	};
 

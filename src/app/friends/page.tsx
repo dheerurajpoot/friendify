@@ -111,17 +111,17 @@ export default function Friends() {
 				</TabsList>
 				<TabsContent value='following'>
 					{/* following */}
-					{loading ? (
-						<div>
-							<Skeleton className='h-16 w-full my-4' />
-							<Skeleton className='h-16 w-full my-4' />
-						</div>
+					{filteredFriends.length == 0 ? (
+						<span className='text-center'>
+							You are not following to anyone.
+						</span>
 					) : (
 						<div className='grid gap-4'>
-							{filteredFriends.length == 0 && !loading ? (
-								<span className='text-center'>
-									You are not following to anyone.
-								</span>
+							{loading ? (
+								<div>
+									<Skeleton className='h-16 w-full my-4' />
+									<Skeleton className='h-16 w-full my-4' />
+								</div>
 							) : (
 								filteredFriends?.map((friend: User) => (
 									<div
@@ -179,17 +179,17 @@ export default function Friends() {
 				</TabsContent>
 				<TabsContent value='followers'>
 					{/* followers */}
-					{loading ? (
-						<div>
-							<Skeleton className='h-16 w-full my-4' />
-							<Skeleton className='h-16 w-full my-4' />
-						</div>
+					{filteredFollowerFriends.length == 0 ? (
+						<span className='text-center'>
+							You have 0 followers
+						</span>
 					) : (
 						<div className='grid gap-4'>
-							{filteredFollowerFriends.length == 0 && !loading ? (
-								<span className='text-center'>
-									You have 0 followers
-								</span>
+							{loading ? (
+								<div>
+									<Skeleton className='h-16 w-full my-4' />
+									<Skeleton className='h-16 w-full my-4' />
+								</div>
 							) : (
 								filteredFollowerFriends?.map((friend: User) => (
 									<div

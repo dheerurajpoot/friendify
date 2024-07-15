@@ -19,14 +19,14 @@ export async function POST(request: NextRequest) {
 			);
 		}
 
-		user.isVerified = true;
-		user.verifyToken = "";
-		user.verifyTokenExpiry = "";
+		await user.updateOne({
+			$set: { isVerified: true },
+			$unset: { verifyToken: "", verifyTokenExpiry: "" },
+		});
 
-		await user.save();
 		return NextResponse.json(
 			{
-				message: "Email Verification Successfull",
+				message: "Email Verification Successful",
 				success: true,
 			},
 			{ status: 200 }

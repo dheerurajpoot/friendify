@@ -26,7 +26,7 @@ const Profile = ({ params }: { params: { userid: string } }) => {
 	const [user, setUser] = useState<User>();
 	const [posts, setPosts] = useState<PostType[]>([]);
 	const [isFollowing, setIsFollowing] = useState(false);
-	const [loggedInUser, setLoggedInUser] = useState<User | null>(null);
+	const [loggedInUser, setLoggedInUser] = useState<User | any>(null);
 
 	useEffect(() => {
 		const userData = getUserFromLocalStorage();
@@ -46,17 +46,9 @@ const Profile = ({ params }: { params: { userid: string } }) => {
 			throw new Error(error);
 		}
 	};
-
 	useEffect(() => {
 		getProfile();
 	}, [userId]);
-
-	useEffect(() => {
-		if (user?.followers.length === 0) return;
-		if (user && loggedInUser) {
-			setIsFollowing(user?.followers.includes(loggedInUser?._id));
-		}
-	}, [user?.followers, loggedInUser, user]);
 
 	const getAllPosts = async () => {
 		try {
@@ -84,25 +76,25 @@ const Profile = ({ params }: { params: { userid: string } }) => {
 				new Date(a.createdAt).getTime()
 		);
 
+	const handleDeletePost = (postId: string) => {
+		setPosts(posts.filter((post) => post?._id !== postId));
+	};
+
 	const handleFollow = async () => {
 		try {
-			setLoading(true);
 			const response = await axios.put("/api/users/followunfollow", {
 				id: user?._id,
 			});
 			if (response.data.success) {
 				toast.success(response.data.message);
+				setIsFollowing(!isFollowing);
 			} else {
 				toast.error(response.data.error);
 			}
-			setLoading(false);
 		} catch (error: any) {
 			toast.error("Something went wrong");
-			setLoading(false);
+			console.error(error);
 		}
-	};
-	const handleDeletePost = (postId: string) => {
-		setPosts(posts.filter((post) => post?._id !== postId));
 	};
 
 	return (
@@ -196,7 +188,9 @@ const Profile = ({ params }: { params: { userid: string } }) => {
 										</Button>
 									</Link>
 									<Button size='sm' onClick={handleFollow}>
-										{isFollowing ? (
+										{user?.followers.includes(
+											loggedInUser?._id
+										) ? (
 											<>
 												<FaUserCheck className='w-4 h-4 mr-2' />
 												Unfollow

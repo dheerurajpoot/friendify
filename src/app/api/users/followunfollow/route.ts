@@ -29,19 +29,15 @@ export async function PUT(request: NextRequest) {
 		}
 
 		if (!user.followers.includes(userId)) {
-			user.followers.push(userId);
-			loggedUser.following.push(id);
-			await user.save();
-			await loggedUser.save();
+			await User.findByIdAndUpdate(id, { $push: { followers: userId } });
+			await User.findByIdAndUpdate(userId, { $push: { following: id } });
 			return NextResponse.json({
 				message: "Followed",
 				success: true,
 			});
 		} else {
-			user.followers.pull(userId);
-			loggedUser.following.pull(id);
-			await user.save();
-			await loggedUser.save();
+			await User.findByIdAndUpdate(id, { $pull: { followers: userId } });
+			await User.findByIdAndUpdate(userId, { $pull: { following: id } });
 			return NextResponse.json({
 				message: "Unfollowed",
 				success: true,

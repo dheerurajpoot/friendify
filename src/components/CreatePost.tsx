@@ -121,6 +121,8 @@ export default function CreatePost() {
 			if (!response.data.success) {
 				toast("Something Went Wront! Please Try Again Letter");
 			}
+			console.log("posts: ", response.data.posts);
+
 			setPosts(response.data.posts);
 			setLoading(false);
 		} catch (error: any) {

@@ -81,14 +81,18 @@ export default function CreatePost() {
 
 	const handleSubmit = async (event: any) => {
 		event.preventDefault();
-		setLoading(true);
 		const picUrl = await uploadFile();
+		if (postContent === "" && picUrl === "") {
+			toast.success("Write something to post!");
+			return;
+		}
 		const data = {
 			postContent,
 			image: picUrl,
 		};
 
 		try {
+			setLoading(true);
 			const res = await axios.post("/api/posts/createpost", data);
 			if (!res.data.success) {
 				toast("Something Went Wront! Please Try Again Letter");

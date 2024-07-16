@@ -21,11 +21,13 @@ const Signup = () => {
 	const onRegister = async () => {
 		try {
 			setLoading(true);
-			await axios.post("/api/users/signup", user);
-			toast.success("Registration successfull");
+			const res = await axios.post("/api/users/signup", user);
+			toast.success(res.data.message);
+			setLoading(false);
 			router.push("/login");
 		} catch (error: any) {
-			toast.error(error.message);
+			setLoading(false);
+			toast.error(error.response.data.message);
 		}
 	};
 

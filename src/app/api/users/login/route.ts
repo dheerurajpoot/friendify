@@ -13,7 +13,7 @@ export async function POST(request: NextRequest) {
 		const user = await User.findOne({ email });
 		if (!user) {
 			return NextResponse.json(
-				{ error: "User does not exist" },
+				{ message: "User does not exist with this email" },
 				{ status: 400 }
 			);
 		}
@@ -21,7 +21,7 @@ export async function POST(request: NextRequest) {
 		const isValid = await bcryptjs.compare(password, user.password);
 		if (!isValid) {
 			return NextResponse.json(
-				{ error: "Email or Password is incorrected" },
+				{ message: "Email or Password is incorrected" },
 				{ status: 400 }
 			);
 		}
@@ -43,6 +43,6 @@ export async function POST(request: NextRequest) {
 		});
 		return response;
 	} catch (error: any) {
-		return NextResponse.json({ error: error.message }, { status: 500 });
+		return NextResponse.json({ message: error.message }, { status: 500 });
 	}
 }

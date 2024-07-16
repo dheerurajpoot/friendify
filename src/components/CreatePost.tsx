@@ -129,6 +129,7 @@ export default function CreatePost() {
 			setLoading(false);
 		} catch (error: any) {
 			console.log(error);
+			setLoading(false);
 			throw new Error(error);
 		}
 	};
@@ -146,6 +147,7 @@ export default function CreatePost() {
 
 	const handleDeletePost = (postId: string) => {
 		setPosts(posts.filter((post) => post?._id !== postId));
+		getAllPosts();
 	};
 
 	return (

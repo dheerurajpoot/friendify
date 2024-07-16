@@ -5,16 +5,17 @@ import bcryptjs from "bcryptjs";
 import { sendMail } from "@/helpers/mailer";
 connectDb();
 
-export async function POST(reqest: NextRequest) {
+export async function POST(request: NextRequest) {
 	try {
-		const reqBody = await reqest.json();
+		const reqBody = await request.json();
 		const { name, username, email, password } = reqBody;
 
 		const user = await User.findOne({ email });
+
 		if (user) {
 			return NextResponse.json(
-				{ error: "User already exists" },
-				{ status: 400 }
+				{ message: "Account already exist with this Email" },
+				{ status: 409 }
 			);
 		}
 		const salt = await bcryptjs.genSalt(10);

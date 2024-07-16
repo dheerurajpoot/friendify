@@ -80,7 +80,7 @@ export async function GET(request: NextRequest) {
 			posts: populatedPosts,
 		});
 	} catch (error: any) {
-		console.log("Error:", error);
-		return NextResponse.json({ error: error.message }, { status: 500 });
+		console.log(error);
+		return NextResponse.json({ message: error.message }, { status: 500 });
 	}
 }

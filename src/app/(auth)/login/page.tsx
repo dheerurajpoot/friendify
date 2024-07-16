@@ -21,11 +21,12 @@ const Signin = () => {
 			setLoading(true);
 			const response = await axios.post("/api/users/login", user);
 			localStorage.setItem("user", JSON.stringify(response.data.user));
-
 			toast.success(response.data.message);
+			setLoading(false);
 			router.push("/");
 		} catch (error: any) {
-			toast.error(error.message);
+			setLoading(false);
+			toast.error(error.response.data.message);
 		}
 	};
 	return (

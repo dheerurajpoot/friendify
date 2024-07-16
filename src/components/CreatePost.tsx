@@ -94,6 +94,9 @@ export default function CreatePost() {
 		try {
 			setLoading(true);
 			const res = await axios.post("/api/posts/createpost", data);
+			if (res.data.success) {
+				getAllPosts();
+			}
 			if (!res.data.success) {
 				toast("Something Went Wront! Please Try Again Letter");
 			}
@@ -101,7 +104,6 @@ export default function CreatePost() {
 			setLoading(false);
 			setPostContent("");
 			setImage("");
-			getAllPosts();
 		} catch (error: any) {
 			setLoading(false);
 			throw new Error(error);

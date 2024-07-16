@@ -15,12 +15,12 @@ export async function POST(request: NextRequest) {
 			image,
 			createdBy: userId,
 		});
-		const savedPost = await newPost.save();
+		const post = await newPost.save();
 
 		return NextResponse.json({
 			message: "Post Published Successfully",
 			success: true,
-			savedPost,
+			post,
 		});
 	} catch (error: any) {
 		return NextResponse.json({ error: error.message }, { status: 500 });

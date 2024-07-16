@@ -45,6 +45,10 @@ export async function DELETE(request: NextRequest) {
 			success: true,
 		});
 	} catch (error: any) {
-		return NextResponse.json({ error: error.message }, { status: 500 });
+		console.log(error);
+		return NextResponse.json(
+			{ message: "Deleting Comment Failed!" },
+			{ status: 500 }
+		);
 	}
 }

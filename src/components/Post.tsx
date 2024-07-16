@@ -60,6 +60,7 @@ const Post: React.FC<PostProps> = ({ data, onDeletePost }) => {
 			toast.success(res.data.message);
 			setCommentText("");
 		} catch (error: any) {
+			toast.error(error.response.data.message);
 			throw new Error(error);
 		}
 	};
@@ -77,7 +78,7 @@ const Post: React.FC<PostProps> = ({ data, onDeletePost }) => {
 				toast.error(res.data.message);
 			}
 		} catch (error: any) {
-			toast.error(error.message);
+			toast.error(error.response.data.message);
 			throw new Error(error);
 		}
 	};
@@ -100,6 +101,7 @@ const Post: React.FC<PostProps> = ({ data, onDeletePost }) => {
 			}
 			toast.success(res.data.message);
 		} catch (error: any) {
+			toast.error(error.response.data.message);
 			throw new Error(error);
 		}
 	};
@@ -128,7 +130,7 @@ const Post: React.FC<PostProps> = ({ data, onDeletePost }) => {
 				toast.error(res.data.message);
 			}
 		} catch (error: any) {
-			toast.error(error.message);
+			toast.error(error.response.data.message);
 			throw new Error(error);
 		}
 	};

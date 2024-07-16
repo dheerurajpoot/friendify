@@ -37,6 +37,10 @@ export async function PUT(request: NextRequest) {
 			});
 		}
 	} catch (error: any) {
-		return NextResponse.json({ error: error.message }, { status: 500 });
+		console.log(error);
+		return NextResponse.json(
+			{ message: "Post Like Failed!" },
+			{ status: 500 }
+		);
 	}
 }

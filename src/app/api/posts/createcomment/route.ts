@@ -13,7 +13,7 @@ export async function PUT(request: NextRequest) {
 		if (!commentText || !postId) {
 			return NextResponse.json(
 				{
-					error: "Missing required fields",
+					message: "Missing required fields",
 				},
 				{ status: 400 }
 			);
@@ -23,7 +23,7 @@ export async function PUT(request: NextRequest) {
 		if (!post) {
 			return NextResponse.json(
 				{
-					error: "Post not found",
+					message: "Post not found",
 				},
 				{ status: 404 }
 			);
@@ -35,13 +35,17 @@ export async function PUT(request: NextRequest) {
 		};
 
 		post.comments.push(newComment);
-		const savedPost = await post.save();
+		await post.save();
 
 		return NextResponse.json({
 			message: "Comment Published Successfully",
 			success: true,
 		});
 	} catch (error: any) {
-		return NextResponse.json({ error: error.message }, { status: 500 });
+		console.log(error);
+		return NextResponse.json(
+			{ message: "Comment posting failed!" },
+			{ status: 500 }
+		);
 	}
 }

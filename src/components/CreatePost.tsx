@@ -95,7 +95,7 @@ export default function CreatePost() {
 			setLoading(true);
 			const res = await axios.post("/api/posts/createpost", data);
 			if (res.data.success) {
-				getAllPosts();
+				await getAllPosts();
 			}
 			if (!res.data.success) {
 				toast("Something Went Wront! Please Try Again Letter");

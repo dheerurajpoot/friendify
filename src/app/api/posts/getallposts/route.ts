@@ -3,6 +3,7 @@ import { Post, postDocument } from "@/model/post.model";
 import { User, userDocument } from "@/model/user.model";
 import { NextRequest, NextResponse } from "next/server";
 import mongoose, { Types } from "mongoose";
+export const revalidate = 0;
 
 interface PopulatedComment {
 	author: {

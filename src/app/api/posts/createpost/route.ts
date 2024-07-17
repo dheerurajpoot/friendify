@@ -2,10 +2,11 @@ import { connectDb } from "@/dbConfig/connectDb";
 import { getTokenData } from "@/helpers/getTokenData";
 import { Post } from "@/model/post.model";
 import { NextRequest, NextResponse } from "next/server";
-connectDb();
+export const revalidate = 0;
 
 export async function POST(request: NextRequest) {
 	try {
+		await connectDb();
 		const userId = await getTokenData(request);
 		const reqBody = await request.json();
 		const { postContent, image } = reqBody;

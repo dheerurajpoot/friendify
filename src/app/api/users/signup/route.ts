@@ -29,13 +29,19 @@ export async function POST(request: NextRequest) {
 		const savedUser = await newUser.save();
 
 		// send verification mail
-		await sendMail({ email, emailType: "VERIFY", userId: savedUser._id });
+		const res = await sendMail({
+			email,
+			emailType: "VERIFY",
+			userId: savedUser._id,
+		});
+		console.log(res);
+
 		return NextResponse.json({
 			message: "Account Created Successfully",
 			success: true,
 			savedUser,
 		});
 	} catch (error: any) {
-		return NextResponse.json({ error: error.message }, { status: 500 });
+		return NextResponse.json({ message: error.message }, { status: 500 });
 	}
 }

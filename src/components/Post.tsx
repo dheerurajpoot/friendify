@@ -137,7 +137,7 @@ const Post: React.FC<PostProps> = ({ data, onDeletePost }) => {
 
 	return (
 		<div className='bg-white my-4 dark:bg-gray-950 rounded-lg border border-gray-200 dark:border-gray-800 shadow-sm m-auto lg:w-[900px] md:w-[900px]'>
-			<div className='p-4'>
+			<div className='p-4 pb-0 md:pb-2'>
 				<div className='flex items-start space-x-4'>
 					<Link href={`/profile/${data.createdBy?._id}`}>
 						<Avatar>
@@ -154,7 +154,7 @@ const Post: React.FC<PostProps> = ({ data, onDeletePost }) => {
 						<div className='flex items-center justify-between'>
 							<div>
 								<Link href={`/profile/${data?.createdBy?._id}`}>
-									<h4 className='font-semibold text-base'>
+									<h4 className='font-semibold md:text-base text-sm'>
 										{data?.createdBy?.name || "Unknown"}
 									</h4>
 								</Link>
@@ -168,7 +168,7 @@ const Post: React.FC<PostProps> = ({ data, onDeletePost }) => {
 										variant='ghost'
 										size='icon'
 										className='rounded-full'>
-										<HiOutlineDotsVertical className='h-8 w-8' />
+										<HiOutlineDotsVertical className='md:h-7 h-5 md:w-7 w-5' />
 										<span className='sr-only'>
 											More options
 										</span>
@@ -211,16 +211,19 @@ const Post: React.FC<PostProps> = ({ data, onDeletePost }) => {
 					</div>
 				</div>
 				<hr className='mt-4' />
-				<div className='mt-2 flex items-center justify-between space-x-4 px-5'>
-					<div className='flex items-center justify-center gap-4'>
+				<div className='flex items-center justify-between space-x-4 px-5'>
+					<div className='flex items-center justify-center gap-2'>
 						<Button
 							onClick={() => likeDislikeHandler(data?._id)}
 							variant='ghost'
 							size='icon'>
 							{isLike ? (
-								<FaHeart className='h-7 w-7' color='#F1330A' />
+								<FaHeart
+									className='md:h-7 h-5 md:w-7 w-5'
+									color='#F1330A'
+								/>
 							) : (
-								<FaRegHeart className='h-7 w-7' />
+								<FaRegHeart className='md:h-7 h-5 md:w-7 w-5' />
 							)}
 							<span className='sr-only'>Like</span>
 						</Button>
@@ -228,7 +231,7 @@ const Post: React.FC<PostProps> = ({ data, onDeletePost }) => {
 							variant='ghost'
 							size='icon'
 							onClick={toggleComments}>
-							<FaRegCommentDots className='h-7 w-7' />
+							<FaRegCommentDots className='md:h-7 h-5 md:w-7 w-5' />
 							<span className='sr-only'>Comment</span>
 						</Button>
 					</div>

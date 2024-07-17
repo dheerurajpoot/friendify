@@ -24,17 +24,22 @@ export const sendMail = async ({ email, emailType, userId }: any) => {
 		}
 
 		const transporter = nodemailer.createTransport({
-			host: "smtp.gmail.com",
-			port: 587,
-			secure: false,
+			// host: "live.smtp.mailtrap.io",
+			// port: 587,
+			// auth: {
+			// 	user: process.env.MAIL_USER,
+			// 	pass: process.env.MAIL_PASS,
+			// },
+			host: "sandbox.smtp.mailtrap.io",
+			port: 2525,
 			auth: {
-				user: process.env.MAIL_USER,
-				pass: process.env.MAIL_PASS,
+				user: "421a4db65b1680",
+				pass: "c0577e01af12c3",
 			},
 		});
 
 		const mailOptions = {
-			from: '"HikeTok ✅" <drexpress90@gmail.com>',
+			from: '"HikeTok ✅" <verify@hiketok.com>',
 			to: email,
 			subject:
 				emailType === "VERIFY"
@@ -48,7 +53,6 @@ export const sendMail = async ({ email, emailType, userId }: any) => {
 		};
 
 		const mailResponse = await transporter.sendMail(mailOptions);
-
 		return mailResponse;
 	} catch (error: any) {
 		throw new Error(`Error sending email: ${error.message}`);

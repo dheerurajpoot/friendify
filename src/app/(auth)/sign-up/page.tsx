@@ -26,6 +26,7 @@ const Signup = () => {
 			setLoading(false);
 			router.push("/login");
 		} catch (error: any) {
+			console.log("error: ", error);
 			setLoading(false);
 			toast.error(error.response.data.message);
 		}

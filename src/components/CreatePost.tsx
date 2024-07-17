@@ -123,8 +123,6 @@ export default function CreatePost() {
 			if (!response.data.success) {
 				toast("Something Went Wront! Please Try Again Letter");
 			}
-			console.log("posts: ", response.data.posts);
-
 			setPosts(response.data.posts);
 			setLoading(false);
 		} catch (error: any) {
@@ -154,7 +152,7 @@ export default function CreatePost() {
 		<div className='m-auto lg:w-[900px] md:w-[900px]'>
 			<div className='bg-white dark:bg-gray-950 rounded-lg shadow-md p-4 sm:p-6 flex min-h-sm relative justify-center pt-5 '>
 				<div className='mr-4 mt-4'>
-					<Avatar className='h-14 w-14'>
+					<Avatar className='md:h-14 h-11 md:w-14 w-11'>
 						<AvatarImage
 							src={loggedInUser?.profilepic}
 							className='object-cover cursor-pointer'
@@ -168,8 +166,8 @@ export default function CreatePost() {
 					<Textarea
 						value={postContent}
 						onChange={(e: any) => setPostContent(e.target.value)}
-						placeholder="What's on your mind?"
-						className='w-full resize-none border-gray-200 dark:border-gray-800 rounded-lg p-4 focus:outline-none focus:ring-2 focus:ring-gray-950 dark:focus:ring-gray-300'
+						placeholder="What's in your mind?"
+						className='w-full resize-none border-gray-200 dark:border-gray-800 rounded-lg md:p-4 p-2 focus:outline-none focus:ring-2 focus:ring-gray-950 dark:focus:ring-gray-300'
 						rows={2}
 					/>
 					<div className='flex items-center justify-between'>

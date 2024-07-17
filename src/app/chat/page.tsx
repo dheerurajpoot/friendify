@@ -97,15 +97,15 @@ export default function Chat() {
 					/>
 				</div>
 			</div>
-			{loading ? (
-				<div>
-					<Skeleton className='h-16 w-full my-4' />
-					<Skeleton className='h-16 w-full my-4' />
-				</div>
+			{filteredFriends.length == 0 ? (
+				<span className='text-center'>You have no Chats.</span>
 			) : (
 				<div className='grid gap-4 shadow p-2'>
-					{filteredFriends.length == 0 && !loading ? (
-						<span className='text-center'>You have no Chat.</span>
+					{loading ? (
+						<div>
+							<Skeleton className='h-16 w-full my-4' />
+							<Skeleton className='h-16 w-full my-4' />
+						</div>
 					) : (
 						filteredFriends.map((friend) => (
 							<div

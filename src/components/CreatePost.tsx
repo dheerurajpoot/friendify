@@ -67,8 +67,7 @@ export default function CreatePost() {
 		data.append("file", image);
 		data.append("upload_preset", "images-preset");
 		try {
-			// const cloudname = process.env.CLOUDINARY_NAME;
-			const cloudname = "dfxxuq8qo";
+			const cloudname = process.env.NEXT_PUBLIC_CLOUDINARY_NAME;
 			const resourceType = "image";
 			const api = `https://api.cloudinary.com/v1_1/${cloudname}/${resourceType}/upload`;
 			const res = await axios.post(api, data);

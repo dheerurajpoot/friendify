@@ -2,12 +2,10 @@ import { connectDb } from "@/dbConfig/connectDb";
 import { log } from "console";
 import { NextResponse } from "next/server";
 
-connectDb();
-
 export async function GET() {
 	try {
+		await connectDb();
 		const response = new NextResponse();
-
 		response.cookies.set("token", "", {
 			httpOnly: true,
 			expires: new Date(0),

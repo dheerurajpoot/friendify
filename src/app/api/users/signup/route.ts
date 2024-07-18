@@ -29,12 +29,11 @@ export async function POST(request: NextRequest) {
 		const savedUser = await newUser.save();
 
 		// send verification mail
-		const res = await sendMail({
+		await sendMail({
 			email,
 			emailType: "VERIFY",
 			userId: savedUser._id,
 		});
-		console.log(res);
 
 		return NextResponse.json({
 			message: "Account Created Successfully",

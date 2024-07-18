@@ -2,9 +2,9 @@ import { connectDb } from "@/dbConfig/connectDb";
 import { User } from "@/model/user.model";
 import { NextResponse } from "next/server";
 
-connectDb();
 export async function GET() {
 	try {
+		await connectDb();
 		const users = await User.find();
 		return NextResponse.json({
 			message: "Users Found",

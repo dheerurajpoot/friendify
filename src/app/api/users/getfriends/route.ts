@@ -1,22 +1,22 @@
 import { connectDb } from "@/dbConfig/connectDb";
 import { User } from "@/model/user.model";
 import { NextRequest, NextResponse } from "next/server";
-connectDb();
 
 export async function POST(request: NextRequest) {
 	try {
+		await connectDb();
 		const reqBody = await request.json();
 		const { userId } = reqBody;
 		if (!userId) {
 			return NextResponse.json(
-				{ error: "User ID is required" },
+				{ message: "User ID is required" },
 				{ status: 400 }
 			);
 		}
 		const user = await User.findById(userId).select("-password");
 		if (!user) {
 			return NextResponse.json(
-				{ error: "User not found" },
+				{ message: "User not found" },
 				{ status: 404 }
 			);
 		}

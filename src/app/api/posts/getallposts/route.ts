@@ -1,8 +1,7 @@
 import { connectDb } from "@/dbConfig/connectDb";
-import { Post, postDocument } from "@/model/post.model";
-import { User, userDocument } from "@/model/user.model";
+import { Post } from "@/model/post.model";
 import { NextRequest, NextResponse } from "next/server";
-import mongoose, { Types } from "mongoose";
+import { Types } from "mongoose";
 export const revalidate = 0;
 
 interface PopulatedComment {
@@ -33,7 +32,6 @@ export async function GET(request: NextRequest) {
 	try {
 		await connectDb();
 
-		// Populate post documents with createdBy and comments.author
 		const populatedPosts = await Post.find()
 			.populate({
 				path: "createdBy",

@@ -3,17 +3,16 @@ import { getTokenData } from "@/helpers/getTokenData";
 import { User } from "@/model/user.model";
 import { NextRequest, NextResponse } from "next/server";
 
-connectDb();
-
 export async function PUT(request: NextRequest) {
 	try {
+		await connectDb();
 		const userId = await getTokenData(request);
 		const reqBody = await request.json();
 		const { id } = reqBody;
 
 		if (!userId || !id) {
 			return NextResponse.json(
-				{ error: "Invalid request data" },
+				{ message: "Invalid request data" },
 				{ status: 400 }
 			);
 		}
@@ -23,7 +22,7 @@ export async function PUT(request: NextRequest) {
 
 		if (!user || !loggedUser) {
 			return NextResponse.json(
-				{ error: "User not found" },
+				{ message: "User not found" },
 				{ status: 404 }
 			);
 		}

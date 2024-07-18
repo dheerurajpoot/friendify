@@ -1,10 +1,10 @@
 import { connectDb } from "@/dbConfig/connectDb";
 import { User } from "@/model/user.model";
 import { NextRequest, NextResponse } from "next/server";
-connectDb();
 
 export async function POST(request: NextRequest) {
 	try {
+		await connectDb();
 		const reqBody = await request.json();
 		const { token } = reqBody;
 		const user = await User.findOne({
@@ -14,7 +14,7 @@ export async function POST(request: NextRequest) {
 
 		if (!user) {
 			return NextResponse.json(
-				{ error: "Invalid Token" },
+				{ message: "Invalid Token" },
 				{ status: 500 }
 			);
 		}

@@ -64,9 +64,7 @@ export default function Component() {
 			setLoading(true);
 			if (!userId) return;
 			const response = await axios.post("/api/users/profile", { userId });
-
 			const userData = response.data.data;
-
 			setProfilePhoto(userData?.profilepic || ProfilePic.src);
 			setName(userData.name);
 			setUsername(userData.username);

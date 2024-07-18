@@ -14,7 +14,7 @@ export const verifyMailTemplate = (token: any) => {
     Welcome to ${process.env.COMPANY_NAME}
   </h3>
   <p>
-    Click <a href="${process.env.DOMAIN}/verifyemail?token=${token}">Verify Email</a> to verify your email or copy and paste the link to into the browser <br/> ${process.env.DOMAIN}/verifyemail?token=${token} </p> 
+    Click <a href="${process.env.DOMAIN}/verifyemail?token=${token}">Verify Email</a> to verify your email <br/> or <br/> copy and paste the link to into the browser <br/> ${process.env.DOMAIN}/verifyemail?token=${token} </p> 
 </body>
 
 </html>`;

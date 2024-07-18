@@ -3,10 +3,9 @@ import { connectDb } from "@/dbConfig/connectDb";
 import { Post } from "@/model/post.model";
 import { NextRequest, NextResponse } from "next/server";
 
-connectDb();
-
 export async function DELETE(request: NextRequest) {
 	try {
+		await connectDb();
 		const reqBody = await request.json();
 		const { postId } = reqBody;
 

@@ -89,7 +89,7 @@ const Profile = ({ params }: { params: { userid: string } }) => {
 				toast.success(response.data.message);
 				setIsFollowing(!isFollowing);
 			} else {
-				toast.error(response.data.error);
+				toast.error(response.data.message);
 			}
 		} catch (error: any) {
 			toast.error("Something went wrong");

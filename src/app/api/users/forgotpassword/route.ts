@@ -17,7 +17,7 @@ export async function POST(request: NextRequest) {
 			);
 		}
 		// send Reset password mail
-		const res = await sendMail({
+		await sendMail({
 			email,
 			emailType: "RESET",
 			userId: user?._id,

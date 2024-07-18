@@ -14,7 +14,7 @@ export const forgotMailTemplate = (token: any) => {
     Welcome to ${process.env.COMPANY_NAME}
   </h3>
   <p>
-    Click <a href="${process.env.DOMAIN}/resetpassword?token=${token}">Reset Password</a> to Reset your password or copy and paste the link to into the browser <br/> ${process.env.DOMAIN}/resetpassword?token=${token} </p> 
+    Click <a href="${process.env.DOMAIN}/resetpassword?token=${token}">Reset Password</a> to Reset your password <br/> or <br/> copy and paste the link to into the browser <br/> ${process.env.DOMAIN}/resetpassword?token=${token} </p> 
 </body>
 
 </html>`;

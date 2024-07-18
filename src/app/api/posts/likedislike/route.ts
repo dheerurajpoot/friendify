@@ -14,7 +14,7 @@ export async function PUT(request: NextRequest) {
 		if (!post) {
 			return NextResponse.json(
 				{
-					error: "Post not found",
+					message: "Post not found",
 				},
 				{ status: 404 }
 			);

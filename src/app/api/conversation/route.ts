@@ -7,7 +7,6 @@ connectDb();
 export async function POST(request: NextRequest) {
 	try {
 		const { userId1, userId2 } = await request.json();
-
 		const existingConversation = await Chat.findOne({
 			participants: { $all: [userId1, userId2] },
 		});
@@ -19,7 +18,6 @@ export async function POST(request: NextRequest) {
 				conversation: existingConversation,
 			});
 		}
-
 		const conversation = new Chat({
 			participants: [userId1, userId2],
 		});

@@ -105,7 +105,7 @@ export default function Message({ params }: { params: { chatId: string } }) {
 	}, [conversationId, messages, receiverId]);
 
 	return (
-		<div className='flex flex-col w-full h-[calc(100vh-190px)] mt-[-12px] rounded-lg border border-gray-200 dark:border-gray-800 overflow-hidden m-auto lg:w-[900px] md:w-[900px]'>
+		<div className='flex flex-col w-full h-[calc(100vh-170px)] mt-[-12px] rounded-lg border border-gray-200 dark:border-gray-800 overflow-hidden m-auto lg:w-[900px] md:w-[900px]'>
 			<div className='bg-gray-100 dark:bg-gray-900 px-4 py-3 flex items-center justify-between'>
 				<div className='flex items-center gap-3'>
 					<Link href={"/chat"}>

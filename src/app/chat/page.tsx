@@ -78,6 +78,7 @@ export default function Chat() {
 			setLoading(false);
 		} catch (error: any) {
 			setLoading(false);
+			console.log(error);
 			throw new Error(error);
 		}
 	};

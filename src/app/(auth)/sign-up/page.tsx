@@ -33,7 +33,7 @@ const Signup = () => {
 	};
 
 	return (
-		<div className='flex flex-col mt-[10%] relative items-center justify-center pt-5 m-auto lg:w-[900px] md:w-[900px]'>
+		<div className='flex flex-col mt-[-40px] md:mt-[10%] relative items-center justify-center md:pt-5 m-auto lg:w-[900px] md:w-[900px]'>
 			<div className='flex lg:w-1/2 md:w-1/2 items-center justify-center dark:bg-gray-950'>
 				<div className='w-full max-w-md space-y-6 rounded-lg bg-white p-8 shadow-lg dark:bg-gray-800'>
 					<div className='space-y-2 text-center'>

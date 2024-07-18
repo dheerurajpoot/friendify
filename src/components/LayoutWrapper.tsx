@@ -17,7 +17,7 @@ export default function LayoutWrapper({
 		<>
 			{!noLayoutPaths.includes(pathname) && <Header />}
 			<Toaster />
-			<div className='my-24'>{children}</div>
+			<div className='mt-24 mb-16'>{children}</div>
 			{!noLayoutPaths.includes(pathname) && <NavMenu />}
 		</>
 	);

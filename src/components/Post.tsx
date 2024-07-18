@@ -276,10 +276,10 @@ const Post: React.FC<PostProps> = ({ data, onDeletePost }) => {
 							</Button>
 						</form>
 						{data.comments &&
-							data.comments.map((commentData: any) => (
+							data.comments.map((commentData: any, index) => (
 								<div
-									key={commentData?._id}
-									className='mt-4 space-y-4 md:mx-10 lg:mx-10'>
+									key={index}
+									className='mt-3 mb-2 space-y-4 md:mx-10 ml-6 lg:mx-10'>
 									<hr />
 									<div className='flex items-start space-x-4'>
 										<Link
@@ -302,11 +302,12 @@ const Post: React.FC<PostProps> = ({ data, onDeletePost }) => {
 										<div className='flex-1'>
 											<div className='flex items-center justify-between'>
 												<div>
-													<h4 className='font-semibold text-sm'>
+													<h4 className='md:font-semibold font-medium inline text-sm'>
 														{commentData?.author
 															?.name || "Unknown"}
+														{" . "}
 													</h4>
-													<p className='text-gray-500 dark:text-gray-400 text-sm'>
+													<p className='text-gray-500 inline dark:text-gray-400 text-sm'>
 														{format(
 															commentData?.createdAt
 														)}
@@ -351,7 +352,7 @@ const Post: React.FC<PostProps> = ({ data, onDeletePost }) => {
 													</DropdownMenuContent>
 												</DropdownMenu>
 											</div>
-											<p className='text-gray-700 dark:text-gray-300 mt-2'>
+											<p className='text-gray-700 dark:text-gray-300'>
 												{commentData?.comment}
 											</p>
 										</div>

@@ -3,10 +3,10 @@ import { User } from "@/model/user.model";
 import { NextRequest, NextResponse } from "next/server";
 import bcryptjs from "bcryptjs";
 import { sendMail } from "@/helpers/mailer";
-connectDb();
 
 export async function POST(request: NextRequest) {
 	try {
+		await connectDb();
 		const reqBody = await request.json();
 		const { name, username, email, password } = reqBody;
 

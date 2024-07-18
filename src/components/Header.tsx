@@ -51,6 +51,29 @@ const Header = () => {
 			setLoggedInUser(userData);
 		}
 	}, []);
+
+	// delete user profile and data
+	const deleteProfile = async () => {
+		const confirmed = window.confirm(
+			"Are you sure you want to delete your profile? Deleted data can't be recovered again!"
+		);
+		if (!confirmed) return;
+		try {
+			const res = await axios.delete("/api/users/deleteprofile");
+			if (res.status === 200) {
+				toast.success(res.data.message);
+				setTimeout(() => {
+					logOut();
+				}, 2000);
+			} else {
+				toast.error(res.data.message);
+			}
+		} catch (error: any) {
+			toast.error("An error occurred during profile delete");
+			console.error(error);
+		}
+	};
+
 	return (
 		<div className='flex fixed top-0 bg-white items-center justify-center z-10 w-full overflow-hidden h-[80px] shadow '>
 			<div className='flex justify-between items-center w-[900px] p-4'>
@@ -105,7 +128,9 @@ const Header = () => {
 								</DropdownMenuItem>
 							</Link>
 							<DropdownMenuSeparator />
-							<DropdownMenuItem className='cursor-pointer'>
+							<DropdownMenuItem
+								onClick={deleteProfile}
+								className='cursor-pointer'>
 								<FaRegTrashAlt className='w-4 h-4 mr-2' />
 								Delete Profile
 							</DropdownMenuItem>

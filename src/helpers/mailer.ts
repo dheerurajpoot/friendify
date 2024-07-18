@@ -2,6 +2,7 @@ import nodemailer from "nodemailer";
 import jwt from "jsonwebtoken";
 import { User } from "@/model/user.model";
 import { verifyMailTemplate } from "./verifyMailTemplate";
+import { forgotMailTemplate } from "./forgotMailTemplate";
 
 export const sendMail = async ({ email, emailType, userId }: any) => {
 	try {
@@ -49,7 +50,7 @@ export const sendMail = async ({ email, emailType, userId }: any) => {
 			html:
 				emailType === "VERIFY"
 					? verifyMailTemplate(token)
-					: "<p>forgot password</p>",
+					: forgotMailTemplate(token),
 		};
 
 		const mailResponse = await transporter.sendMail(mailOptions);

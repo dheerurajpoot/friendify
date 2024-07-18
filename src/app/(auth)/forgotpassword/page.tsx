@@ -8,22 +8,20 @@ import axios from "axios";
 import { toast } from "react-hot-toast";
 import { useRouter } from "next/navigation";
 
-const Signin = () => {
-	const [user, setUser] = useState({
-		email: "",
-		password: "",
-	});
+const ForgotPassword = () => {
+	const [email, setEmail] = useState("");
 	const [loading, setLoading] = useState(false);
 	const router = useRouter();
 
-	const onLogin = async () => {
+	const forgotPassword = async () => {
 		try {
 			setLoading(true);
-			const response = await axios.post("/api/users/login", user);
-			localStorage.setItem("user", JSON.stringify(response.data.user));
+			const response = await axios.post("/api/users/forgotpassword", {
+				email,
+			});
 			toast.success(response.data.message);
 			setLoading(false);
-			router.push("/");
+			router.push("/login");
 		} catch (error: any) {
 			setLoading(false);
 			toast.error(error.response.data.message);
@@ -34,10 +32,10 @@ const Signin = () => {
 			<div className='flex lg:w-1/2 md:w-1/2 items-center justify-center dark:bg-gray-950'>
 				<div className='w-full max-w-md space-y-6 rounded-lg bg-white p-8 shadow-lg dark:bg-gray-800'>
 					<div className='space-y-2 text-center'>
-						<h1 className='text-3xl font-bold'>Sign In</h1>
+						<h1 className='text-3xl font-bold'>Forgot Password</h1>
 						<p className='text-gray-500 dark:text-gray-400'>
-							Enter your email and password to <br /> login to
-							your account.
+							Enter your registered email address to <br /> get
+							reset password link
 						</p>
 					</div>
 					<form className='space-y-4'>
@@ -46,53 +44,26 @@ const Signin = () => {
 							<Input
 								id='email'
 								type='email'
-								placeholder='john@example.com'
+								placeholder='test@example.com'
 								required
-								value={user.email}
-								onChange={(e) =>
-									setUser({
-										...user,
-										email: e.target.value,
-									})
-								}
+								value={email}
+								onChange={(e) => setEmail(e.target.value)}
 							/>
 						</div>
-						<div className='space-y-2'>
-							<Label htmlFor='password'>Password</Label>
-							<Input
-								id='password'
-								type='password'
-								placeholder='Enter password'
-								required
-								value={user.password}
-								onChange={(e) =>
-									setUser({
-										...user,
-										password: e.target.value,
-									})
-								}
-							/>
-						</div>
-						<div className='flex justify-end'>
-							<Link
-								href={"/forgotpassword"}
-								className='text-blue-500 underline'>
-								Forgot password
-							</Link>
-						</div>
+
 						<Button
 							type='button'
-							onClick={onLogin}
+							onClick={forgotPassword}
 							className='w-full bg-blue-500 hover:bg-blue-600 text-white'>
-							{loading ? "Processing" : "Log In"}
+							{loading ? "Processing" : "Send Reset Link"}
 						</Button>
 					</form>
 					<div>
-						<span>Don't' have an account: </span>{" "}
+						<span>Remember password: </span>{" "}
 						<Link
-							href={"/sign-up"}
+							href={"/login"}
 							className='text-blue-500 font-semibold'>
-							Sign Up
+							Sign In
 						</Link>
 					</div>
 				</div>
@@ -101,4 +72,4 @@ const Signin = () => {
 	);
 };
 
-export default Signin;
+export default ForgotPassword;

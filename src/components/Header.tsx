@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import Link from "next/link";
 import { HiOutlineDotsVertical } from "react-icons/hi";
+import { MdOutlineLockReset } from "react-icons/md";
 import {
 	DropdownMenu,
 	DropdownMenuContent,
@@ -125,6 +126,13 @@ const Header = () => {
 								<DropdownMenuItem className='cursor-pointer'>
 									<FaEdit className='w-4 h-4 mr-2' />
 									Edit Profile
+								</DropdownMenuItem>
+							</Link>
+							<DropdownMenuSeparator />
+							<Link href={"/forgotpassword"}>
+								<DropdownMenuItem className='cursor-pointer'>
+									<MdOutlineLockReset className='w-4 h-4 mr-2' />
+									Forgot Password
 								</DropdownMenuItem>
 							</Link>
 							<DropdownMenuSeparator />

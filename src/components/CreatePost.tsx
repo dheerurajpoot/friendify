@@ -17,6 +17,7 @@ import { PostType } from "@/app/page";
 
 export default function CreatePost() {
 	const [loading, setLoading] = useState(false);
+	const [postLoading, setPostLoading] = useState(false);
 	const [posts, setPosts] = useState<PostType[]>([]);
 	const [postContent, setPostContent] = useState("");
 	const [image, setImage] = useState<string | File>("");
@@ -92,7 +93,7 @@ export default function CreatePost() {
 		};
 
 		try {
-			setLoading(true);
+			setPostLoading(true);
 			const res = await axios.post("/api/posts/createpost", data);
 			if (res.data.success) {
 				await getAllPosts();
@@ -101,11 +102,11 @@ export default function CreatePost() {
 				toast("Something Went Wront! Please Try Again Letter");
 			}
 			toast.success("Post Published successfully");
-			setLoading(false);
+			setPostLoading(false);
 			setPostContent("");
 			setImage("");
 		} catch (error: any) {
-			setLoading(false);
+			setPostLoading(false);
 			throw new Error(error);
 		}
 	};
@@ -225,7 +226,7 @@ export default function CreatePost() {
 							</Button>
 						</div>
 						<Button onClick={handleSubmit}>
-							{loading ? (
+							{postLoading ? (
 								<div className='flex items-center justify-center'>
 									<div className='w-6 h-6 rounded-full border-4 border-gray-400 border-t-white animate-spin' />
 								</div>

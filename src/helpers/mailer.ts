@@ -1,7 +1,7 @@
 import nodemailer from "nodemailer";
 import jwt from "jsonwebtoken";
 import { User } from "@/model/user.model";
-import { verifyMailTemplate } from "./verifyMailTemplate";
+import { emailBody } from "./verifyMailTemplate";
 import { forgotMailTemplate } from "./forgotMailTemplate";
 
 export const sendMail = async ({ email, emailType, userId }: any) => {
@@ -25,22 +25,17 @@ export const sendMail = async ({ email, emailType, userId }: any) => {
 		}
 
 		const transporter = nodemailer.createTransport({
-			// host: "live.smtp.mailtrap.io",
-			// port: 587,
-			// auth: {
-			// 	user: process.env.MAIL_USER,
-			// 	pass: process.env.MAIL_PASS,
-			// },
-			host: "sandbox.smtp.mailtrap.io",
-			port: 2525,
+			host: "smtp.gmail.com",
+			port: 465,
+			secure: true,
 			auth: {
-				user: "421a4db65b1680",
-				pass: "c0577e01af12c3",
+				user: process.env.MAIL_USER,
+				pass: process.env.MAIL_PASS,
 			},
 		});
 
 		const mailOptions = {
-			from: '"HikeTok ✅" <verify@hiketok.com>',
+			from: '"HikeTok ✅" <drexpress90@gmail.com>',
 			to: email,
 			subject:
 				emailType === "VERIFY"
@@ -49,7 +44,7 @@ export const sendMail = async ({ email, emailType, userId }: any) => {
 			text: "",
 			html:
 				emailType === "VERIFY"
-					? verifyMailTemplate(token)
+					? emailBody(token)
 					: forgotMailTemplate(token),
 		};
 

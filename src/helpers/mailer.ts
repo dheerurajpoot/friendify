@@ -1,7 +1,7 @@
 import nodemailer from "nodemailer";
 import jwt from "jsonwebtoken";
 import { User } from "@/model/user.model";
-import { emailBody } from "./verifyMailTemplate";
+import { verifyMailTemplate } from "./verifyMailTemplate";
 import { forgotMailTemplate } from "./forgotMailTemplate";
 
 export const sendMail = async ({ email, emailType, userId }: any) => {
@@ -44,7 +44,7 @@ export const sendMail = async ({ email, emailType, userId }: any) => {
 			text: "",
 			html:
 				emailType === "VERIFY"
-					? emailBody(token)
+					? verifyMailTemplate(token)
 					: forgotMailTemplate(token),
 		};
 

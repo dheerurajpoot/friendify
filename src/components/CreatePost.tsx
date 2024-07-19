@@ -95,7 +95,7 @@ export default function CreatePost() {
 			setPostLoading(true);
 			const res = await axios.post("/api/posts/createpost", data);
 			if (res.data.success) {
-				await getAllPosts();
+				await getNewPost();
 			}
 			if (!res.data.success) {
 				toast("Something Went Wront! Please Try Again Letter");
@@ -115,6 +115,19 @@ export default function CreatePost() {
 			setLoggedInUser(userData);
 		}
 	}, []);
+
+	const getNewPost = async () => {
+		try {
+			const response = await axios.get("/api/posts/getallposts");
+			if (!response.data.success) {
+				toast("Something Went Wront! Please Try Again Letter");
+			}
+			setPosts(response.data.posts);
+		} catch (error: any) {
+			console.log(error);
+			throw new Error(error);
+		}
+	};
 
 	const getAllPosts = async () => {
 		try {
@@ -145,7 +158,6 @@ export default function CreatePost() {
 
 	const handleDeletePost = (postId: string) => {
 		setPosts(posts.filter((post) => post?._id !== postId));
-		getAllPosts();
 	};
 
 	return (

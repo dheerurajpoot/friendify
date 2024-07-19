@@ -1,6 +1,7 @@
 import mongoose, { Types, Document, Model } from "mongoose";
 
 export interface Comment {
+	_id: mongoose.Schema.Types.ObjectId;
 	author: mongoose.Schema.Types.ObjectId;
 	comment: string;
 	createdAt: Date;
@@ -19,24 +20,25 @@ export interface postDocument extends PostInterface, Document {
 	updatedAt: Date;
 }
 
-const commentSchema = new mongoose.Schema<Comment>(
-	{
-		author: {
-			type: mongoose.Schema.Types.ObjectId,
-			ref: "User",
-			required: true,
-		},
-		comment: {
-			type: String,
-			required: true,
-		},
-		createdAt: {
-			type: Date,
-			default: Date.now,
-		},
+const commentSchema = new mongoose.Schema<Comment>({
+	_id: {
+		type: mongoose.Schema.Types.ObjectId,
+		required: true,
 	},
-	{ _id: false }
-);
+	author: {
+		type: mongoose.Schema.Types.ObjectId,
+		ref: "User",
+		required: true,
+	},
+	comment: {
+		type: String,
+		required: true,
+	},
+	createdAt: {
+		type: Date,
+		default: Date.now,
+	},
+});
 
 const postModel = new mongoose.Schema<postDocument>(
 	{

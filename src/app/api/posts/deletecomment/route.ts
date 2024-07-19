@@ -16,18 +16,15 @@ export async function DELETE(request: NextRequest) {
 				{ status: 400 }
 			);
 		}
-
 		const post = await Post.findById(postId);
-
 		if (!post) {
 			return NextResponse.json(
 				{ message: "Post not found" },
 				{ status: 404 }
 			);
 		}
-
 		const commentIndex = post.comments.findIndex(
-			(comment: any) => comment?._id.toString() === commentId
+			(comment: any) => comment?._id?.toString() === commentId
 		);
 
 		if (commentIndex === -1) {

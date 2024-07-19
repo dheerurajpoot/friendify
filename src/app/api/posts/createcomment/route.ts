@@ -1,6 +1,7 @@
 import { connectDb } from "@/dbConfig/connectDb";
 import { getTokenData } from "@/helpers/getTokenData";
 import { Post, postDocument } from "@/model/post.model";
+import mongoose from "mongoose";
 import { NextRequest, NextResponse } from "next/server";
 
 export const revalidate = 0;
@@ -20,8 +21,19 @@ export async function PUT(request: NextRequest) {
 				{ status: 400 }
 			);
 		}
-		const post: postDocument | null = await Post.findById(postId);
 
+		const newComment: any = {
+			_id: new mongoose.Types.ObjectId(),
+			author: userId,
+			comment: commentText,
+			createdAt: new Date(),
+		};
+
+		const post = await Post.findByIdAndUpdate(
+			postId,
+			{ $push: { comments: newComment } },
+			{ new: true }
+		);
 		if (!post) {
 			return NextResponse.json(
 				{
@@ -30,14 +42,6 @@ export async function PUT(request: NextRequest) {
 				{ status: 404 }
 			);
 		}
-		const newComment: any = {
-			author: userId,
-			comment: commentText,
-			createdAt: new Date(),
-		};
-
-		post.comments.push(newComment);
-		await post.save();
 
 		return NextResponse.json({
 			message: "Comment Published Successfully",

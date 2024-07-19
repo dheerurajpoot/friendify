@@ -49,15 +49,15 @@ const Post: React.FC<PostProps> = ({ data, onDeletePost }) => {
 	};
 
 	// create comment
-
 	const commentHandler = async (postId: string) => {
 		try {
 			const res = await axios.put("/api/posts/createcomment", {
 				commentText,
 				postId,
 			});
-
-			toast.success(res.data.message);
+			if (res.data.success) {
+				toast.success(res.data.message);
+			}
 			setCommentText("");
 		} catch (error: any) {
 			toast.error(error.response.data.message);

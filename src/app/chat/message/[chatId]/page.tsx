@@ -78,7 +78,7 @@ export default function Message({ params }: { params: { chatId: string } }) {
 				fetchMessages();
 			}
 		} catch (error: any) {
-			console.error(error.message);
+			console.error(error);
 		}
 	};
 
@@ -166,58 +166,64 @@ export default function Message({ params }: { params: { chatId: string } }) {
 					</DropdownMenu>
 				</div>
 			</div>
-			<div className='flex-1 overflow-auto p-4 space-y-4'>
-				{messages.map((msg: any) => (
-					<div
-						key={msg._id}
-						className={`flex items-start gap-3 ${
-							msg.sender === loggedInUser?._id
-								? "justify-end"
-								: ""
-						}`}>
-						{msg.sender !== loggedInUser?._id && (
-							<Link href={`/profile/${msg.receiverId}`}>
-								<Avatar>
-									<AvatarImage
-										src={receiverUser?.profilepic}
-										className='object-cover'
-									/>
-									<AvatarFallback>
-										{receiverUser?.name.charAt(0)}
-									</AvatarFallback>
-								</Avatar>
-							</Link>
-						)}
+			{messages.length === 0 ? (
+				<div className='flex-1 overflow-auto p-4 space-y-4 text-center'>
+					<span>You haven't chat yet, Let's chat!</span>
+				</div>
+			) : (
+				<div className='flex-1 overflow-auto p-4 space-y-4'>
+					{messages.map((msg: any) => (
 						<div
-							className={`bg-gray-100 dark:bg-gray-800 rounded-lg p-3 max-w-[70%] ${
+							key={msg._id}
+							className={`flex items-start gap-3 ${
 								msg.sender === loggedInUser?._id
-									? "bg-blue-300 dark:bg-blue-900"
+									? "justify-end"
 									: ""
 							}`}>
-							<p className='text-sm'>{msg.content}</p>
-							<div className='text-xs text-gray-500 dark:text-gray-400 mt-1'>
-								{msg.sender === loggedInUser?._id
-									? "You"
-									: receiverUser?.name}{" "}
-								• {format(msg?.createdAt)}
+							{msg.sender !== loggedInUser?._id && (
+								<Link href={`/profile/${msg.receiverId}`}>
+									<Avatar>
+										<AvatarImage
+											src={receiverUser?.profilepic}
+											className='object-cover'
+										/>
+										<AvatarFallback>
+											{receiverUser?.name.charAt(0)}
+										</AvatarFallback>
+									</Avatar>
+								</Link>
+							)}
+							<div
+								className={`bg-gray-100 dark:bg-gray-800 rounded-lg p-3 max-w-[70%] ${
+									msg.sender === loggedInUser?._id
+										? "bg-blue-300 dark:bg-blue-900"
+										: ""
+								}`}>
+								<p className='text-sm'>{msg.content}</p>
+								<div className='text-xs text-gray-500 dark:text-gray-400 mt-1'>
+									{msg.sender === loggedInUser?._id
+										? "You"
+										: receiverUser?.name}{" "}
+									• {format(msg?.createdAt)}
+								</div>
 							</div>
+							{msg.sender === loggedInUser?._id && (
+								<Link href={`/profile/${msg.sender}`}>
+									<Avatar>
+										<AvatarImage
+											src={loggedInUser?.profilepic}
+											className='object-cover'
+										/>
+										<AvatarFallback>
+											{loggedInUser?.name.charAt(0)}
+										</AvatarFallback>
+									</Avatar>
+								</Link>
+							)}
 						</div>
-						{msg.sender === loggedInUser?._id && (
-							<Link href={`/profile/${msg.sender}`}>
-								<Avatar>
-									<AvatarImage
-										src={loggedInUser?.profilepic}
-										className='object-cover'
-									/>
-									<AvatarFallback>
-										{loggedInUser?.name.charAt(0)}
-									</AvatarFallback>
-								</Avatar>
-							</Link>
-						)}
-					</div>
-				))}
-			</div>
+					))}
+				</div>
+			)}
 			<div className='bg-gray-100 dark:bg-gray-900 px-4 py-3 flex items-center gap-2'>
 				<Input
 					type='text'

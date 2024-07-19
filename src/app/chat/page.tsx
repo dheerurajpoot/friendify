@@ -6,7 +6,6 @@ import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { IoSearch } from "react-icons/io5";
 import { FiMessageCircle } from "react-icons/fi";
-import Link from "next/link";
 import { getUserFromLocalStorage } from "@/helpers/getUserFromLocalStorage";
 import { User } from "../search/page";
 import axios from "axios";

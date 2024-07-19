@@ -24,6 +24,10 @@ const Signup = () => {
 			const res = await axios.post("/api/users/signup", user);
 			toast.success(res.data.message);
 			setLoading(false);
+			const confirmed = window.confirm(
+				"Please verify your email address to login, verification link has been sended to your email address!"
+			);
+			if (!confirmed) return;
 			router.push("/login");
 		} catch (error: any) {
 			console.log("error: ", error);

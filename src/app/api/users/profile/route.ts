@@ -8,18 +8,21 @@ export async function POST(request: NextRequest) {
 		await connectDb();
 		const reqBody = await request.json();
 		const { userId } = reqBody;
+		console.log(userId);
+
 		const user = await User.findOne({ _id: userId }).select("-password");
 		if (!user) {
 			return NextResponse.json(
-				{ error: "User not found" },
+				{ message: "User not found" },
 				{ status: 400 }
 			);
 		}
 		return NextResponse.json(
-			{ error: "User profile found", data: user },
+			{ message: "User profile found", data: user },
 			{ status: 200 }
 		);
 	} catch (error: any) {
+		console.log(error);
 		return NextResponse.json({ error: error.message }, { status: 500 });
 	}
 }

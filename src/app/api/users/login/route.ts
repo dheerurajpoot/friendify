@@ -24,7 +24,6 @@ export async function POST(request: NextRequest) {
 				{ status: 400 }
 			);
 		}
-		// console.log(user);
 		const isValid = await bcryptjs.compare(password, user.password);
 		if (!isValid) {
 			return NextResponse.json(
@@ -37,7 +36,7 @@ export async function POST(request: NextRequest) {
 			username: user.username,
 		};
 		const token = jwt.sign(tokenData, process.env.TOKEN_SECRET!, {
-			expiresIn: "30d",
+			expiresIn: "15d",
 		});
 
 		const response = NextResponse.json({
@@ -50,6 +49,7 @@ export async function POST(request: NextRequest) {
 		});
 		return response;
 	} catch (error: any) {
+		console.log(error);
 		return NextResponse.json({ message: error.message }, { status: 500 });
 	}
 }

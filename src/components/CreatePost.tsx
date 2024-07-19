@@ -14,6 +14,7 @@ import { User } from "@/app/search/page";
 import { Skeleton } from "./ui/skeleton";
 import Post from "./Post";
 import { PostType } from "@/app/page";
+import Link from "next/link";
 
 export default function CreatePost() {
 	const [loading, setLoading] = useState(false);
@@ -164,15 +165,17 @@ export default function CreatePost() {
 		<div className='m-auto lg:w-[900px] md:w-[900px]'>
 			<div className='bg-white dark:bg-gray-950 rounded-lg shadow-md p-4 sm:p-6 flex min-h-sm relative justify-center pt-5 '>
 				<div className='mr-4 mt-4'>
-					<Avatar className='md:h-14 h-11 md:w-14 w-11'>
-						<AvatarImage
-							src={loggedInUser?.profilepic}
-							className='object-cover cursor-pointer'
-						/>
-						<AvatarFallback>
-							{loggedInUser?.name.charAt(0)}
-						</AvatarFallback>
-					</Avatar>
+					<Link href={`/profile/${loggedInUser?._id}`}>
+						<Avatar className='md:h-14 h-11 md:w-14 w-11'>
+							<AvatarImage
+								src={loggedInUser?.profilepic}
+								className='object-cover cursor-pointer'
+							/>
+							<AvatarFallback>
+								{loggedInUser?.name.charAt(0)}
+							</AvatarFallback>
+						</Avatar>
+					</Link>
 				</div>
 				<div className='flex flex-col gap-4 w-full'>
 					<Textarea

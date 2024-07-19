@@ -103,7 +103,7 @@ const Profile = ({ params }: { params: { userid: string } }) => {
 				<div className='relative'>
 					<CardHeader className='bg-gray-100 dark:bg-gray-800 h-72 relative overflow-hidden'>
 						<Image
-							src={ProfilePic}
+							src={ProfilePic || ""}
 							alt='Banner'
 							width={800}
 							height={400}

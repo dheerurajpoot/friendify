@@ -29,10 +29,10 @@ export async function PUT(request: NextRequest) {
 			);
 		}
 		return NextResponse.json(
-			{ message: "User profile found", data: user },
+			{ message: "Profile Updated Successfully!", data: user },
 			{ status: 200 }
 		);
 	} catch (error: any) {
-		return NextResponse.json({ error: error.message }, { status: 500 });
+		return NextResponse.json({ message: error.message }, { status: 500 });
 	}
 }

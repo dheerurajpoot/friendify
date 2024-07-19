@@ -135,6 +135,14 @@ const Post: React.FC<PostProps> = ({ data, onDeletePost }) => {
 		}
 	};
 
+	const allComments = data.comments
+		.slice()
+		.sort(
+			(a, b) =>
+				new Date(b.createdAt).getTime() -
+				new Date(a.createdAt).getTime()
+		);
+
 	return (
 		<div className='bg-white my-4 dark:bg-gray-950 rounded-lg border border-gray-200 dark:border-gray-800 shadow-sm m-auto lg:w-[900px] md:w-[900px]'>
 			<div className='p-4 pb-0 md:pb-2'>
@@ -247,14 +255,14 @@ const Post: React.FC<PostProps> = ({ data, onDeletePost }) => {
 				{showComments && (
 					<div className='mt-4 border-t border-gray-200 dark:border-gray-800 pt-4'>
 						<form className='flex items-center space-x-2 md:mx-10 lg:mx-10'>
-							<Link href={`/profile/${data?.createdBy?._id}`}>
+							<Link href={`/profile/${loggedInUser?._id}`}>
 								<Avatar>
 									<AvatarImage
 										className='object-cover'
-										src={data?.createdBy?.profilepic}
+										src={loggedInUser?.profilepic}
 									/>
 									<AvatarFallback>
-										{data.createdBy?.name?.charAt(0) || "U"}
+										{loggedInUser?.name?.charAt(0) || "U"}
 									</AvatarFallback>
 								</Avatar>
 							</Link>
@@ -276,7 +284,7 @@ const Post: React.FC<PostProps> = ({ data, onDeletePost }) => {
 							</Button>
 						</form>
 						{data.comments &&
-							data.comments.map((commentData: any, index) => (
+							allComments.map((commentData: any, index) => (
 								<div
 									key={index}
 									className='mt-3 mb-2 space-y-4 md:mx-10 ml-6 lg:mx-10'>

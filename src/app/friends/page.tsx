@@ -76,13 +76,6 @@ export default function Friends() {
 		);
 	};
 
-	const toProfile = (fId: string) => {
-		router.push(`/profile/${fId}`);
-	};
-	const toMessage = (fId: string) => {
-		router.push(`/chat`);
-	};
-
 	return (
 		<div className='flex flex-col w-full max-w-4xl mx-auto p-4 md:p-6'>
 			<div className='flex items-center justify-between mb-4'>
@@ -149,27 +142,25 @@ export default function Friends() {
 											</div>
 										</Link>
 										<div className='flex items-center gap-2'>
-											<Button
-												variant='outline'
-												size='sm'
-												onClick={() =>
-													toMessage(friend?._id)
-												}>
-												<FiMessageCircle className='w-4 h-4 md:mr-2' />
-												<span className='hidden md:block'>
-													Message
-												</span>
-											</Button>
-											<Button
-												size='sm'
-												onClick={() =>
-													toProfile(friend?._id)
-												}>
-												<CgProfile className='w-4 h-4 md:mr-2' />
-												<span className='hidden md:block'>
-													View Profile
-												</span>
-											</Button>
+											<Link href={"/chat"}>
+												<Button
+													variant='outline'
+													size='sm'>
+													<FiMessageCircle className='w-4 h-4 md:mr-2' />
+													<span className='hidden md:block'>
+														Message
+													</span>
+												</Button>
+											</Link>
+											<Link
+												href={`/profile/${friend?._id}`}>
+												<Button size='sm'>
+													<CgProfile className='w-4 h-4 md:mr-2' />
+													<span className='hidden md:block'>
+														View Profile
+													</span>
+												</Button>
+											</Link>
 										</div>
 									</div>
 								))
@@ -217,27 +208,25 @@ export default function Friends() {
 											</div>
 										</Link>
 										<div className='flex items-center gap-2'>
-											<Button
-												variant='outline'
-												size='sm'
-												onClick={() =>
-													toMessage(friend?._id)
-												}>
-												<FiMessageCircle className='w-4 h-4 md:mr-2' />
-												<span className='hidden md:block'>
-													Message
-												</span>
-											</Button>
-											<Button
-												size='sm'
-												onClick={() =>
-													toProfile(friend?._id)
-												}>
-												<CgProfile className='w-4 h-4 md:mr-2' />
-												<span className='hidden md:block'>
-													View Profile
-												</span>
-											</Button>
+											<Link href={"/chat"}>
+												<Button
+													variant='outline'
+													size='sm'>
+													<FiMessageCircle className='w-4 h-4 md:mr-2' />
+													<span className='hidden md:block'>
+														Message
+													</span>
+												</Button>
+											</Link>
+											<Link
+												href={`/profile/${friend?._id}`}>
+												<Button size='sm'>
+													<CgProfile className='w-4 h-4 md:mr-2' />
+													<span className='hidden md:block'>
+														View Profile
+													</span>
+												</Button>
+											</Link>
 										</div>
 									</div>
 								))

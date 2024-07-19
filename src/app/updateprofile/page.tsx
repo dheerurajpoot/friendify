@@ -94,12 +94,12 @@ export default function Component() {
 		};
 
 		try {
-			await axios.put("/api/users/updateprofile", data);
-			toast.success("Profile updated successfully");
+			const res = await axios.put("/api/users/updateprofile", data);
+			toast.success(res.data.message);
 			setLoading(false);
 			router.push(`/profile/${userId}`);
-			getProfile();
 		} catch (error: any) {
+			console.log(error);
 			setLoading(false);
 			throw new Error(error);
 		}
@@ -134,7 +134,8 @@ export default function Component() {
 								src={
 									typeof profilePhoto === "string"
 										? profilePhoto
-										: URL.createObjectURL(profilePhoto)
+										: URL.createObjectURL(profilePhoto) ||
+										  ""
 								}
 								alt='Profile Picture'
 							/>

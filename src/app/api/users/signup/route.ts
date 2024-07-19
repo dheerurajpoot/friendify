@@ -4,6 +4,7 @@ import { NextRequest, NextResponse } from "next/server";
 import bcryptjs from "bcryptjs";
 import { sendMail } from "@/helpers/mailer";
 
+export const revalidate = 0;
 export async function POST(request: NextRequest) {
 	try {
 		await connectDb();

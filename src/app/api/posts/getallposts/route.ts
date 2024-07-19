@@ -2,8 +2,8 @@ import { connectDb } from "@/dbConfig/connectDb";
 import { Post } from "@/model/post.model";
 import { NextRequest, NextResponse } from "next/server";
 import { Types } from "mongoose";
-export const revalidate = 0;
 
+export const revalidate = 0;
 interface PopulatedComment {
 	author: {
 		_id: Types.ObjectId;
@@ -27,11 +27,9 @@ interface PopulatedPost {
 	createdAt: Date;
 	updatedAt: Date;
 }
-
 export async function GET(request: NextRequest) {
 	try {
 		await connectDb();
-
 		const populatedPosts = await Post.find()
 			.populate({
 				path: "createdBy",

@@ -2,10 +2,10 @@ import { connectDb } from "@/dbConfig/connectDb";
 import { Chat } from "@/model/chat.model";
 import { NextRequest, NextResponse } from "next/server";
 
-connectDb();
-
+export const revalidate = 0;
 export async function POST(request: NextRequest) {
 	try {
+		await connectDb();
 		const { userId1, userId2 } = await request.json();
 		const existingConversation = await Chat.findOne({
 			participants: { $all: [userId1, userId2] },

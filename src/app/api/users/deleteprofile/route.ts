@@ -3,6 +3,7 @@ import { User } from "@/model/user.model";
 import { Post } from "@/model/post.model"; // Import Post model
 import { NextRequest, NextResponse } from "next/server";
 import { getTokenData } from "@/helpers/getTokenData";
+export const revalidate = 0;
 
 export async function DELETE(request: NextRequest) {
 	try {

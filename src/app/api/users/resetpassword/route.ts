@@ -3,6 +3,7 @@ import { User } from "@/model/user.model";
 import { NextRequest, NextResponse } from "next/server";
 import bcryptjs from "bcryptjs";
 
+export const revalidate = 0;
 export async function PUT(request: NextRequest) {
 	try {
 		await connectDb();

@@ -3,6 +3,7 @@ import { connectDb } from "@/dbConfig/connectDb";
 import { Post } from "@/model/post.model";
 import { NextRequest, NextResponse } from "next/server";
 
+export const revalidate = 0;
 export async function DELETE(request: NextRequest) {
 	try {
 		await connectDb();

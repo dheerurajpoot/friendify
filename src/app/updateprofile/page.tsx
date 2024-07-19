@@ -98,6 +98,7 @@ export default function Component() {
 			toast.success("Profile updated successfully");
 			setLoading(false);
 			router.push(`/profile/${userId}`);
+			getProfile();
 		} catch (error: any) {
 			setLoading(false);
 			throw new Error(error);

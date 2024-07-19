@@ -1,6 +1,7 @@
 import { connectDb } from "@/dbConfig/connectDb";
 import { User } from "@/model/user.model";
 import { NextRequest, NextResponse } from "next/server";
+export const revalidate = 0;
 
 export async function POST(request: NextRequest) {
 	try {

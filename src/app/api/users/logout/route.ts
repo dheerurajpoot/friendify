@@ -1,7 +1,7 @@
 import { connectDb } from "@/dbConfig/connectDb";
-import { log } from "console";
 import { NextResponse } from "next/server";
 
+export const revalidate = 0;
 export async function GET() {
 	try {
 		await connectDb();

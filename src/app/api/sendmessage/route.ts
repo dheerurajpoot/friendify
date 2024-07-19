@@ -3,6 +3,7 @@ import { Message } from "@/model/message.model";
 import { Chat } from "@/model/chat.model";
 import { NextRequest, NextResponse } from "next/server";
 
+export const revalidate = 0;
 export async function POST(request: NextRequest) {
 	try {
 		await connectDb();

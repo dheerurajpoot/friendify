@@ -23,6 +23,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 
 const Profile = ({ params }: { params: { userid: string } }) => {
 	const [loading, setLoading] = useState(false);
+	const [refresh, setRefresh] = useState(false);
 	const [user, setUser] = useState<User>();
 	const [posts, setPosts] = useState<PostType[]>([]);
 	const [loggedInUser, setLoggedInUser] = useState<User | any>(null);
@@ -232,6 +233,7 @@ const Profile = ({ params }: { params: { userid: string } }) => {
 								key={post?._id}
 								data={post}
 								onDeletePost={handleDeletePost}
+								onRefresh={setRefresh}
 							/>
 						))
 					) : (

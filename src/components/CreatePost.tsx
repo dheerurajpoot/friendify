@@ -18,6 +18,7 @@ import Link from "next/link";
 
 export default function CreatePost() {
 	const [loading, setLoading] = useState(false);
+	const [refresh, setRefresh] = useState(false);
 	const [postLoading, setPostLoading] = useState(false);
 	const [posts, setPosts] = useState<PostType[]>([]);
 	const [postContent, setPostContent] = useState("");
@@ -121,7 +122,7 @@ export default function CreatePost() {
 		try {
 			const response = await axios.get("/api/posts/getallposts");
 			if (!response.data.success) {
-				toast("Something Went Wront! Please Try Again Letter");
+				toast(response.data.message);
 			}
 			setPosts(response.data.posts);
 		} catch (error: any) {
@@ -135,7 +136,7 @@ export default function CreatePost() {
 			setLoading(true);
 			const response = await axios.get("/api/posts/getallposts");
 			if (!response.data.success) {
-				toast("Something Went Wront! Please Try Again Letter");
+				toast(response.data.message);
 			}
 			setPosts(response.data.posts);
 			setLoading(false);
@@ -148,6 +149,10 @@ export default function CreatePost() {
 	useEffect(() => {
 		getAllPosts();
 	}, []);
+
+	useEffect(() => {
+		getNewPost();
+	}, [refresh]);
 
 	const allPosts = posts
 		.slice()
@@ -286,6 +291,7 @@ export default function CreatePost() {
 									key={post?._id}
 									data={post}
 									onDeletePost={handleDeletePost}
+									onRefresh={setRefresh}
 								/>
 							))}
 					</div>

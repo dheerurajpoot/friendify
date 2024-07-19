@@ -25,7 +25,6 @@ const Profile = ({ params }: { params: { userid: string } }) => {
 	const [loading, setLoading] = useState(false);
 	const [user, setUser] = useState<User>();
 	const [posts, setPosts] = useState<PostType[]>([]);
-	const [isFollowing, setIsFollowing] = useState(false);
 	const [loggedInUser, setLoggedInUser] = useState<User | any>(null);
 
 	useEffect(() => {
@@ -85,15 +84,24 @@ const Profile = ({ params }: { params: { userid: string } }) => {
 			const response = await axios.put("/api/users/followunfollow", {
 				id: user?._id,
 			});
+			getUserProfile();
 			if (response.data.success) {
 				toast.success(response.data.message);
-				setIsFollowing(!isFollowing);
 			} else {
 				toast.error(response.data.message);
 			}
 		} catch (error: any) {
 			toast.error("Something went wrong");
 			console.error(error);
+		}
+	};
+
+	const getUserProfile = async () => {
+		try {
+			const response = await axios.post("/api/users/profile", { userId });
+			setUser(response?.data?.data);
+		} catch (error: any) {
+			throw new Error(error);
 		}
 	};
 

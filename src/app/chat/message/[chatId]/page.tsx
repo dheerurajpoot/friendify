@@ -13,7 +13,7 @@ import {
 import { FaRegTrashAlt } from "react-icons/fa";
 import { FaUserCheck } from "react-icons/fa";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef, useLayoutEffect } from "react";
 import axios from "axios";
 import { getUserFromLocalStorage } from "@/helpers/getUserFromLocalStorage";
 import { User } from "@/app/search/page";
@@ -34,6 +34,7 @@ export default function Message({ params }: { params: { chatId: string } }) {
 	const [receiverId, setReceiverId] = useState<string | null>(null);
 	const [loading, setLoading] = useState(false);
 	const [receiverUser, setReceiverUser] = useState<User>();
+	const messagesEndRef = useRef<HTMLDivElement>(null);
 
 	// getting loggedIn user from localstorage
 	useEffect(() => {
@@ -79,7 +80,12 @@ export default function Message({ params }: { params: { chatId: string } }) {
 		};
 	}, []);
 
-	// send messages to database
+	// Use `useLayoutEffect` to handle initial scroll position
+	useLayoutEffect(() => {
+		messagesEndRef.current?.scrollIntoView({ behavior: "auto" });
+	}, [messages]);
+
+	// Send messages to database
 	const sendMessage = async () => {
 		if (!messageText.trim() || !receiverId) return;
 		try {
@@ -101,7 +107,7 @@ export default function Message({ params }: { params: { chatId: string } }) {
 		}
 	};
 
-	// getting receiver user profile
+	// Get receiver user profile
 	const getProfile = async () => {
 		if (!receiverId) return;
 
@@ -264,6 +270,7 @@ export default function Message({ params }: { params: { chatId: string } }) {
 							)}
 						</div>
 					))}
+					<div ref={messagesEndRef} />
 				</div>
 			)}
 			<div className='bg-gray-100 dark:bg-gray-900 px-4 py-3 flex items-center gap-2'>
@@ -272,6 +279,12 @@ export default function Message({ params }: { params: { chatId: string } }) {
 					placeholder='Type your message...'
 					value={messageText}
 					onChange={(e) => setMessageText(e.target.value)}
+					onKeyDown={(e) => {
+						if (e.key === "Enter") {
+							e.preventDefault();
+							sendMessage();
+						}
+					}}
 					className='flex-1 px-4 py-2 rounded-lg bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent'
 				/>
 				<Button onClick={sendMessage}>Send</Button>

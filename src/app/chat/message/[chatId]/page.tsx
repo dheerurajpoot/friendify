@@ -25,6 +25,7 @@ interface MessageInterface {
 	id: string;
 	text: string;
 }
+
 export default function Message({ params }: { params: { chatId: string } }) {
 	const conversationId = params.chatId;
 	const [loggedInUser, setLoggedInUser] = useState<User | null>(null);
@@ -55,11 +56,6 @@ export default function Message({ params }: { params: { chatId: string } }) {
 				(id: string) => id !== loggedInUser?._id
 			);
 			setReceiverId(receiver);
-			socket.on("chat message", (newMsg: any) => {
-				console.log("chat message: ", newMsg);
-
-				setMessages((prevMessages) => [...prevMessages, newMsg]);
-			});
 		} catch (error: any) {
 			console.error(error.message);
 		}
@@ -71,8 +67,19 @@ export default function Message({ params }: { params: { chatId: string } }) {
 		}
 	}, [loggedInUser, conversationId]);
 
-	// send messages to database
+	useEffect(() => {
+		const handleNewMessage = (newMsg: any) => {
+			setMessages((prevMessages) => [...prevMessages, newMsg]);
+		};
 
+		socket.on("chat message", handleNewMessage);
+
+		return () => {
+			socket.off("chat message", handleNewMessage);
+		};
+	}, []);
+
+	// send messages to database
 	const sendMessage = async () => {
 		if (!messageText.trim() || !receiverId) return;
 		try {
@@ -95,7 +102,6 @@ export default function Message({ params }: { params: { chatId: string } }) {
 	};
 
 	// getting receiver user profile
-
 	const getProfile = async () => {
 		if (!receiverId) return;
 
@@ -115,8 +121,6 @@ export default function Message({ params }: { params: { chatId: string } }) {
 		if (!receiverId) return;
 		getProfile();
 	}, [conversationId, messages, receiverId]);
-
-	// socket implemention for messages
 
 	const [isConnected, setIsConnected] = useState(false);
 

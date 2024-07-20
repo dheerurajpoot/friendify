@@ -1,32 +1,9 @@
 import { connectDb } from "@/dbConfig/connectDb";
 import { Post } from "@/model/post.model";
 import { NextRequest, NextResponse } from "next/server";
-import { Types } from "mongoose";
 
 export const revalidate = 0;
-interface PopulatedComment {
-	author: {
-		_id: Types.ObjectId;
-		name: string;
-		profilepic: string;
-	} | null;
-	comment: string;
-	createdAt: Date;
-}
 
-interface PopulatedPost {
-	postContent: string;
-	image: string;
-	likes: Types.ObjectId[];
-	comments: PopulatedComment[];
-	createdBy: {
-		_id: Types.ObjectId;
-		name: string;
-		profilepic: string;
-	} | null;
-	createdAt: Date;
-	updatedAt: Date;
-}
 export async function GET(request: NextRequest) {
 	try {
 		await connectDb();

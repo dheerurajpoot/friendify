@@ -1,4 +1,5 @@
 import mongoose, { Types, Document, Model } from "mongoose";
+import { User } from "./user.model";
 
 export interface Comment {
 	_id: mongoose.Schema.Types.ObjectId;
@@ -27,7 +28,7 @@ const commentSchema = new mongoose.Schema<Comment>({
 	},
 	author: {
 		type: mongoose.Schema.Types.ObjectId,
-		ref: "User",
+		ref: User.modelName,
 		required: true,
 	},
 	comment: {
@@ -51,7 +52,7 @@ const postModel = new mongoose.Schema<postDocument>(
 		likes: [
 			{
 				type: mongoose.Schema.Types.ObjectId,
-				ref: "User",
+				ref: User.modelName,
 			},
 		],
 		comments: [commentSchema],

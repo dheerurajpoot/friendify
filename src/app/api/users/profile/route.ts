@@ -8,7 +8,6 @@ export async function POST(request: NextRequest) {
 		await connectDb();
 		const reqBody = await request.json();
 		const { userId } = reqBody;
-		console.log(userId);
 
 		const user = await User.findOne({ _id: userId }).select("-password");
 		if (!user) {

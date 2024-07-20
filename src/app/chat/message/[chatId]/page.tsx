@@ -19,12 +19,17 @@ import { getUserFromLocalStorage } from "@/helpers/getUserFromLocalStorage";
 import { User } from "@/app/search/page";
 import { IoMdArrowRoundBack } from "react-icons/io";
 import { format } from "timeago.js";
+import { socket } from "./../../../../socket";
 
+interface MessageInterface {
+	id: string;
+	text: string;
+}
 export default function Message({ params }: { params: { chatId: string } }) {
 	const conversationId = params.chatId;
 	const [loggedInUser, setLoggedInUser] = useState<User | null>(null);
 	const [messageText, setMessageText] = useState("");
-	const [messages, setMessages] = useState([]);
+	const [messages, setMessages] = useState<MessageInterface[]>([]);
 	const [receiverId, setReceiverId] = useState<string | null>(null);
 	const [loading, setLoading] = useState(false);
 	const [receiverUser, setReceiverUser] = useState<User>();
@@ -50,6 +55,11 @@ export default function Message({ params }: { params: { chatId: string } }) {
 				(id: string) => id !== loggedInUser?._id
 			);
 			setReceiverId(receiver);
+			socket.on("chat message", (newMsg: any) => {
+				console.log("chat message: ", newMsg);
+
+				setMessages((prevMessages) => [...prevMessages, newMsg]);
+			});
 		} catch (error: any) {
 			console.error(error.message);
 		}
@@ -66,15 +76,17 @@ export default function Message({ params }: { params: { chatId: string } }) {
 	const sendMessage = async () => {
 		if (!messageText.trim() || !receiverId) return;
 		try {
-			const res = await axios.post("/api/sendmessage", {
+			const msgData = {
 				sender: loggedInUser?._id,
 				receiver: receiverId,
 				content: messageText,
 				conversationId,
-			});
+			};
+			const res = await axios.post("/api/sendmessage", msgData);
 
 			if (res.data.success) {
 				setMessageText("");
+				socket.emit("chat message", msgData);
 				fetchMessages();
 			}
 		} catch (error: any) {
@@ -103,6 +115,32 @@ export default function Message({ params }: { params: { chatId: string } }) {
 		if (!receiverId) return;
 		getProfile();
 	}, [conversationId, messages, receiverId]);
+
+	// socket implemention for messages
+
+	const [isConnected, setIsConnected] = useState(false);
+
+	useEffect(() => {
+		if (socket.connected) {
+			onConnect();
+		}
+
+		function onConnect() {
+			setIsConnected(true);
+		}
+
+		function onDisconnect() {
+			setIsConnected(false);
+		}
+
+		socket.on("connect", onConnect);
+		socket.on("disconnect", onDisconnect);
+
+		return () => {
+			socket.off("connect", onConnect);
+			socket.off("disconnect", onDisconnect);
+		};
+	}, []);
 
 	return (
 		<div className='flex flex-col w-full h-[calc(100vh-170px)] mt-[-12px] rounded-lg border border-gray-200 dark:border-gray-800 overflow-hidden m-auto lg:w-[900px] md:w-[900px]'>
@@ -172,9 +210,9 @@ export default function Message({ params }: { params: { chatId: string } }) {
 				</div>
 			) : (
 				<div className='flex-1 overflow-auto p-4 space-y-4'>
-					{messages.map((msg: any) => (
+					{messages.map((msg: any, index) => (
 						<div
-							key={msg._id}
+							key={index}
 							className={`flex items-start gap-3 ${
 								msg.sender === loggedInUser?._id
 									? "justify-end"

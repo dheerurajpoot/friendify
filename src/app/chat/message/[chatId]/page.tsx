@@ -183,12 +183,12 @@ export default function Message({ params }: { params: { chatId: string } }) {
 					</div>
 				</div>
 				<div className='flex items-center gap-2'>
-					<Button
+					{/* <Button
 						variant='ghost'
 						size='icon'
 						className='rounded-full'>
 						<IoSearch className='w-5 h-5 text-gray-500 dark:text-gray-400' />
-					</Button>
+					</Button> */}
 					<DropdownMenu>
 						<DropdownMenuTrigger asChild>
 							<Button
@@ -229,7 +229,7 @@ export default function Message({ params }: { params: { chatId: string } }) {
 									: ""
 							}`}>
 							{msg.sender !== loggedInUser?._id && (
-								<Link href={`/profile/${msg.receiverId}`}>
+								<Link href={`/profile/${receiverUser?._id}`}>
 									<Avatar>
 										<AvatarImage
 											src={receiverUser?.profilepic}
@@ -242,17 +242,16 @@ export default function Message({ params }: { params: { chatId: string } }) {
 								</Link>
 							)}
 							<div
-								className={`bg-gray-100 dark:bg-gray-800 rounded-lg p-3 max-w-[70%] ${
+								className={`bg-gray-100 dark:bg-gray-800 rounded p-2 max-w-[70%] ${
 									msg.sender === loggedInUser?._id
-										? "bg-blue-300 dark:bg-blue-900"
+										? "bg-blue-200 dark:bg-blue-900"
 										: ""
 								}`}>
-								<p className='text-sm'>{msg.content}</p>
+								<p className='text-sm md:text-base'>
+									{msg.content}
+								</p>
 								<div className='text-xs text-gray-500 dark:text-gray-400 mt-1'>
-									{msg.sender === loggedInUser?._id
-										? "You"
-										: receiverUser?.name}{" "}
-									• {format(msg?.createdAt)}
+									{format(msg?.createdAt)}
 								</div>
 							</div>
 							{msg.sender === loggedInUser?._id && (

@@ -77,7 +77,7 @@ export default function Friends() {
 	};
 
 	return (
-		<div className='flex flex-col w-full max-w-4xl mx-auto p-4 md:p-6'>
+		<div className='flex flex-col w-full max-w-4xl mx-auto p-4 md:p-6 shadow overflow-auto max-h-screen h-[calc(100vh-180px)]'>
 			<div className='flex items-center justify-between mb-4'>
 				<h1 className='text-2xl font-bold'>Friends</h1>
 				<div className='relative'>

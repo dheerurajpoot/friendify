@@ -17,7 +17,7 @@ const Signup = () => {
 	});
 	const [loading, setLoading] = useState(false);
 	const [username, setUsername] = useState("");
-	const [isUsernameAvailable, setIsUsernameAvailable] = useState(false);
+	const [isUsernameAvailable, setIsUsernameAvailable]: any = useState();
 
 	const router = useRouter();
 
@@ -26,11 +26,10 @@ const Signup = () => {
 			const res = await axios.post("/api/users/unique-username", {
 				username,
 			});
-			const data = await res.data;
-			setIsUsernameAvailable(data.isUnique);
-		} catch (error) {
-			setIsUsernameAvailable(false);
-			console.error(error);
+			setIsUsernameAvailable(res.data);
+		} catch (error: any) {
+			setIsUsernameAvailable(error.response.data);
+			throw new Error(error);
 		}
 	};
 
@@ -48,9 +47,9 @@ const Signup = () => {
 			}, 1000);
 			router.push("/login");
 		} catch (error: any) {
-			console.log("error: ", error);
 			setLoading(false);
 			toast.error(error.response.data.message);
+			throw new Error(error);
 		}
 	};
 
@@ -102,15 +101,14 @@ const Signup = () => {
 							/>
 							{username !== "" && (
 								<div>
-									{isUsernameAvailable ? (
-										<p className='text-green-500'>
-											Username available!
-										</p>
-									) : (
-										<p className='text-red-500'>
-											Username already taken!.
-										</p>
-									)}
+									<p
+										className={
+											isUsernameAvailable?.isUnique
+												? "text-green-500"
+												: "text-red-500"
+										}>
+										{isUsernameAvailable?.message}
+									</p>
 								</div>
 							)}
 						</div>

@@ -167,7 +167,7 @@ export default function CreatePost() {
 	};
 
 	return (
-		<div className='m-auto lg:w-[900px] md:w-[900px]'>
+		<div className='m-auto pb-2 lg:w-[900px] md:w-[900px]'>
 			<div className='bg-white dark:bg-gray-950 rounded-lg shadow-md p-4 sm:p-6 flex min-h-sm relative justify-center pt-5 '>
 				<div className='mr-4 mt-4'>
 					<Link href={`/profile/${loggedInUser?._id}`}>

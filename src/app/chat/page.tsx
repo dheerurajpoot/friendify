@@ -83,7 +83,7 @@ export default function Chat() {
 	};
 
 	return (
-		<div className='flex flex-col w-full max-w-4xl mx-auto p-4 md:p-6'>
+		<div className='flex flex-col w-full max-w-4xl mx-auto p-4 md:p-6 shadow max-h-screen h-[calc(100vh-180px)] overflow-auto'>
 			<div className='flex items-center justify-between mb-4'>
 				<h1 className='text-2xl font-bold'>Message</h1>
 				<div className='relative'>
@@ -97,8 +97,11 @@ export default function Chat() {
 					/>
 				</div>
 			</div>
+			<hr className='mb-3' />
 			{filteredFriends.length == 0 ? (
-				<span className='text-center'>You have no Chats.</span>
+				<span className='text-center'>
+					You don't have any friend to chat.
+				</span>
 			) : (
 				<div className='grid gap-4 shadow p-2'>
 					{loading ? (

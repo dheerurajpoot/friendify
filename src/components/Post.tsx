@@ -147,7 +147,7 @@ const Post: React.FC<PostProps> = ({ data, onDeletePost, onRefresh }) => {
 		);
 
 	return (
-		<div className='bg-white my-4 dark:bg-gray-950 rounded-lg border border-gray-200 dark:border-gray-800 shadow-sm m-auto lg:w-[900px] md:w-[900px]'>
+		<div className='bg-white my-2 dark:bg-gray-950 rounded-lg border border-gray-200 dark:border-gray-800 shadow-sm m-auto lg:w-[900px] md:w-[900px]'>
 			<div className='p-4 pb-0 md:pb-2'>
 				<div className='flex items-start space-x-4'>
 					<Link href={`/profile/${data.createdBy?._id}`}>

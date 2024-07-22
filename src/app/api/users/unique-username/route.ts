@@ -8,6 +8,15 @@ export async function POST(req: NextRequest) {
 		const { username } = await req.json();
 
 		const user = await User.findOne({ username });
+		if (username.length < 4) {
+			return NextResponse.json(
+				{
+					message: "Username is too short! ",
+					success: false,
+				},
+				{ status: 409 }
+			);
+		}
 		if (user) {
 			return NextResponse.json(
 				{

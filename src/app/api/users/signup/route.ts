@@ -11,11 +11,17 @@ export async function POST(request: NextRequest) {
 		const reqBody = await request.json();
 		const { name, username, email, password } = reqBody;
 
+		if (username.length < 4) {
+			return NextResponse.json(
+				{ message: "Username is too short! " },
+				{ status: 409 }
+			);
+		}
 		const user = await User.findOne({ email });
 
 		if (user) {
 			return NextResponse.json(
-				{ message: "Account already exist with this Email" },
+				{ message: "Account already exist with this Email!" },
 				{ status: 409 }
 			);
 		}

@@ -16,7 +16,23 @@ const Signup = () => {
 		password: "",
 	});
 	const [loading, setLoading] = useState(false);
+	const [username, setUsername] = useState("");
+	const [isUsernameAvailable, setIsUsernameAvailable] = useState(false);
+
 	const router = useRouter();
+
+	const checkUsernameAvailability = async (username: string) => {
+		try {
+			const res = await axios.post("/api/users/unique-username", {
+				username,
+			});
+			const data = await res.data;
+			setIsUsernameAvailable(data.isUnique);
+		} catch (error) {
+			setIsUsernameAvailable(false);
+			console.error(error);
+		}
+	};
 
 	const onRegister = async () => {
 		try {
@@ -75,13 +91,28 @@ const Signup = () => {
 								placeholder='Enter username'
 								required
 								value={user.username}
-								onChange={(e) =>
+								onChange={(e) => {
 									setUser({
 										...user,
 										username: e.target.value,
-									})
-								}
+									});
+									setUsername(e.target.value);
+									checkUsernameAvailability(e.target.value);
+								}}
 							/>
+							{username !== "" && (
+								<div>
+									{isUsernameAvailable ? (
+										<p className='text-green-500'>
+											Username available!
+										</p>
+									) : (
+										<p className='text-red-500'>
+											Username already taken!.
+										</p>
+									)}
+								</div>
+							)}
 						</div>
 						<div className='space-y-2'>
 							<Label htmlFor='email'>Email</Label>

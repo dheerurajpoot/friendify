@@ -76,6 +76,28 @@ export default function Friends() {
 		);
 	};
 
+	// create conversion between two friends
+	const createConversation = async (userId2: string) => {
+		try {
+			setLoading(true);
+			const response = await axios.post("/api/conversation", {
+				userId1: loggedInUser?._id,
+				userId2,
+			});
+
+			if (response?.data?.success) {
+				router.push(
+					`/chat/message/${response?.data?.conversation?._id}`
+				);
+			}
+			setLoading(false);
+		} catch (error: any) {
+			setLoading(false);
+			console.log(error);
+			throw new Error(error);
+		}
+	};
+
 	return (
 		<div className='flex flex-col w-full max-w-4xl mx-auto p-4 md:p-6 shadow overflow-auto max-h-screen h-[calc(100vh-180px)]'>
 			<div className='flex items-center justify-between mb-4'>
@@ -119,7 +141,7 @@ export default function Friends() {
 								filteredFriends?.map((friend: User) => (
 									<div
 										key={friend._id}
-										className='flex items-center justify-between bg-gray-100 dark:bg-gray-800 rounded-lg p-4'>
+										className='flex items-center justify-between bg-gray-100 hover:bg-blue-100 cursor-pointer dark:bg-gray-800 rounded-lg p-4'>
 										<Link href={`/profile/${friend?._id}`}>
 											<div className='flex items-center gap-4'>
 												<Avatar>
@@ -142,16 +164,19 @@ export default function Friends() {
 											</div>
 										</Link>
 										<div className='flex items-center gap-2'>
-											<Link href={"/chat"}>
-												<Button
-													variant='outline'
-													size='sm'>
-													<FiMessageCircle className='w-4 h-4 md:mr-2' />
-													<span className='hidden md:block'>
-														Message
-													</span>
-												</Button>
-											</Link>
+											<Button
+												onClick={() =>
+													createConversation(
+														friend?._id
+													)
+												}
+												variant='outline'
+												size='sm'>
+												<FiMessageCircle className='w-4 h-4 md:mr-2' />
+												<span className='hidden md:block'>
+													Message
+												</span>
+											</Button>
 											<Link
 												href={`/profile/${friend?._id}`}>
 												<Button size='sm'>
@@ -185,7 +210,7 @@ export default function Friends() {
 								filteredFollowerFriends?.map((friend: User) => (
 									<div
 										key={friend._id}
-										className='flex items-center justify-between bg-gray-100 dark:bg-gray-800 rounded-lg p-4'>
+										className='flex items-center justify-between bg-gray-100 hover:bg-blue-100 cursor-pointer dark:bg-gray-800 rounded-lg p-4'>
 										<Link href={`/profile/${friend?._id}`}>
 											<div className='flex items-center gap-4'>
 												<Avatar>
@@ -208,16 +233,19 @@ export default function Friends() {
 											</div>
 										</Link>
 										<div className='flex items-center gap-2'>
-											<Link href={"/chat"}>
-												<Button
-													variant='outline'
-													size='sm'>
-													<FiMessageCircle className='w-4 h-4 md:mr-2' />
-													<span className='hidden md:block'>
-														Message
-													</span>
-												</Button>
-											</Link>
+											<Button
+												onClick={() =>
+													createConversation(
+														friend?._id
+													)
+												}
+												variant='outline'
+												size='sm'>
+												<FiMessageCircle className='w-4 h-4 md:mr-2' />
+												<span className='hidden md:block'>
+													Message
+												</span>
+											</Button>
 											<Link
 												href={`/profile/${friend?._id}`}>
 												<Button size='sm'>

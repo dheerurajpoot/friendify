@@ -20,6 +20,7 @@ import { getUserFromLocalStorage } from "@/helpers/getUserFromLocalStorage";
 import { PostType } from "@/app/page";
 import { User } from "@/app/search/page";
 import { Skeleton } from "@/components/ui/skeleton";
+import { useRouter } from "next/navigation";
 
 const Profile = ({ params }: { params: { userid: string } }) => {
 	const [loading, setLoading] = useState(false);
@@ -27,6 +28,7 @@ const Profile = ({ params }: { params: { userid: string } }) => {
 	const [user, setUser] = useState<User>();
 	const [posts, setPosts] = useState<PostType[]>([]);
 	const [loggedInUser, setLoggedInUser] = useState<User | any>(null);
+	const router = useRouter();
 
 	useEffect(() => {
 		const userData = getUserFromLocalStorage();
@@ -102,6 +104,28 @@ const Profile = ({ params }: { params: { userid: string } }) => {
 			const response = await axios.post("/api/users/profile", { userId });
 			setUser(response?.data?.data);
 		} catch (error: any) {
+			throw new Error(error);
+		}
+	};
+
+	// create conversion between two friends
+	const createConversation = async () => {
+		try {
+			setLoading(true);
+			const response = await axios.post("/api/conversation", {
+				userId1: loggedInUser?._id,
+				userId2: userId,
+			});
+
+			if (response?.data?.success) {
+				router.push(
+					`/chat/message/${response?.data?.conversation?._id}`
+				);
+			}
+			setLoading(false);
+		} catch (error: any) {
+			setLoading(false);
+			console.log(error);
 			throw new Error(error);
 		}
 	};
@@ -190,12 +214,13 @@ const Profile = ({ params }: { params: { userid: string } }) => {
 							</div>
 							{userId !== loggedInUser?._id && (
 								<div className='flex items-center justify-center gap-8 mt-4'>
-									<Link href={"/chat"}>
-										<Button variant='outline' size='sm'>
-											<FiMessageCircle className='w-4 h-4 mr-2' />
-											Message
-										</Button>
-									</Link>
+									<Button
+										onClick={createConversation}
+										variant='outline'
+										size='sm'>
+										<FiMessageCircle className='w-4 h-4 mr-2' />
+										Message
+									</Button>
 									<Button size='sm' onClick={handleFollow}>
 										{user?.followers.includes(
 											loggedInUser?._id

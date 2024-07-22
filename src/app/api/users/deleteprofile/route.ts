@@ -5,13 +5,23 @@ import { NextRequest, NextResponse } from "next/server";
 import { getTokenData } from "@/helpers/getTokenData";
 export const revalidate = 0;
 
-export async function DELETE(request: NextRequest) {
+export async function PUT(request: NextRequest) {
 	try {
 		await connectDb();
 		const userId = await getTokenData(request);
 
 		// Find the user by email
-		const user = await User.findOne({ _id: userId });
+		const user = await User.findByIdAndUpdate(
+			{ _id: userId },
+			{
+				name: "Deleted User",
+				email: "email",
+				profession: "",
+				profilepic: "",
+				about: "",
+				password: "",
+			}
+		);
 
 		if (!user) {
 			return NextResponse.json(
@@ -21,7 +31,6 @@ export async function DELETE(request: NextRequest) {
 		}
 
 		await Post.deleteMany({ createdBy: user._id });
-		await user.deleteOne();
 
 		return NextResponse.json({
 			message: "Profile deleted successfully",

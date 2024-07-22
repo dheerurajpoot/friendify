@@ -60,7 +60,7 @@ const Header = () => {
 		);
 		if (!confirmed) return;
 		try {
-			const res = await axios.delete("/api/users/deleteprofile");
+			const res = await axios.put("/api/users/deleteprofile");
 			if (res.status === 200) {
 				toast.success(res.data.message);
 				setTimeout(() => {

@@ -131,7 +131,7 @@ const Profile = ({ params }: { params: { userid: string } }) => {
 	};
 
 	return (
-		<div className='flex min-h-screen pt-4 flex-col relative items-center m-auto lg:w-[900px] md:w-[900px]'>
+		<div className='flex pt-4 flex-col relative items-center m-auto overflow-auto lg:w-[900px] md:w-[900px] md:h-[calc(100vh-180px)] h-[calc(100vh-270px)]'>
 			<Card className='w-full mx-auto'>
 				<div className='relative'>
 					<CardHeader className='bg-gray-100 dark:bg-gray-800 h-72 relative overflow-hidden'>

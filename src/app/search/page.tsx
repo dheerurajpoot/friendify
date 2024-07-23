@@ -65,7 +65,7 @@ export default function Search() {
 	}, [filteredUsers, loggedInUser]);
 
 	return (
-		<div className='bg-white dark:bg-gray-950 rounded-lg shadow-md p-4 mx-auto lg:w-[900px] md:w-[900px]'>
+		<div className='bg-white dark:bg-gray-950 rounded-lg overflow-auto shadow-md p-4 mx-auto lg:w-[900px] md:w-[900px] max-h-screen md:h-[calc(100vh-180px)] h-[calc(100vh-270px)]'>
 			<div className='flex items-center justify-between mb-4'>
 				<h1 className='text-2xl font-bold'>Search</h1>
 				<div className='relative'>

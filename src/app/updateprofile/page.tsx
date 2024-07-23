@@ -106,7 +106,7 @@ export default function Component() {
 	};
 
 	return (
-		<div className='flex flex-col min-h-sm relative items-center justify-center pt-5 m-auto lg:w-[900px] md:w-[900px]'>
+		<div className='flex flex-col min-h-sm relative items-center overflow-auto justify-center pt-5 m-auto lg:w-[900px] md:w-[900px] max-h-screen md:h-[calc(100vh-180px)] h-[calc(100vh-270px)]'>
 			<form className='w-full'>
 				<Card className='w-full mx-auto'>
 					<div className='flex items-center ml-4'>

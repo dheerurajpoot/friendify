@@ -34,7 +34,8 @@ export default function Message({ params }: { params: { chatId: string } }) {
 	const [loading, setLoading] = useState(false);
 	const [receiverUser, setReceiverUser] = useState<User>();
 	const messagesEndRef = useRef<HTMLDivElement>(null);
-	const [isConnected, setIsConnected] = useState(false);
+	const [onlineUsers, setOnlineUsers] = useState<[] | any>(null);
+	const [userStatus, setUserStatus] = useState(false);
 
 	// getting loggedIn user from localstorage
 	useEffect(() => {
@@ -124,26 +125,11 @@ export default function Message({ params }: { params: { chatId: string } }) {
 	}, [conversationId, messages, receiverId]);
 
 	useEffect(() => {
-		if (socket.connected) {
-			onConnect();
-		}
-
-		function onConnect() {
-			setIsConnected(true);
-		}
-
-		function onDisconnect() {
-			setIsConnected(false);
-		}
-
-		socket.on("connect", onConnect);
-		socket.on("disconnect", onDisconnect);
-
-		return () => {
-			socket.off("connect", onConnect);
-			socket.off("disconnect", onDisconnect);
-		};
-	}, []);
+		socket.on("online users", (users) => {
+			setOnlineUsers(users);
+		});
+	}, [conversationId]);
+	console.log("online users: ", onlineUsers);
 
 	// scroll to view
 	useLayoutEffect(() => {
@@ -151,7 +137,7 @@ export default function Message({ params }: { params: { chatId: string } }) {
 	}, [messages]);
 
 	return (
-		<div className='flex flex-col w-full h-[calc(100vh-170px)] mt-[-12px] rounded-lg border border-gray-200 dark:border-gray-800 overflow-hidden m-auto lg:w-[900px] md:w-[900px]'>
+		<div className='flex flex-col w-full md:h-[calc(100vh-170px)] h-[calc(100vh-270px)] mt-[-12px] rounded-lg border border-gray-200 dark:border-gray-800 overflow-hidden m-auto lg:w-[900px] md:w-[900px]'>
 			<div className='bg-gray-100 dark:bg-gray-900 px-4 py-3 flex items-center justify-between'>
 				<div className='flex items-center gap-3'>
 					<Link href={"/chat"}>
@@ -176,7 +162,9 @@ export default function Message({ params }: { params: { chatId: string } }) {
 					<div>
 						<div className='font-medium'>{receiverUser?.name}</div>
 						<div className='text-sm text-gray-500 dark:text-gray-400'>
-							Online
+							{onlineUsers?.includes(receiverId)
+								? "Online"
+								: "Offline"}
 						</div>
 					</div>
 				</div>

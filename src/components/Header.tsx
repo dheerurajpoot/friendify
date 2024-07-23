@@ -96,8 +96,8 @@ const Header = () => {
 						{/* <h2 className='text-3xl font-bold'>HikeTok</h2> */}
 						<Image
 							src={logo}
-							height={100}
-							width={160}
+							height={90}
+							width={140}
 							alt='HikeTok'
 						/>
 					</Link>

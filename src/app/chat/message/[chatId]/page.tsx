@@ -3,7 +3,6 @@ import { Button } from "@/components/ui/button";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { Input } from "@/components/ui/input";
 import { HiOutlineDotsVertical } from "react-icons/hi";
-import { IoSearch } from "react-icons/io5";
 import {
 	DropdownMenu,
 	DropdownMenuContent,
@@ -35,6 +34,7 @@ export default function Message({ params }: { params: { chatId: string } }) {
 	const [loading, setLoading] = useState(false);
 	const [receiverUser, setReceiverUser] = useState<User>();
 	const messagesEndRef = useRef<HTMLDivElement>(null);
+	const [isConnected, setIsConnected] = useState(false);
 
 	// getting loggedIn user from localstorage
 	useEffect(() => {
@@ -68,22 +68,17 @@ export default function Message({ params }: { params: { chatId: string } }) {
 		}
 	}, [loggedInUser, conversationId]);
 
+	// getting messages from socket
 	useEffect(() => {
 		const handleNewMessage = (newMsg: any) => {
 			setMessages((prevMessages) => [...prevMessages, newMsg]);
 		};
-
 		socket.on("chat message", handleNewMessage);
 
 		return () => {
 			socket.off("chat message", handleNewMessage);
 		};
 	}, []);
-
-	// Use `useLayoutEffect` to handle initial scroll position
-	useLayoutEffect(() => {
-		messagesEndRef.current?.scrollIntoView({ behavior: "auto" });
-	}, [messages]);
 
 	// Send messages to database
 	const sendMessage = async () => {
@@ -128,8 +123,6 @@ export default function Message({ params }: { params: { chatId: string } }) {
 		getProfile();
 	}, [conversationId, messages, receiverId]);
 
-	const [isConnected, setIsConnected] = useState(false);
-
 	useEffect(() => {
 		if (socket.connected) {
 			onConnect();
@@ -151,6 +144,11 @@ export default function Message({ params }: { params: { chatId: string } }) {
 			socket.off("disconnect", onDisconnect);
 		};
 	}, []);
+
+	// scroll to view
+	useLayoutEffect(() => {
+		messagesEndRef.current?.scrollIntoView({ behavior: "auto" });
+	}, [messages]);
 
 	return (
 		<div className='flex flex-col w-full h-[calc(100vh-170px)] mt-[-12px] rounded-lg border border-gray-200 dark:border-gray-800 overflow-hidden m-auto lg:w-[900px] md:w-[900px]'>

@@ -24,29 +24,33 @@ const NavMenu = () => {
 			<Menubar className='flex justify-between items-center w-[900px] h-[80px] p-4 lg:px-12 md:px-12 shadow-2xl'>
 				<MenubarMenu>
 					<Link href={"/"}>
-						<MenubarTrigger className='cursor-pointer'>
-							<FaHome size={30} />
+						<MenubarTrigger className='flex flex-col items-center justify-center cursor-pointer'>
+							<FaHome className='h-6 md:h-8 w-6 md:w-8' />
+							<span>Home</span>
 						</MenubarTrigger>
 					</Link>
 				</MenubarMenu>
 				<MenubarMenu>
 					<Link href={"/friends"}>
-						<MenubarTrigger className='cursor-pointer'>
-							<FaUserFriends size={30} />
+						<MenubarTrigger className='flex flex-col items-center justify-center cursor-pointer'>
+							<FaUserFriends className='h-6 md:h-8 w-6 md:w-8' />
+							<span>Friends</span>
 						</MenubarTrigger>
 					</Link>
 				</MenubarMenu>
 				<MenubarMenu>
 					<Link href={"/chat"}>
-						<MenubarTrigger className='cursor-pointer'>
-							<FaFacebookMessenger size={30} />
+						<MenubarTrigger className='flex flex-col items-center justify-center cursor-pointer'>
+							<FaFacebookMessenger className='h-6 md:h-8 w-6 md:w-8' />
+							<span>Chat</span>
 						</MenubarTrigger>
 					</Link>
 				</MenubarMenu>
 				<MenubarMenu>
 					<Link href={"/search"}>
-						<MenubarTrigger className='cursor-pointer'>
-							<IoSearchSharp size={30} />
+						<MenubarTrigger className='flex flex-col items-center justify-center cursor-pointer'>
+							<IoSearchSharp className='h-6 md:h-8 w-6 md:w-8' />
+							<span>Search</span>
 						</MenubarTrigger>
 					</Link>
 				</MenubarMenu>
@@ -59,8 +63,8 @@ const NavMenu = () => {
 				</MenubarMenu> */}
 				<MenubarMenu>
 					<Link href={`/profile/${loggedInUser?._id}`}>
-						<MenubarTrigger className='cursor-pointer'>
-							<Avatar>
+						<MenubarTrigger className='flex flex-col items-center justify-center cursor-pointer'>
+							<Avatar className='h-6 md:h-8 w-6 md:w-8'>
 								<AvatarImage
 									src={loggedInUser?.profilepic}
 									className='object-cover'
@@ -69,6 +73,7 @@ const NavMenu = () => {
 									{loggedInUser?.name.charAt(0)}
 								</AvatarFallback>
 							</Avatar>
+							<span>Profile</span>
 						</MenubarTrigger>
 					</Link>
 				</MenubarMenu>

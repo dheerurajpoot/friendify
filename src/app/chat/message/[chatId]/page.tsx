@@ -35,7 +35,6 @@ export default function Message({ params }: { params: { chatId: string } }) {
 	const [receiverUser, setReceiverUser] = useState<User>();
 	const messagesEndRef = useRef<HTMLDivElement>(null);
 	const [onlineUsers, setOnlineUsers] = useState<[] | any>(null);
-	const [userStatus, setUserStatus] = useState(false);
 
 	// getting loggedIn user from localstorage
 	useEffect(() => {
@@ -129,7 +128,6 @@ export default function Message({ params }: { params: { chatId: string } }) {
 			setOnlineUsers(users);
 		});
 	}, [conversationId]);
-	console.log("online users: ", onlineUsers);
 
 	// scroll to view
 	useLayoutEffect(() => {

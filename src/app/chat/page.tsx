@@ -12,6 +12,7 @@ import axios from "axios";
 import { useRouter } from "next/navigation";
 import { Skeleton } from "@/components/ui/skeleton";
 import { getUserProfile } from "@/helpers/getUserProfile";
+import { socket } from "@/socket";
 
 export default function Chat() {
 	const [searchTerm, setSearchTerm] = useState("");
@@ -19,6 +20,7 @@ export default function Chat() {
 	const [loggedInUser, setLoggedInUser] = useState<User | null>(null);
 	const [loading, setLoading] = useState(false);
 	const [friends, setFriends] = useState<User[]>([]);
+	const [onlineUsers, setOnlineUsers] = useState<[] | any>(null);
 	const router = useRouter();
 
 	// handle search friends
@@ -100,6 +102,13 @@ export default function Chat() {
 		getConversation();
 	}, [userId]);
 
+	// user online status
+	useEffect(() => {
+		socket.on("online users", (users) => {
+			setOnlineUsers(users);
+		});
+	}, []);
+
 	return (
 		<div className='flex flex-col w-full max-w-4xl mx-auto p-4 md:p-6 shadow max-h-screen h-[calc(100vh-180px)] overflow-auto'>
 			<div className='flex items-center justify-between mb-4'>
@@ -149,8 +158,9 @@ export default function Chat() {
 											{friend?.name}
 										</p>
 										<p className='text-xs text-gray-500 dark:text-gray-400'>
-											{/* {friend.status} */}
-											onliine
+											{onlineUsers?.includes(friend?._id)
+												? "Online"
+												: "Offline"}
 										</p>
 									</div>
 								</div>

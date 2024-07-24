@@ -262,7 +262,7 @@ const Profile = ({ params }: { params: { userid: string } }) => {
 							/>
 						))
 					) : (
-						<p className='mt-10'>You have not posted yet </p>
+						<p className='mt-10'>No posts available! </p>
 					)}
 				</div>
 			)}

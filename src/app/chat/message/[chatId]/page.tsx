@@ -190,17 +190,17 @@ export default function Message({ params }: { params: { chatId: string } }) {
 									View Profile
 								</DropdownMenuItem>
 							</Link>
-							<DropdownMenuItem className='cursor-pointer'>
+							{/* <DropdownMenuItem className='cursor-pointer'>
 								<FaRegTrashAlt className='h-4 w-4 mr-2' />
 								Clear Chat
-							</DropdownMenuItem>
+							</DropdownMenuItem> */}
 						</DropdownMenuContent>
 					</DropdownMenu>
 				</div>
 			</div>
 			{messages.length === 0 ? (
 				<div className='flex-1 overflow-auto p-4 space-y-4 text-center'>
-					<span>You haven't chat yet, Let's chat!</span>
+					<span>Type to start chat!</span>
 				</div>
 			) : (
 				<div className='flex-1 overflow-auto p-4 space-y-4'>

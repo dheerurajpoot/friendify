@@ -9,32 +9,24 @@ export async function POST(req: NextRequest) {
 
 		const user = await User.findOne({ username });
 		if (username.length < 4) {
-			return NextResponse.json(
-				{
-					message: "Username is too short! ",
-					success: false,
-				},
-				{ status: 409 }
-			);
+			return NextResponse.json({
+				message: "Username is too short! ",
+				success: false,
+			});
 		}
 		if (user) {
-			return NextResponse.json(
-				{
-					isUnique: false,
-					message: "Username already taken!",
-					success: false,
-				},
-				{ status: 409 }
-			);
-		} else {
-			return NextResponse.json(
-				{
-					isUnique: true,
-					message: "Username available!",
-					success: true,
-				},
-				{ status: 200 }
-			);
+			return NextResponse.json({
+				isUnique: false,
+				message: "Username already taken!",
+				success: false,
+			});
+		}
+		if (!user) {
+			return NextResponse.json({
+				isUnique: true,
+				message: "Username available!",
+				success: true,
+			});
 		}
 	} catch (error: any) {
 		console.log(error);

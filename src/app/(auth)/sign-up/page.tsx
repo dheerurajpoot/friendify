@@ -29,7 +29,7 @@ const Signup = () => {
 			setIsUsernameAvailable(res.data);
 		} catch (error: any) {
 			setIsUsernameAvailable(error.response.data);
-			throw new Error(error);
+			throw Error(error);
 		}
 	};
 

@@ -1,6 +1,6 @@
 import { connectDb } from "@/dbConfig/connectDb";
 import { User } from "@/model/user.model";
-import { Post } from "@/model/post.model"; // Import Post model
+import { Post } from "@/model/post.model";
 import { NextRequest, NextResponse } from "next/server";
 import { getTokenData } from "@/helpers/getTokenData";
 export const revalidate = 0;
@@ -15,10 +15,7 @@ export async function PUT(request: NextRequest) {
 			{ _id: userId },
 			{
 				name: "Deleted User",
-				email: "email",
-				profession: "",
 				profilepic: "",
-				about: "",
 				password: "",
 			}
 		);

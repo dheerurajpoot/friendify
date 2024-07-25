@@ -46,7 +46,7 @@ const Signin = () => {
 							<Input
 								id='email'
 								type='email'
-								placeholder='john@example.com'
+								placeholder='example@gmail.com'
 								required
 								value={user.email}
 								onChange={(e) =>
@@ -92,7 +92,7 @@ const Signin = () => {
 						<Link
 							href={"/sign-up"}
 							className='text-blue-500 font-semibold'>
-							Sign Up
+							Create Account
 						</Link>
 					</div>
 				</div>

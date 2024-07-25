@@ -53,6 +53,10 @@ const Signup = () => {
 		}
 	};
 
+	const sanitizeInput = (input: string) => {
+		return input.replace(/[^\w\s]/gi, "");
+	};
+
 	return (
 		<div className='flex flex-col mt-[-40px] md:mt-[10%] relative items-center justify-center md:pt-5 m-auto lg:w-[900px] md:w-[900px]'>
 			<div className='flex lg:w-1/2 md:w-1/2 items-center justify-center dark:bg-gray-950'>
@@ -77,7 +81,7 @@ const Signup = () => {
 								onChange={(e) =>
 									setUser({
 										...user,
-										name: e.target.value,
+										name: sanitizeInput(e.target.value),
 									})
 								}
 							/>
@@ -93,7 +97,7 @@ const Signup = () => {
 								onChange={(e) => {
 									setUser({
 										...user,
-										username: e.target.value,
+										username: sanitizeInput(e.target.value),
 									});
 									setUsername(e.target.value);
 									checkUsernameAvailability(e.target.value);
@@ -156,7 +160,7 @@ const Signup = () => {
 						<Link
 							href={"/login"}
 							className='text-blue-500 font-semibold'>
-							Sign In
+							Login
 						</Link>
 					</div>
 				</div>

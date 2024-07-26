@@ -7,32 +7,34 @@ import { Button } from "@/components/ui/button";
 import { IoSearch } from "react-icons/io5";
 import { FiMessageCircle } from "react-icons/fi";
 import { getUserFromLocalStorage } from "@/helpers/getUserFromLocalStorage";
-import { User } from "../search/page";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import { Skeleton } from "@/components/ui/skeleton";
-import { getUserProfile } from "@/helpers/getUserProfile";
 import { socket } from "@/socket";
+import { User } from "../search/page";
 
 export default function Chat() {
 	const [searchTerm, setSearchTerm] = useState("");
 	const [filteredFriends, setFilteredFriends] = useState<User[]>([]);
-	const [loggedInUser, setLoggedInUser] = useState<User | null>(null);
+	const [loggedInUser, setLoggedInUser] = useState<User[] | any>([]);
 	const [loading, setLoading] = useState(false);
-	const [friends, setFriends] = useState<User[]>([]);
-	const [onlineUsers, setOnlineUsers] = useState<[] | any>(null);
+	const [onlineUsers, setOnlineUsers] = useState<User[] | any>([]);
 	const router = useRouter();
 
-	// handle search friends
+	// Handle search friends
 	const handleSearch = (e: any) => {
 		const term = e.target.value.toLowerCase();
 		setSearchTerm(term);
-		setFilteredFriends(
-			friends.filter((friend) => friend.name.toLowerCase().includes(term))
+		setFilteredFriends((prev) =>
+			prev.filter((friend) =>
+				friend.participants.some((user: any) =>
+					user.name.toLowerCase().includes(term)
+				)
+			)
 		);
 	};
 
-	// getting loggedIn user from localstorage
+	// Getting loggedIn user from localstorage
 	useEffect(() => {
 		const userData = getUserFromLocalStorage();
 		if (userData) {
@@ -42,7 +44,7 @@ export default function Chat() {
 
 	const userId = loggedInUser?._id;
 
-	// create conversion between two friends
+	// Create conversation between two friends
 	const createConversation = async (userId2: string) => {
 		try {
 			setLoading(true);
@@ -64,7 +66,7 @@ export default function Chat() {
 		}
 	};
 
-	let chatUsers: any = [];
+	// Get conversations
 	const getConversation = async () => {
 		try {
 			setLoading(true);
@@ -72,37 +74,21 @@ export default function Chat() {
 			const response = await axios.post("/api/getconversation", {
 				userId,
 			});
-			const conversation = response.data.conversation;
-			let participants: any = [];
 
-			conversation.map((item: any) =>
-				participants.push(
-					item.participants.filter((id: string) => id !== userId)[0]
-				)
-			);
-
-			for (const id of participants) {
-				const chatUserProfile = await getUserProfile(id);
-
-				if (chatUserProfile.status === 400) return;
-
-				chatUsers.push(chatUserProfile.data);
-			}
+			setFilteredFriends(response.data.conversation);
 			setLoading(false);
-			const users = chatUsers.reverse();
-			setFilteredFriends(users);
-			setFriends(chatUsers);
 		} catch (error: any) {
 			setLoading(false);
 			console.log(error);
 			throw new Error(error);
 		}
 	};
+
 	useEffect(() => {
 		getConversation();
 	}, [userId]);
 
-	// user online status
+	// User online status
 	useEffect(() => {
 		socket.on("online users", (users) => {
 			setOnlineUsers(users);
@@ -131,35 +117,39 @@ export default function Chat() {
 				</div>
 			) : (
 				<div className='grid gap-4 p-2'>
-					{filteredFriends && filteredFriends.length == 0 ? (
+					{filteredFriends.length === 0 ? (
 						<span className='text-center'>No chats available.</span>
 					) : (
 						<div className='grid gap-4 p-2'>
-							{filteredFriends &&
-								filteredFriends.map((friend) => (
+							{filteredFriends.map((chat) => {
+								const receiver = chat.participants.find(
+									(user: any) => user?._id !== userId
+								);
+								return (
 									<div
 										onClick={() =>
-											createConversation(friend?._id)
+											createConversation(receiver?._id)
 										}
-										key={friend?._id}
+										key={chat._id}
 										className='flex items-center justify-between bg-gray-100 hover:bg-blue-100 dark:bg-gray-800 rounded-lg p-4 cursor-pointer'>
 										<div className='flex items-center gap-4'>
 											<Avatar>
 												<AvatarImage
-													src={friend?.profilepic}
+													src={receiver?.profilepic}
 													className='object-cover'
 												/>
 												<AvatarFallback>
-													{friend?.name.charAt(0)}
+													{receiver?.name?.charAt(0)}
 												</AvatarFallback>
 											</Avatar>
 											<div className='grid gap-0.5'>
 												<p className='text-sm font-medium'>
-													{friend?.name}
+													{receiver?.name ||
+														"Deleted User"}
 												</p>
 												<p className='text-xs text-gray-500 dark:text-gray-400'>
-													{onlineUsers?.includes(
-														friend?._id
+													{onlineUsers.includes(
+														receiver?._id
 													)
 														? "Online"
 														: "Offline"}
@@ -171,13 +161,11 @@ export default function Chat() {
 												variant='outline'
 												size='icon'>
 												<FiMessageCircle className='h-4 w-4' />
-												<span className='sr-only'>
-													Message {friend?.name}
-												</span>
 											</Button>
 										</div>
 									</div>
-								))}
+								);
+							})}
 						</div>
 					)}
 				</div>

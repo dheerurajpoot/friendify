@@ -22,6 +22,7 @@ export interface User {
 	_id: string;
 	followers: string[];
 	following: string[];
+	participants:any;
 }
 
 export default function Search() {

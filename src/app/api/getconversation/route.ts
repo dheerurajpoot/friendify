@@ -9,6 +9,9 @@ export async function POST(request: NextRequest) {
 		const { userId } = await request.json();
 		const conversation = await Chat.find({
 			participants: { $in: userId },
+		}).populate({
+			path: "participants",
+			select: "name profilepic username",
 		});
 
 		if (!conversation) {

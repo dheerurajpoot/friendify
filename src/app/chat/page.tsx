@@ -125,7 +125,7 @@ export default function Chat() {
 				</div>
 			</div>
 			<hr className='mb-3' />
-			{loading && loading ? (
+			{loading ? (
 				<div>
 					<Skeleton className='h-16 w-full my-4' />
 				</div>

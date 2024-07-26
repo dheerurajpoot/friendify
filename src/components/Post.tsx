@@ -249,7 +249,7 @@ const Post: React.FC<PostProps> = ({ data, onDeletePost, onRefresh }) => {
 					<div className='text-gray-500 dark:text-gray-400 text-base'>
 						{data.likes.length} likes •{" "}
 						<span
-							className='cursor-pointer underline'
+							className='cursor-pointer'
 							onClick={toggleComments}>
 							{data.comments.length} comments
 						</span>
@@ -257,7 +257,7 @@ const Post: React.FC<PostProps> = ({ data, onDeletePost, onRefresh }) => {
 				</div>
 				{showComments && (
 					<div className='mt-4 border-t border-gray-200 dark:border-gray-800 pt-4'>
-						<form className='flex items-center space-x-2 md:mx-10 lg:mx-10'>
+						<div className='flex items-center mb-3 space-x-2 md:mx-10 lg:mx-10'>
 							<Link href={`/profile/${loggedInUser?._id}`}>
 								<Avatar>
 									<AvatarImage
@@ -277,6 +277,12 @@ const Post: React.FC<PostProps> = ({ data, onDeletePost, onRefresh }) => {
 								onChange={(
 									e: React.ChangeEvent<HTMLInputElement>
 								) => setCommentText(e.target.value)}
+								onKeyDown={(e) => {
+									if (e.key === "Enter") {
+										e.preventDefault();
+										commentHandler(data?._id);
+									}
+								}}
 							/>
 							<Button
 								type='button'
@@ -285,7 +291,7 @@ const Post: React.FC<PostProps> = ({ data, onDeletePost, onRefresh }) => {
 								<BsFillSendFill className='h-4 w-4' />
 								<span className='sr-only'>Send</span>
 							</Button>
-						</form>
+						</div>
 						{data.comments &&
 							allComments.map((commentData: any, index) => (
 								<div
@@ -310,7 +316,7 @@ const Post: React.FC<PostProps> = ({ data, onDeletePost, onRefresh }) => {
 												</AvatarFallback>
 											</Avatar>
 										</Link>
-										<div className='flex-1'>
+										<div className='flex-1 mb-2'>
 											<div className='flex items-center justify-between'>
 												<div>
 													<h4 className='md:font-semibold font-medium inline text-sm'>

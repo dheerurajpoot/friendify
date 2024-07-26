@@ -110,7 +110,7 @@ const Header = () => {
 								variant='ghost'
 								size='icon'
 								className='rounded-full relative'>
-								<HiOutlineDotsVertical className='h-8 w-8' />
+								<HiOutlineDotsVertical className='h-7 md:h-8 w-7 md:w-8' />
 								<span className='sr-only'>More options</span>
 							</Button>
 						</DropdownMenuTrigger>

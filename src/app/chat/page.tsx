@@ -1,5 +1,4 @@
 "use client";
-
 import { useEffect, useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
@@ -13,9 +12,15 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { socket } from "@/socket";
 import { User } from "../search/page";
 
+type Chat = {
+	_id: string;
+	participants: User[];
+	updatedAt: string;
+};
+
 export default function Chat() {
 	const [searchTerm, setSearchTerm] = useState("");
-	const [filteredFriends, setFilteredFriends] = useState<User[]>([]);
+	const [filteredFriends, setFilteredFriends] = useState<Chat[]>([]);
 	const [loggedInUser, setLoggedInUser] = useState<User[] | any>([]);
 	const [loading, setLoading] = useState(false);
 	const [onlineUsers, setOnlineUsers] = useState<User[] | any>([]);
@@ -44,28 +49,6 @@ export default function Chat() {
 
 	const userId = loggedInUser?._id;
 
-	// Create conversation between two friends
-	const createConversation = async (userId2: string) => {
-		try {
-			setLoading(true);
-			const response = await axios.post("/api/conversation", {
-				userId1: userId,
-				userId2,
-			});
-
-			if (response?.data?.success) {
-				router.push(
-					`/chat/message/${response?.data?.conversation?._id}`
-				);
-			}
-			setLoading(false);
-		} catch (error: any) {
-			setLoading(false);
-			console.log(error);
-			throw new Error(error);
-		}
-	};
-
 	// Get conversations
 	const getConversation = async () => {
 		try {
@@ -75,7 +58,15 @@ export default function Chat() {
 				userId,
 			});
 
-			setFilteredFriends(response.data.conversation);
+			const sortedConversations = (
+				response.data.conversation as Chat[]
+			).sort(
+				(a, b) =>
+					new Date(b.updatedAt).getTime() -
+					new Date(a.updatedAt).getTime()
+			);
+
+			setFilteredFriends(sortedConversations);
 			setLoading(false);
 		} catch (error: any) {
 			setLoading(false);
@@ -94,6 +85,10 @@ export default function Chat() {
 			setOnlineUsers(users);
 		});
 	}, []);
+
+	const toMessage = (id: any) => {
+		router.push(`/chat/message/${id}`);
+	};
 
 	return (
 		<div className='flex flex-col w-full max-w-4xl mx-auto p-4 md:p-6 shadow max-h-screen md:h-[calc(100vh-180px)] h-[calc(100vh-270px)] overflow-auto'>
@@ -127,9 +122,7 @@ export default function Chat() {
 								);
 								return (
 									<div
-										onClick={() =>
-											createConversation(receiver?._id)
-										}
+										onClick={() => toMessage(chat?._id)}
 										key={chat._id}
 										className='flex items-center justify-between bg-gray-100 hover:bg-blue-100 dark:bg-gray-800 rounded-lg p-4 cursor-pointer'>
 										<div className='flex items-center gap-4'>

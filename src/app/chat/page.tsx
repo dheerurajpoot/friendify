@@ -7,10 +7,10 @@ import { IoSearch } from "react-icons/io5";
 import { FiMessageCircle } from "react-icons/fi";
 import { getUserFromLocalStorage } from "@/helpers/getUserFromLocalStorage";
 import axios from "axios";
-import { useRouter } from "next/navigation";
 import { Skeleton } from "@/components/ui/skeleton";
 import { socket } from "@/socket";
 import { User } from "../search/page";
+import Link from "next/link";
 
 type Chat = {
 	_id: string;
@@ -20,20 +20,20 @@ type Chat = {
 
 export default function Chat() {
 	const [searchTerm, setSearchTerm] = useState("");
-	const [filteredFriends, setFilteredFriends] = useState<Chat[]>([]);
+	const [chattingUser, setChattingUser] = useState<User[] | any>([]);
+	const [filteredFriends, setFilteredFriends] = useState<Chat[] | any>([]);
 	const [loggedInUser, setLoggedInUser] = useState<User[] | any>([]);
 	const [loading, setLoading] = useState(false);
 	const [onlineUsers, setOnlineUsers] = useState<User[] | any>([]);
-	const router = useRouter();
 
 	// Handle search friends
 	const handleSearch = (e: any) => {
 		const term = e.target.value.toLowerCase();
 		setSearchTerm(term);
-		setFilteredFriends((prev) =>
-			prev.filter((friend) =>
-				friend.participants.some((user: any) =>
-					user.name.toLowerCase().includes(term)
+		setFilteredFriends(
+			chattingUser?.filter((friend: any) =>
+				friend.participants?.some((user: any) =>
+					user?.name.includes(term)
 				)
 			)
 		);
@@ -65,7 +65,7 @@ export default function Chat() {
 					new Date(b.updatedAt).getTime() -
 					new Date(a.updatedAt).getTime()
 			);
-
+			setChattingUser(sortedConversations);
 			setFilteredFriends(sortedConversations);
 			setLoading(false);
 		} catch (error: any) {
@@ -85,10 +85,6 @@ export default function Chat() {
 			setOnlineUsers(users);
 		});
 	}, []);
-
-	const toMessage = (id: any) => {
-		router.push(`/chat/message/${id}`);
-	};
 
 	return (
 		<div className='flex flex-col w-full max-w-4xl mx-auto p-4 md:p-6 shadow max-h-screen md:h-[calc(100vh-180px)] h-[calc(100vh-270px)] overflow-auto'>
@@ -112,18 +108,18 @@ export default function Chat() {
 				</div>
 			) : (
 				<div className='grid gap-4 p-2'>
-					{filteredFriends.length === 0 ? (
+					{filteredFriends?.length === 0 ? (
 						<span className='text-center'>No chats available.</span>
 					) : (
 						<div className='grid gap-4 p-2'>
-							{filteredFriends.map((chat) => {
-								const receiver = chat.participants.find(
+							{filteredFriends?.map((chat: any) => {
+								const receiver = chat?.participants?.find(
 									(user: any) => user?._id !== userId
 								);
 								return (
-									<div
-										onClick={() => toMessage(chat?._id)}
-										key={chat._id}
+									<Link
+										href={`/chat/message/${chat?._id}`}
+										key={chat?._id}
 										className='flex items-center justify-between bg-gray-100 hover:bg-blue-100 dark:bg-gray-800 rounded-lg p-4 cursor-pointer'>
 										<div className='flex items-center gap-4'>
 											<Avatar>
@@ -156,7 +152,7 @@ export default function Chat() {
 												<FiMessageCircle className='h-4 w-4' />
 											</Button>
 										</div>
-									</div>
+									</Link>
 								);
 							})}
 						</div>

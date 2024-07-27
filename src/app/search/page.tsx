@@ -22,7 +22,7 @@ export interface User {
 	_id: string;
 	followers: string[];
 	following: string[];
-	participants:any;
+	participants: any;
 }
 
 export default function Search() {
@@ -37,7 +37,7 @@ export default function Search() {
 		);
 	}, [users, searchTerm]);
 
-	const getAllUsers = async (searchTerm: string) => {
+	const getAllUsers = async () => {
 		try {
 			setLoading(true);
 			const response = await axios.get("/api/users/getallusers");
@@ -50,7 +50,7 @@ export default function Search() {
 
 	useEffect(() => {
 		if (searchTerm) {
-			getAllUsers(searchTerm);
+			getAllUsers();
 		} else {
 			setUsers([]);
 		}

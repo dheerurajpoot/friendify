@@ -1,5 +1,6 @@
 import mongoose, { Model, Types } from "mongoose";
 import { Document } from "mongoose";
+import { User } from "./user.model";
 
 export interface chatInterface {
 	participants: mongoose.Types.ObjectId[];
@@ -15,7 +16,7 @@ const chatModel = new mongoose.Schema<chatDocument>(
 		participants: [
 			{
 				type: mongoose.Schema.Types.ObjectId,
-				ref: "User",
+				ref: User.modelName,
 				required: true,
 			},
 		],

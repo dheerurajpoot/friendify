@@ -1,6 +1,6 @@
 import { connectDb } from "@/dbConfig/connectDb";
 import { getTokenData } from "@/helpers/getTokenData";
-import { Post, postDocument } from "@/model/post.model";
+import { Post } from "@/model/post.model";
 import mongoose from "mongoose";
 import { NextRequest, NextResponse } from "next/server";
 

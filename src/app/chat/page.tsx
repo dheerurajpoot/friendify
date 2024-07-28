@@ -20,7 +20,7 @@ type Chat = {
 
 export default function Chat() {
 	const [searchTerm, setSearchTerm] = useState("");
-	const [chattingUser, setChattingUser] = useState<User[] | any>([]);
+	const [chattingUser, setChattingUser] = useState<Chat[] | any>([]);
 	const [filteredFriends, setFilteredFriends] = useState<Chat[] | any>([]);
 	const [loggedInUser, setLoggedInUser] = useState<User[] | any>([]);
 	const [loading, setLoading] = useState(false);
@@ -31,9 +31,9 @@ export default function Chat() {
 		const term = e.target.value.toLowerCase();
 		setSearchTerm(term);
 		setFilteredFriends(
-			chattingUser?.filter((friend: any) =>
-				friend.participants?.some((user: any) =>
-					user?.name.includes(term)
+			chattingUser?.filter((chat: Chat) =>
+				chat.participants?.some((user: User) =>
+					user?.name.toLowerCase().includes(term)
 				)
 			)
 		);

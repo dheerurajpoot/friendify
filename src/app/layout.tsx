@@ -24,6 +24,7 @@ export default function RootLayout({
           src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8559499402519284"
           crossOrigin="anonymous" 
         />
+        <meta name="google-site-verification" content="GpJXdXDFGlPlSzIKwXoStonSBvkaHaWnr8swxq_qH5s" />
       </head>
       <body className={inter.className}>
         <LayoutWrapper>{children}</LayoutWrapper>
